@@ -1,0 +1,241 @@
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.transition-colors-standard {
+  transition-property: color, background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+.ribbon-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: ribbon-marquee 22s linear infinite;
+}
+
+.ribbon-marquee-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.42em;
+  padding-right: 0.42em;
+  font-family: var(--font-gamay-editorial), Arial, Helvetica, sans-serif;
+  font-size: 6.4583cqw;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ribbon-marquee-mark {
+  display: block;
+  width: 0.58em;
+  height: 0.27em;
+  flex: none;
+  border-radius: 0 0 999px 999px;
+  background: currentColor;
+}
+
+.ribbon-marquee-reverse {
+  animation-direction: reverse;
+}
+
+@keyframes ribbon-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.brand-loader-logo {
+  animation: brand-loader-logo 1.6s ease-in-out infinite;
+}
+
+.brand-loader-track {
+  position: relative;
+  width: min(420px, 68vw);
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.brand-loader-track span {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 38%;
+  background: currentColor;
+  animation: brand-loader-progress 1.15s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes brand-loader-logo {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.985);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes brand-loader-progress {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(290%);
+  }
+}
+
+.cart-close-blade-top,
+.cart-close-blade-bottom {
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.cart-close-blade-top {
+  transform: translateY(-50%) rotate(-32deg);
+}
+
+.cart-close-blade-bottom {
+  transform: translateY(-50%) rotate(32deg);
+}
+
+.cart-close-button:hover .cart-close-blade-top {
+  animation: cart-scissor-top 700ms ease-in-out;
+}
+
+.cart-close-button:hover .cart-close-blade-bottom {
+  animation: cart-scissor-bottom 700ms ease-in-out;
+}
+
+@keyframes cart-scissor-top {
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(-32deg);
+  }
+
+  45%,
+  60% {
+    transform: translateY(-50%) rotate(-4deg);
+  }
+}
+
+@keyframes cart-scissor-bottom {
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(32deg);
+  }
+
+  45%,
+  60% {
+    transform: translateY(-50%) rotate(4deg);
+  }
+}
+
+.initial-loader-overlay {
+  animation: initial-loader-dismiss 2s linear forwards;
+}
+
+.settle-zoom {
+  transform: scale(1.08);
+}
+
+.badge-spin-outer,
+.badge-spin-inner {
+  transform-box: view-box;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.badge-spin-outer {
+  animation: badge-spin-left 16s linear infinite;
+}
+
+.badge-spin-inner {
+  animation: badge-spin-right 13s linear infinite;
+}
+
+@keyframes badge-spin-left {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes badge-spin-right {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.comb-frame-line {
+  stroke-dasharray: 24 16;
+  will-change: stroke-dashoffset;
+  animation: comb-frame-line-flow 5s linear infinite;
+}
+
+@keyframes comb-frame-line-flow {
+  to {
+    stroke-dashoffset: -400;
+  }
+}
+
+@keyframes initial-loader-dismiss {
+  0%,
+  85% {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  100% {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes initial-loader-dismiss-reduced {
+  0%,
+  99% {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  100% {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .initial-loader-overlay {
+    animation-name: initial-loader-dismiss-reduced !important;
+    animation-duration: 2s !important;
+  }
+
+  .settle-zoom {
+    transform: scale(1) !important;
+  }
+}

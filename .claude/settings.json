@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node /Users/olcay.senturk/Desktop/Others/cutpilot/.scratch-snap.mjs)",
+      "Bash(node /Users/olcay.senturk/Desktop/Others/cutpilot/.scratch-fullscroll.mjs)",
+      "Bash(rm -f f*.png contact.png)",
+      "Bash(ffmpeg -y -i /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4 -ss 33.5 -to 35.5 -vf \"fps=12,scale=700:-1\" fine%03d.png)",
+      "Bash(ffmpeg -y -pattern_type glob -i \"fine*.png\" -vf \"tile=4x6\" contact2.png)",
+      "Bash(ffmpeg -y -pattern_type glob -i \"fine01[3-6].png\" -vf \"tile=2x2\" wipe.png)",
+      "Bash(ffmpeg -y -i fine013.png -i fine014.png -i fine015.png -i fine016.png -filter_complex \"tile=2x2\" wipe.png)",
+      "Bash(mkdir -p /private/tmp/claude-842554220/-Users-olcay-senturk-Desktop-Others-cutpilot/64b3baac-dde6-4e6a-b979-1504f27d8b6b/scratchpad/frames)",
+      "Bash(ffmpeg -y -ss 43 -i Articut_Website_Presentation_Final.mp4 -t 5 -vf fps=1 /private/tmp/claude-842554220/-Users-olcay-senturk-Desktop-Others-cutpilot/64b3baac-dde6-4e6a-b979-1504f27d8b6b/scratchpad/frames/frame_%02d.png)",
+      "Bash(ffmpeg -y -i frame_01.png -vf \"crop=460:460:80:280\" dial_crop.png)",
+      "Bash(lsof -i :3000 -sTCP:LISTEN)",
+      "Bash(node /private/tmp/claude-842554220/-Users-olcay-senturk-Desktop-Others-cutpilot/64b3baac-dde6-4e6a-b979-1504f27d8b6b/scratchpad/shot.mjs)",
+      "Bash(cp /private/tmp/claude-842554220/-Users-olcay-senturk-Desktop-Others-cutpilot/64b3baac-dde6-4e6a-b979-1504f27d8b6b/scratchpad/shot.mjs /Users/olcay.senturk/Desktop/Others/cutpilot/.scratch-shot.mjs)",
+      "Bash(node .scratch-shot.mjs)",
+      "Bash(ffmpeg -y -i frame_01.png -vf \"crop=1920:900:0:0\" ref_top.png)",
+      "Bash(ffmpeg -y -i current_desktop.png -vf \"crop=1440:620:0:80\" cur_top.png)",
+      "Bash(ffmpeg -y -i ref_top.png -vf scale=1440:-1 ref_top_scaled.png)",
+      "Bash(ffmpeg -y -i ref_top_scaled.png -i cur_top.png -filter_complex vstack compare_vstack.png)",
+      "Bash(ffmpeg -y -i frame_01.png -vf \"crop=500:200:80:680\" set_text_crop.png)",
+      "Bash(ffmpeg -y -i frame_01.png -vf \"crop=1500:200:550:680\" rest_text_crop.png)",
+      "Bash(ffmpeg -y -ss 40 -i /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4 -t 10 -vf fps=4 seq_%03d.png)",
+      "Bash(ffmpeg -y -start_number 9 -i seq_0%2d.png -frames:v 24 -vf \"scale=320:-1,tile=4x6\" contact.png)",
+      "Bash(ffmpeg -y -start_number 9 -i seq_0%2d.png -frames:v 24 -vf \"scale=320:-1,tile=4x6\" -update 0 contact.png)",
+      "Bash(ffmpeg -y -framerate 4 -start_number 9 -i seq_%03d.png -frames:v 24 -vf \"scale=320:-1,tile=4x6\" -update 1 -frames:v 1 contact.png)",
+      "Bash(ffmpeg -y -i frame_01.png -vf \"crop=400:400:1520:680\" badge_crop.png)",
+      "Bash(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4)",
+      "Bash(ffmpeg -y -i /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4 -vf \"crop=400:400:1520:680,fps=2,scale=200:-1,tile=10x18\" -frames:v 1 badge_contact.png)",
+      "Bash(ffmpeg -y -i /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4 -vf \"crop=400:400:1520:680,fps=1,scale=150:-1,tile=9x10\" -update 1 -frames:v 1 badge_contact.png)",
+      "Bash(rm -f /Users/olcay.senturk/Desktop/Others/cutpilot/.scratch-fix*.mjs)",
+      "Bash(node .scratch-home-check.mjs)"
+    ],
+    "additionalDirectories": [
+      "/Users/olcay.senturk/Desktop/Others/cutpilot"
+    ]
+  }
+}

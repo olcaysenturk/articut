@@ -1,0 +1,28 @@
+:root {
+  --color-background: #ffffff;
+  --color-foreground: #111111;
+  --color-accent: #111111;
+  --color-muted: #6b6b6b;
+  --color-border: #e5e5e5;
+  --color-surface: #f7f7f7;
+
+  --font-display: var(--font-gamay-narrow);
+  --font-body: var(--font-gamay-editorial);
+  --font-brand: var(--font-gamay-wide);
+
+  --space-section: 6rem;
+  --container-width: 1280px;
+  --header-height: 4.5rem;
+  --radius-button: 999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0a0a0a;
+    --color-foreground: #f5f5f5;
+    --color-accent: #f5f5f5;
+    --color-muted: #a0a0a0;
+    --color-border: #262626;
+    --color-surface: #141414;
+  }
+}

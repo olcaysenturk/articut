@@ -314,7 +314,7 @@ function MobileHomepage({ product }: { product: Product }) {
           loop
           playsInline
           preload="metadata"
-          poster="/figma/cutpilot-pack.png"
+          poster="/images/hero-poster.png"
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>

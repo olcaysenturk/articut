@@ -15,7 +15,7 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   snapSection: true,
   enablePngSequence: true,
   sequence: {
-    path: "/images/sequence/Cutpilot_3D_Desktop{index}.png",
+    path: "/images/sequence/Cutpilot_3D_Desktop{index}.webp",
     frameCount: 125,
     frameWidth: 1440,
     frameHeight: 810,
@@ -66,7 +66,7 @@ export function HeroProductReveal({ header }: HeroProductRevealProps) {
           loop
           playsInline
           preload="metadata"
-          poster="/figma/cutpilot-pack.png"
+          poster="/images/hero-poster.png"
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>

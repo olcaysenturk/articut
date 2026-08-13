@@ -13,7 +13,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   ghost: "bg-transparent hover:bg-surface",
 };
 
-export function Button({ variant = "primary", className, ...props }: ButtonProps) {
+export function Button({ variant = "primary", className, children, ...props }: ButtonProps) {
   return (
     <button
       className={cn(
@@ -22,6 +22,8 @@ export function Button({ variant = "primary", className, ...props }: ButtonProps
         className,
       )}
       {...props}
-    />
+    >
+      <span className="relative z-10 inline-flex items-center justify-center">{children}</span>
+    </button>
   );
 }

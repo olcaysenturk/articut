@@ -52,7 +52,7 @@ export function AddToCartButton({
       aria-label={children ? label : undefined}
       className={className}
     >
-      {isPending ? "Adding..." : (children ?? label)}
+      {isPending && !children ? "Adding..." : (children ?? label)}
     </Button>
   );
 }

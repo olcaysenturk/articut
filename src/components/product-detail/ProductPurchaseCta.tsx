@@ -25,14 +25,14 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
 
   return (
     <div ref={rootRef} className="flex flex-col items-center gap-[22px]">
-      <div className="relative h-[46px] w-[227px] md:h-[61px] md:w-[304px]">
+      <div className="product-purchase-hover relative h-[46px] w-[227px] md:h-[61px] md:w-[304px]">
         <motion.div
           aria-hidden
           initial={false}
           animate={{ scaleX: isVisible ? 1 : 0, opacity: isVisible ? 1 : 0 }}
           transition={reduceMotion ? { duration: 0 } : { duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           style={{ transformOrigin: "center center" }}
-          className="pointer-events-none absolute inset-0 rounded-full bg-[#e04d26]"
+          className="product-purchase-pill pointer-events-none absolute inset-0 rounded-full bg-[#e04d26]"
         />
         <motion.div
           initial={false}
@@ -45,7 +45,7 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
             quantity={1}
             disabled={!variant || !product.available}
             label={`Add to Cart    →    ${price}`}
-            className="h-full w-full cursor-pointer whitespace-pre bg-transparent px-4 text-[14px] font-normal text-[#e0e0e0] hover:bg-[#f15a35] md:px-8 md:text-[20px]"
+            className="h-full w-full cursor-pointer whitespace-pre bg-transparent px-4 text-[14px] font-normal text-[#e0e0e0] md:px-8 md:text-[20px]"
           />
         </motion.div>
       </div>

@@ -3,6 +3,7 @@ import {
   FeatureSection,
   type FeatureSectionConfig,
 } from "@/components/sections/features/FeatureSection";
+import { VideoMuteButton } from "@/components/media/VideoMuteButton";
 import { FEATURES } from "@/components/sections/hero/hero-content";
 
 const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
@@ -12,7 +13,6 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     "section-two-heading absolute left-1/2 top-[52px] z-10 w-[min(1340px,92vw)] -translate-x-1/2",
   sectionClassName: "relative h-dvh overflow-hidden bg-black text-white",
   nodeId: "1:503",
-  snapSection: true,
   enablePngSequence: true,
   sequence: {
     path: "/images/sequence/Cutpilot_3D_Desktop{index}.webp",
@@ -35,8 +35,8 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     href: "/cutpilot",
     label: "Explore Cutpilot™",
     className:
-      "absolute bottom-[75px] left-1/2 h-[61px] w-[304px] -translate-x-1/2",
-    backgroundClassName: "absolute inset-0 rounded-full bg-[#e04d26]",
+      "feature-cta-hover absolute bottom-[75px] left-1/2 h-[61px] w-[304px] -translate-x-1/2",
+    backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
     contentClassName:
       "pointer-events-auto absolute inset-0 flex items-center justify-center text-[20px] text-[#e0e0e0]",
   },
@@ -54,9 +54,9 @@ export function HeroProductReveal({ header }: HeroProductRevealProps) {
   return (
     <>
       <section
+        data-video-frame
         className="relative h-dvh overflow-hidden bg-black"
         data-node-id="1:502"
-        data-snap-section
       >
         {header}
         <video
@@ -71,6 +71,7 @@ export function HeroProductReveal({ header }: HeroProductRevealProps) {
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/10" />
+        <VideoMuteButton className="absolute bottom-[34px] right-[50px] z-20" />
       </section>
 
       <FeatureSection config={CUTPILOT_FEATURE_CONFIG} />

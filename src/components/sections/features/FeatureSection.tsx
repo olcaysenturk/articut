@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, registerGsapPlugins } from "@/lib/animation/gsap";
+import { gsap, registerGsapPlugins, ScrollTrigger } from "@/lib/animation/gsap";
 import { mediaQueries } from "@/lib/animation/breakpoints";
 
 type FeatureImageBase = {
@@ -26,6 +26,7 @@ type SequenceConfig = {
   frameWidth: number;
   frameHeight: number;
   indexPadding?: number;
+  preloadMediaQuery?: string;
   startAt?: number;
   duration?: number;
   canvasClassName: string;
@@ -47,7 +48,6 @@ type FeatureSectionBaseConfig = {
   headingClassName: string;
   sectionClassName: string;
   nodeId?: string;
-  snapSection?: boolean;
   backgroundImage?: FeatureImage;
   productImage?: FeatureImage;
   productImageContainerClassName?: string;
@@ -146,7 +146,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
     }
 
     const sequenceConfig = sequence;
-    const media = window.matchMedia(mediaQueries.tabletUp);
+    const media = window.matchMedia(sequenceConfig.preloadMediaQuery ?? mediaQueries.tabletUp);
     let cancelled = false;
     let loaded = false;
 
@@ -196,15 +196,14 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       const animateHeading = animation?.animateHeading ?? false;
       const animateDetails = animation?.animateDetails ?? false;
       const animateProductImage = animation?.animateProductImage ?? false;
-      const hasTimelineAnimation = enablePngSequence || animateHeading || animateDetails;
-      const hasAnimation = hasTimelineAnimation || animateProductImage;
+      const hasAnimation =
+        enablePngSequence || animateHeading || animateDetails || animateProductImage;
 
       if (!stage || !hasAnimation) {
         return;
       }
 
       if (window.matchMedia(mediaQueries.reducedMotion).matches) {
-        gsap.set(headingRef.current, { lineHeight: 1 });
         gsap.set(headingLines, { opacity: 1, y: 0 });
         gsap.set([buttonPillRef.current, buttonContentRef.current, featureItems], {
           clearProps: "all",
@@ -218,10 +217,12 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       }
 
       if (animateHeading) {
-        gsap.set(headingRef.current, { lineHeight: 1.32, willChange: "line-height" });
+        gsap.set(headingRef.current, { overflow: "hidden" });
         gsap.set(headingLines, {
+          display: "block",
           opacity: (index) => Math.min(0.2 + index * 0.2, 0.6),
-          y: (index) => 140 - index * 15,
+          yPercent: (index) => 90 - index * 10,
+          force3D: true,
           willChange: "transform, opacity",
         });
       }
@@ -239,7 +240,6 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       if (animateProductImage) {
         gsap.set(productImageRef.current, {
           opacity: 0,
-          scale: 0.96,
           transformOrigin: "center center",
         });
       }
@@ -248,16 +248,15 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       const sequenceStart = sequence?.startAt ?? 0.4;
       const sequenceDuration = sequence?.duration ?? 3.3;
       const productImageStart = animation?.productImageStartAt ?? (animateHeading ? 1.05 : 0);
-      const productImageDuration = animation?.productImageDuration ?? 0.8;
+      const productImageDuration =
+        animation?.productImageDuration ?? (animateProductImage && animateHeading ? sequenceDuration : 0.8);
 
       if (animateHeading) {
-        timeline
-          .to(headingRef.current, { lineHeight: 1, duration: 1.05, ease: "sine.out" }, 0)
-          .to(
-            headingLines,
-            { opacity: 1, y: 0, duration: 0.9, ease: "sine.out", stagger: 0.04 },
-            0,
-          );
+        timeline.to(
+          headingLines,
+          { opacity: 1, yPercent: 0, duration: 0.9, ease: "sine.out", stagger: 0.04 },
+          0,
+        );
       }
 
       const playhead = { frame: 0 };
@@ -281,10 +280,11 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
       if (animateDetails && buttonPillRef.current && buttonContentRef.current) {
         const detailsStart = enablePngSequence
-          ? sequenceStart + sequenceDuration
+          ? sequenceStart + sequenceDuration * 0.42
           : animateProductImage
-            ? productImageStart + productImageDuration
+            ? productImageStart + productImageDuration * 0.42
             : 0;
+        const featureItemsStart = detailsStart + (enablePngSequence || animateProductImage ? 0.55 : 0.9);
         timeline
           .to(
             buttonPillRef.current,
@@ -299,61 +299,35 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
           .to(
             featureItems,
             { opacity: 1, y: 0, duration: 0.42, stagger: 0.21, ease: "power2.out" },
-            detailsStart + 0.9,
+            featureItemsStart,
           );
       }
 
 
-      const productImageEntrance = animateProductImage
-        ? gsap
-            .timeline({ paused: true })
-            .to(
-              productImageRef.current,
-              {
-                opacity: 1,
-                scale: 1,
-                duration: productImageDuration,
-                ease: "power2.out",
-              },
-              productImageStart,
-            )
-        : null;
-      let hasPlayedProductImageEntrance = false;
-      let previousRatio = 0;
+      if (animateProductImage) {
+        timeline.to(
+          productImageRef.current,
+          {
+            opacity: 1,
+            duration: productImageDuration,
+            ease: "none",
+          },
+          productImageStart,
+        );
+      }
 
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          const enteredThreshold = entry.intersectionRatio >= 0.8 && previousRatio < 0.8;
-          previousRatio = entry.intersectionRatio;
-
-          if (enteredThreshold) {
-            if (hasTimelineAnimation) {
-              timeline.restart();
-            }
-            if (productImageEntrance && !hasPlayedProductImageEntrance) {
-              hasPlayedProductImageEntrance = true;
-              productImageEntrance.play(0);
-            }
-            return;
-          }
-
-          if (!entry.isIntersecting && hasTimelineAnimation) {
-            timeline.pause(0);
-            if (enablePngSequence) {
-              playhead.frame = 0;
-              currentFrameRef.current = 0;
-              drawFrame(0);
-            }
-          }
-        },
-        { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] },
-      );
-      observer.observe(stage);
+      const scrollTrigger = ScrollTrigger.create({
+        trigger: stage,
+        start: "top 78%",
+        end: "top top",
+        scrub: 0.35,
+        animation: timeline,
+        invalidateOnRefresh: true,
+      });
 
       return () => {
-        observer.disconnect();
+        scrollTrigger.kill();
         timeline.kill();
-        productImageEntrance?.kill();
       };
     },
     {
@@ -371,7 +345,6 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       id={config.sectionId}
       className={config.sectionClassName}
       data-node-id={config.nodeId}
-      data-snap-section={config.snapSection || undefined}
     >
       {config.backgroundImage ? <ConfiguredImage image={config.backgroundImage} /> : null}
 
@@ -401,7 +374,11 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         />
       ) : config.productImage ? (
         config.productImageContainerClassName ? (
-          <div ref={productImageRef} className={config.productImageContainerClassName}>
+          <div
+            ref={productImageRef}
+            data-product-image-reveal={animation?.animateProductImage || undefined}
+            className={config.productImageContainerClassName}
+          >
             <ConfiguredImage image={config.productImage} />
           </div>
         ) : (

@@ -30,7 +30,15 @@
       "Bash(ffmpeg -y -i /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4 -vf \"crop=400:400:1520:680,fps=2,scale=200:-1,tile=10x18\" -frames:v 1 badge_contact.png)",
       "Bash(ffmpeg -y -i /Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4 -vf \"crop=400:400:1520:680,fps=1,scale=150:-1,tile=9x10\" -update 1 -frames:v 1 badge_contact.png)",
       "Bash(rm -f /Users/olcay.senturk/Desktop/Others/cutpilot/.scratch-fix*.mjs)",
-      "Bash(node .scratch-home-check.mjs)"
+      "Bash(node .scratch-home-check.mjs)",
+      "Bash(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 public/videos/hero.mp4)",
+      "Bash(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 Articut_Website_Presentation_Final.mp4)",
+      "Bash(mkdir -p /private/tmp/claude-842554220/-Users-olcay-senturk-Desktop-Others-cutpilot/1a31ac78-5c0e-4033-aa66-2743d4971109/scratchpad/frames)",
+      "Bash(ffmpeg -y -ss 55 -to 58.5 -i \"/Users/olcay.senturk/Desktop/Others/cutpilot/Articut_Website_Presentation_Final.mp4\" -vf fps=2 frame_%02d.png)",
+      "Bash(npx --yes svgexport combframe.svg combframe.png)",
+      "Bash(npx tsc *)",
+      "Bash(disown)",
+      "Bash(timeout 40 bash -c 'until curl -sf http://localhost:3000 >/dev/null; do sleep 1; done')"
     ],
     "additionalDirectories": [
       "/Users/olcay.senturk/Desktop/Others/cutpilot"

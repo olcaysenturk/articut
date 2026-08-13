@@ -7,10 +7,120 @@ html {
   scroll-behavior: smooth;
 }
 
+[data-product-image-reveal] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-product-image-reveal] {
+    opacity: 1;
+  }
+}
+
 .transition-colors-standard {
   transition-property: color, background-color, border-color;
   transition-duration: 200ms;
   transition-timing-function: ease;
+}
+
+.yellow-center-hover {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #e04d26;
+}
+
+.yellow-center-hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: #fab446;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.yellow-center-hover:hover::before,
+.yellow-center-hover:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.yellow-center-hover:hover,
+.yellow-center-hover:focus-visible {
+  opacity: 1;
+}
+
+.feature-cta-pill {
+  overflow: hidden;
+}
+
+.feature-cta-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fab446;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.feature-cta-hover:hover .feature-cta-pill::after,
+.feature-cta-hover:focus-within .feature-cta-pill::after {
+  transform: scaleX(1);
+}
+
+.feature-cta-hover:hover a,
+.feature-cta-hover:focus-within a {
+  color: #e04d26;
+}
+
+.product-purchase-pill {
+  overflow: hidden;
+}
+
+.product-purchase-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fab446;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.product-purchase-hover:hover .product-purchase-pill::after,
+.product-purchase-hover:focus-within .product-purchase-pill::after {
+  transform: scaleX(1);
+}
+
+.product-purchase-hover:hover button,
+.product-purchase-hover:focus-within button {
+  color: #e04d26;
+  opacity: 1;
+}
+
+.video-mute-button {
+  display: inline-flex;
+  width: 38px;
+  height: 31px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #e04d26;
+  cursor: pointer;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.video-mute-button:hover {
+  opacity: 0.82;
+  transform: scale(1.04);
 }
 
 .ribbon-marquee-track {
@@ -24,8 +134,6 @@ html {
   display: flex;
   flex: none;
   align-items: center;
-  gap: 0.42em;
-  padding-right: 0.42em;
   font-family: var(--font-gamay-editorial), Arial, Helvetica, sans-serif;
   font-size: 6.4583cqw;
   font-style: italic;
@@ -34,8 +142,24 @@ html {
   white-space: nowrap;
 }
 
+.ribbon-marquee-word {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.ribbon-marquee-separator {
+  display: inline-flex;
+  width: 1em;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
 .ribbon-marquee-mark {
   display: block;
+  position: relative;
+  top: 15px;
   width: 0.58em;
   height: 0.27em;
   flex: none;
@@ -179,15 +303,8 @@ html {
 }
 
 .comb-frame-line {
-  stroke-dasharray: 24 16;
-  will-change: stroke-dashoffset;
-  animation: comb-frame-line-flow 5s linear infinite;
-}
-
-@keyframes comb-frame-line-flow {
-  to {
-    stroke-dashoffset: -400;
-  }
+  fill: transparent;
+  vector-effect: non-scaling-stroke;
 }
 
 @keyframes initial-loader-dismiss {

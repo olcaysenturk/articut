@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AddToCartButton } from "@/components/commerce/AddToCartButton";
 import { CartButton } from "@/components/commerce/CartButton";
 import { MobileStickyHeader } from "@/components/layout/MobileStickyHeader";
+import { VideoMuteButton } from "@/components/media/VideoMuteButton";
 import {
   FeatureSection,
   type FeatureSectionConfig,
@@ -11,7 +12,6 @@ import { HeroProductReveal } from "@/components/sections/hero/HeroProductReveal"
 import { FEATURES } from "@/components/sections/hero/hero-content";
 import { CutpilotPackageImage } from "@/components/sections/product/CutpilotPackageImage";
 import { ProductPaymentReveal } from "@/components/sections/figma-landing/ProductPaymentReveal";
-import { ScrollSnapNav } from "@/components/motion/ScrollSnapNav";
 import { formatCompactMoney } from "@/features/cart/cart-utils";
 import type { Product } from "@/types/shopify";
 
@@ -37,13 +37,17 @@ const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     "mobile-feature-heading absolute left-1/2 top-[40px] z-10 w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
   sectionClassName:
     "absolute left-0 top-[492px] h-[580px] w-full overflow-hidden bg-black text-white",
-  productImage: {
-    src: "/figma/cutpilot-product.png",
-    alt: "",
-    width: 398,
-    height: 205,
-    sizes: "398px",
-    className: "absolute left-[-3px] top-[214px] w-[398px] max-w-none object-contain",
+  enablePngSequence: true,
+  sequence: {
+    path: "/images/sequence/mobile/cutpilot_3D_Mobile_HigRes{index}.webp",
+    frameCount: 125,
+    frameWidth: 1179,
+    frameHeight: 1740,
+    indexPadding: 3,
+    preloadMediaQuery: "(max-width: 767px)",
+    startAt: 1.05,
+    duration: 3.3,
+    canvasClassName: "absolute inset-0 z-0 h-full w-full object-cover",
   },
   features: FEATURES,
   featuresClassName:
@@ -55,8 +59,8 @@ const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     href: "/cutpilot",
     label: "Explore Cutpilot™",
     className:
-      "absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
-    backgroundClassName: "absolute inset-0 rounded-full bg-[#e04d26]",
+      "feature-cta-hover absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
+    backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
     contentClassName:
       "pointer-events-auto absolute inset-0 flex items-center justify-center text-[12px] text-[#e0e0e0]",
   },
@@ -74,7 +78,6 @@ const DESKTOP_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
     "section-two-heading absolute left-1/2 top-[52px] z-10 w-[min(1340px,92vw)] -translate-x-1/2",
   sectionClassName: "relative h-dvh overflow-hidden bg-[#e04d26] text-white",
   nodeId: "1:554",
-  snapSection: true,
   backgroundImage: {
     src: "/figma/scissors-hero.png",
     alt: "Articut scissors",
@@ -102,8 +105,8 @@ const DESKTOP_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
     href: "#product",
     label: "Explore CutScissors™",
     className:
-      "absolute bottom-[75px] left-1/2 h-[61px] w-[296px] -translate-x-1/2",
-    backgroundClassName: "absolute inset-0 rounded-full bg-[#d9d9d9]",
+      "feature-cta-hover absolute bottom-[75px] left-1/2 h-[61px] w-[296px] -translate-x-1/2",
+    backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#d9d9d9]",
     contentClassName:
       "pointer-events-auto absolute inset-0 flex items-center justify-center text-[20px] text-[#e04d26]",
   },
@@ -111,6 +114,8 @@ const DESKTOP_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
     animateHeading: true,
     animateDetails: true,
     animateProductImage: true,
+    productImageStartAt: 2.2,
+    productImageDuration: 2.15,
   },
 };
 
@@ -150,8 +155,8 @@ const MOBILE_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
     href: "/cutpilot",
     label: "Explore Cutpilot™",
     className:
-      "absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
-    backgroundClassName: "absolute inset-0 rounded-full bg-[#e04d26]",
+      "feature-cta-hover absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
+    backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
     contentClassName:
       "pointer-events-auto absolute inset-0 flex items-center justify-center text-[12px] text-[#fab446]",
   },
@@ -173,7 +178,7 @@ function ProductCta({ product }: { product: Product }) {
         quantity={1}
         disabled={!variant || !product.available}
         label={`Add to Cart    →    ${formatCompactMoney(variant?.price ?? product.price)}`}
-        className="h-[61px] w-[304px] whitespace-pre bg-[#e0e0e0] px-8 text-[20px] font-normal text-[#e04d26] hover:bg-white"
+        className="yellow-center-hover h-[61px] w-[304px] whitespace-pre bg-[#e0e0e0] px-8 text-[20px] font-normal text-[#e04d26]"
       />
     </div>
   );
@@ -235,9 +240,11 @@ function RibbonMarquee({
           <div key={group} className="ribbon-marquee-group h-full">
             {[0, 1, 2].flatMap((repeat) =>
               RIBBON_WORDS.map((word) => (
-                <span key={`${repeat}-${word}`} className="contents">
+                <span key={`${repeat}-${word}`} className="ribbon-marquee-word">
                   <span>{word}</span>
-                  <span className="ribbon-marquee-mark" />
+                  <span className="ribbon-marquee-separator">
+                    <span className="ribbon-marquee-mark" />
+                  </span>
                 </span>
               )),
             )}
@@ -253,7 +260,6 @@ function FooterBand() {
     <footer
       className="relative h-[690px] overflow-hidden text-[#e04d26]"
       style={{ backgroundColor: GRAY }}
-      data-snap-section
     >
       <div className="absolute left-[50px] top-[63px] text-[18px] leading-[24px]">
         <Link href="/" className="block">
@@ -292,9 +298,15 @@ function FooterBand() {
       <p className="absolute bottom-[48px] right-[50px] text-right text-[18px] leading-[24px]">
         Website by Artı Stüdyo
       </p>
-      <p className="font-brand-wide absolute bottom-[83px] left-[50px] text-[220px] leading-[0.8] tracking-[0] md:text-[300px]">
-        Articut
-      </p>
+      <div className="absolute bottom-[83px] left-1/2 aspect-[215/41] w-[calc(100%-100px)] max-w-[1340px] -translate-x-1/2">
+        <Image
+          src="/figma/articut-logo.svg"
+          alt="Articut"
+          fill
+          sizes="1340px"
+          className="object-contain"
+        />
+      </div>
     </footer>
   );
 }
@@ -306,7 +318,7 @@ function MobileHomepage({ product }: { product: Product }) {
     <div id="mobile-home" className="relative h-[3106px] w-full overflow-hidden bg-white text-[#e04d26]">
       <MobileStickyHeader />
 
-      <section className="absolute left-0 top-0 h-[492px] w-full overflow-hidden bg-black">
+      <section data-video-frame className="absolute left-0 top-0 h-[492px] w-full overflow-hidden bg-black">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
@@ -318,6 +330,7 @@ function MobileHomepage({ product }: { product: Product }) {
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
+        <VideoMuteButton className="absolute bottom-[18px] right-[18px] z-20 scale-[0.82]" />
       </section>
 
       <FeatureSection config={MOBILE_CUTPILOT_FEATURE_CONFIG} />
@@ -331,7 +344,7 @@ function MobileHomepage({ product }: { product: Product }) {
               quantity={1}
               disabled={!variant || !product.available}
               label={`Add to Cart    →    ${formatCompactMoney(variant?.price ?? product.price)}`}
-              className="h-[46px] w-[241px] whitespace-pre bg-[#e0e0e0] px-4 text-[12px] font-normal text-[#e04d26] hover:bg-white"
+              className="yellow-center-hover h-[46px] w-[241px] whitespace-pre bg-[#e0e0e0] px-4 text-[12px] font-normal text-[#e04d26]"
             />
           }
           buttonClassName="absolute left-1/2 top-[583px] -translate-x-1/2"
@@ -420,14 +433,12 @@ export function FigmaLandingPage({ product }: FigmaLandingPageProps) {
   return (
     <>
       <div className="hidden bg-white text-[#e04d26] md:block">
-      <ScrollSnapNav />
       <HeroProductReveal header={<HeaderOverlay />} />
 
       <section
         id="product"
         className="relative h-dvh overflow-hidden bg-white"
         data-node-id="1:538"
-        data-snap-section
       >
         <CutpilotPackageImage sizes="100vw" />
         <ProductPaymentReveal
@@ -441,10 +452,9 @@ export function FigmaLandingPage({ product }: FigmaLandingPageProps) {
         className="relative h-dvh overflow-hidden"
         style={{ backgroundColor: YELLOW }}
         data-node-id="1:499"
-        data-snap-section
       >
         <div
-          className="absolute left-1/2 top-1/2 aspect-[16/9] w-[min(100%,177.7778dvh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-[#fab446] [container-type:size]"
+          className="absolute inset-0 overflow-hidden bg-[#fab446] [container-type:size]"
           style={{ border: "max(1px, 0.2083cqw) solid #e04d26" }}
         >
           <RibbonMarquee className="absolute left-[10.5556%] top-0 h-[18.5185%] w-[78.8889%]" />

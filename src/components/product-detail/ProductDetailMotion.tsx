@@ -43,13 +43,9 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       }
 
       if (reduceMotion) {
-        gsap.set(
-          [heroProduct, heroTitle, heroCopy, badge, combLeft, combRight, combFrameText],
-          {
-            clearProps: "all",
-            opacity: 1,
-          },
-        );
+        const revealedOnLoad = [heroProduct, heroTitle, heroCopy, badge, combLeft, combRight, combFrameText];
+        gsap.set(revealedOnLoad, { clearProps: "all" });
+        gsap.set(revealedOnLoad, { opacity: 1 });
         gsap.set(featureOverlayItems, { opacity: (index) => (index === 0 ? 1 : 0) });
         gsap.set(introSecondary, { clearProps: "all", opacity: 1 });
         gsap.set(introPrimaryLeft, { clipPath: "polygon(-16% 0%, -16% 0%, -32% 100%, -32% 100%)" });
@@ -247,8 +243,8 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
 
         const featureOverlayScrollTrigger = ScrollTrigger.create({
           trigger: featureOverlaySection,
-          start: isTabletUp ? "top top" : "bottom bottom",
-          end: isTabletUp ? "bottom top" : "bottom 62px",
+          start: "top top",
+          end: "bottom top",
           invalidateOnRefresh: true,
           onRefresh: (self) => updateFeatureOverlay(self.progress),
           onUpdate: (self) => updateFeatureOverlay(self.progress),

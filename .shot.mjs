@@ -1,0 +1,10 @@
+import { chromium } from "playwright";
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = [];
+page.on("pageerror", (e) => errs.push(String(e)));
+page.on("console", (m) => { if (m.type() === "error") errs.push(m.text()); });
+await page.goto("http://localhost:3000/cutpilot", { waitUntil: "networkidle", timeout: 60000 });
+await page.waitForTimeout(1000);
+console.log(JSON.stringify(errs, null, 2));
+await browser.close();

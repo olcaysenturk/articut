@@ -200,14 +200,15 @@ export function CutpilotProductPage({ product }: { product: Product }) {
         </div>
       </section>
 
-      <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[calc(100svh-62px)] overflow-hidden text-white md:h-[2200px] md:overflow-visible">
-        <div className="relative h-full overflow-hidden md:sticky md:top-0 md:h-[calc(100svh-100px)]">
-          <ResponsiveImage src={`${PRODUCT_ASSET}/in-use.jpg`} alt="Cutpilot in use" className="object-cover" />
+      <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[2200px] overflow-visible text-white">
+        <div className="sticky top-15.5 h-[calc(100svh-62px)] overflow-hidden md:top-0 md:h-[calc(100vh)]">
+          {/* eslint-disable-next-line @next/next/no-img-element -- plain img avoids Next's image optimizer, which deadlocks under this sticky section on high-DPR mobile */}
+          <img src={`${PRODUCT_ASSET}/in-use.jpg`} alt="Cutpilot in use" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-[#e04d26]/10" />
-          <div data-feature-overlay-panel className="pointer-events-none absolute left-0 top-1/2 z-10 h-full w-full -translate-y-1/2 overflow-hidden text-center text-[14px] font-semibold md:h-[360px] md:text-[30px]">
+          <div data-feature-overlay-panel className="pointer-events-none absolute left-0 top-1/2 z-10 h-75 w-full -translate-y-1/2 overflow-hidden text-center text-[14px] font-semibold md:h-[360px] md:text-[30px]">
             <div data-feature-overlay-track className="absolute left-0 top-0 flex w-full flex-col items-center gap-[90px]">
               {FEATURES.map((feature) => (
-                <p data-feature-overlay-item key={feature} className="flex shrink-0 items-center justify-center px-6 opacity-0">
+                <p data-feature-overlay-item key={feature} className="flex shrink-0 items-center justify-center px-6 opacity-0 text-xl">
                   {feature}
                 </p>
               ))}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FigmaLandingPage } from "@/components/sections/figma-landing/FigmaLandingPage";
+import { HomeLanding } from "@/components/sections/home-landing/HomeLanding";
 import { env } from "@/lib/env";
 import { toProduct } from "@/lib/shopify/mappers";
 import { getProductByHandle } from "@/lib/shopify/queries/product";
@@ -59,7 +59,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <FigmaLandingPage product={product} />
+      <HomeLanding product={product} />
     </>
   );
 }

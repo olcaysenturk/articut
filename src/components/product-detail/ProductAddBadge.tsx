@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { AddToCartBadgeIcon } from "@/components/product-detail/AddToCartBadgeIcon";
+import { AddToCartBadgeIconMobile } from "@/components/product-detail/AddToCartBadgeIconMobile";
 import { AddToCartButton } from "@/components/commerce/AddToCartButton";
 import { useCartStore } from "@/features/cart/cart-store";
 import type { Product } from "@/types/shopify";
@@ -13,7 +14,7 @@ export function ProductAddBadge({ product }: { product: Product }) {
   return (
     <div
       data-product-badge
-      className="pointer-events-none fixed bottom-[-126px] right-[-123px] z-30 opacity-0 motion-reduce:opacity-100"
+      className="pointer-events-none fixed top-[calc(50dvh-120.5px)] -right-40 z-30 opacity-0 motion-reduce:opacity-100 md:top-auto md:-right-30 md:-bottom-30"
     >
       <motion.div
         initial={false}
@@ -32,7 +33,12 @@ export function ProductAddBadge({ product }: { product: Product }) {
           label="Add to Cart"
           className="relative h-[241px] w-[243px] cursor-pointer bg-transparent p-0 transition-transform hover:scale-105"
         >
-          <AddToCartBadgeIcon />
+          <div className="absolute inset-0 md:hidden">
+            <AddToCartBadgeIconMobile />
+          </div>
+          <div className="absolute inset-0 hidden md:block">
+            <AddToCartBadgeIcon />
+          </div>
         </AddToCartButton>
       </motion.div>
     </div>

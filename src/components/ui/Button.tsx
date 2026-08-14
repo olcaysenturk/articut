@@ -23,7 +23,7 @@ export function Button({ variant = "primary", className, children, ...props }: B
       )}
       {...props}
     >
-      <span className="relative z-10 inline-flex items-center justify-center">{children}</span>
+      <span className="relative z-10 inline-flex h-full w-full items-center justify-center">{children}</span>
     </button>
   );
 }

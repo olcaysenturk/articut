@@ -5,7 +5,7 @@ import { CartButton } from "@/components/commerce/CartButton";
 export function HeaderOverlay() {
   return (
     <header className="absolute left-0 top-0 z-30 h-[100px] w-full text-[14px] font-bold text-[#e04d26]">
-      <div className="relative mx-auto h-full max-w-[1440px]">
+      <div className="relative mx-auto h-full w-full">
         <Link href="/about" className="absolute left-[50px] top-[42px] leading-none">
           About
         </Link>

@@ -3,6 +3,21 @@ import Link from "next/link";
 
 const GRAY = "#a5a5a5";
 
+function FooterArrow() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="footer-link-arrow ml-[0.28em] inline-block size-[0.82em]"
+    >
+      <path
+        d="M4.8 20.7L17.1 8.4H8.3V5.2h14.1v14.1h-3.2v-8.7L7.1 22.9Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export function FooterBand() {
   return (
     <footer
@@ -32,26 +47,33 @@ export function FooterBand() {
         </Link>
       </div>
       <div className="absolute right-[50px] top-[63px] text-right text-[18px] leading-[24px]">
-        <a href="mailto:info@articut.com" className="block">
-          info@articut.com ↗
+        <a href="mailto:info@articut.com" className="footer-link-with-arrow block">
+          info@articut.com
+          <FooterArrow />
         </a>
-        <a href="https://instagram.com" target="_blank" rel="noreferrer" className="block">
-          Instagram ↗
+        <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link-with-arrow block">
+          Instagram
+          <FooterArrow />
         </a>
       </div>
-      <p className="absolute bottom-[48px] left-[50px] text-[18px] leading-[24px]">© 2026 Articut</p>
-      <p className="absolute bottom-[48px] left-1/2 -translate-x-1/2 text-[18px] leading-[24px]">
-        All rights reserved
+      <p className="absolute bottom-[16px] left-[50px] text-[14px] uppercase leading-none">© 2026 ARTICUT</p>
+      <p className="absolute bottom-[16px] left-1/2 -translate-x-1/2 text-[14px] uppercase leading-none">
+        ALL RIGHTS RESERVED
       </p>
-      <p className="absolute bottom-[48px] right-[50px] text-right text-[18px] leading-[24px]">
-        Website by Artı Stüdyo
-      </p>
-      <div className="absolute bottom-[83px] left-1/2 aspect-[215/41] w-[calc(100%-100px)] max-w-[1340px] -translate-x-1/2">
+      <a
+        href="https://artistudyo.com"
+        target="_blank"
+        rel="noreferrer"
+        className="absolute bottom-[16px] right-[50px] text-right text-[14px] uppercase leading-none"
+      >
+        WEBSITE BY ARTI STÜDYO
+      </a>
+      <div className="absolute bottom-[50px] left-[50px] aspect-[670/131] w-[calc(100%-100px)]">
         <Image
-          src="/figma/articut-logo.svg"
+          src="/figma/footer-logo.svg"
           alt="Articut"
           fill
-          sizes="1340px"
+          sizes="calc(100vw - 100px)"
           className="object-contain"
         />
       </div>

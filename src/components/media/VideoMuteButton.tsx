@@ -45,7 +45,7 @@ export function VideoMuteButton({ className = "" }: VideoMuteButtonProps) {
       aria-label={isMuted ? "Unmute video" : "Mute video"}
       aria-pressed={!isMuted}
       onClick={toggleMute}
-      className={`video-mute-button group ${isMuted ? "is-muted" : "is-unmuted"} ${className}`}
+      className={`video-mute-button ${isMuted ? "is-muted" : "is-unmuted"} ${className}`}
     >
       <svg
         aria-hidden="true"
@@ -65,14 +65,14 @@ export function VideoMuteButton({ className = "" }: VideoMuteButtonProps) {
             <path
               d="M23.15 9.25C24.78 10.82 25.7 13.05 25.7 15.5C25.7 17.95 24.78 20.18 23.15 21.75"
               stroke="currentColor"
-              strokeWidth="3.4"
               strokeLinecap="round"
+              strokeWidth="3.4"
             />
             <path
               d="M29.15 5.35C31.95 7.92 33.55 11.58 33.55 15.5C33.55 19.42 31.95 23.08 29.15 25.65"
               stroke="currentColor"
-              strokeWidth="3.4"
               strokeLinecap="round"
+              strokeWidth="3.4"
             />
           </>
         )}

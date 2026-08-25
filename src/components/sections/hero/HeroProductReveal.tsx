@@ -4,7 +4,9 @@ import {
   type FeatureSectionConfig,
 } from "@/components/sections/features/FeatureSection";
 import { VideoMuteButton } from "@/components/media/VideoMuteButton";
+import { VideoPlaybackButton } from "@/components/media/VideoPlaybackButton";
 import { FEATURES } from "@/components/sections/hero/hero-content";
+import { HERO_VIDEO_POSTER_URL, HERO_VIDEO_URL } from "@/config/hero-video";
 
 const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   title: ["Revolutionary", "at-home hair", "cutting gadget"],
@@ -20,14 +22,14 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     frameWidth: 1440,
     frameHeight: 810,
     indexPadding: 3,
-    startAt: 1.05,
-    duration: 3.3,
+    startAt: 1.85,
+    duration: 5.4,
     canvasClassName:
       "absolute left-0 top-1/2 z-20 h-auto w-full -translate-y-1/2 object-contain xl:inset-0 xl:h-full xl:translate-y-0 xl:object-cover",
   },
   features: FEATURES,
   featuresClassName:
-    "absolute bottom-[161px] left-1/2 w-[min(554px,82vw)] -translate-x-1/2 text-center text-[clamp(14px,1.53vw,22px)] font-light leading-[1.23]",
+    "absolute bottom-[161px] left-1/2 w-[min(554px,82vw)] -translate-x-1/2 text-center text-[18px] font-light leading-[1.23]",
   featureItemClassName: "flex items-center justify-center gap-[10px]",
   showFeatureBullets: true,
   bulletClassName: "h-[8px] w-[8px] shrink-0 rounded-full bg-[#e04d26]",
@@ -43,6 +45,16 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   animation: {
     animateHeading: true,
     animateDetails: true,
+    headingStartAt: 0.45,
+    headingDuration: 1.35,
+    headingStagger: 0.14,
+    headingScrollStart: "top 50%",
+    headingScrollEnd: "top 18%",
+    headingScrollScrub: 0.45,
+    scrollStart: "top top",
+    scrollEnd: "+=220%",
+    scrollScrub: 0.55,
+    pin: true,
   },
 };
 
@@ -66,11 +78,12 @@ export function HeroProductReveal({ header }: HeroProductRevealProps) {
           loop
           playsInline
           preload="metadata"
-          poster="/images/hero-poster.png"
+          poster={HERO_VIDEO_POSTER_URL}
         >
-          <source src="/videos/hero.mp4" type="video/mp4" />
+          <source src={HERO_VIDEO_URL} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/10" />
+        <VideoPlaybackButton className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2" />
         <VideoMuteButton className="absolute bottom-[34px] right-[50px] z-20" />
       </section>
 

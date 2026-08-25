@@ -27,7 +27,7 @@ const ITEMS = [
 ];
 
 export function ProductFaq() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const reduceMotion = useReducedMotion();
 
   return (
@@ -44,12 +44,9 @@ export function ProductFaq() {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex min-h-[76px] w-full cursor-pointer items-center justify-between gap-6 px-5 text-left text-[14px] font-semibold transition-colors hover:bg-[#e04d26] hover:text-[#fff4de] md:min-h-[117px] md:px-[64px] md:text-[30px]"
+                className="flex min-h-[76px] w-full cursor-pointer items-center px-5 text-left text-[14px] font-semibold transition-colors hover:bg-[#e04d26] hover:text-[#fff4de] md:min-h-[117px] md:px-[64px] md:text-[30px]"
               >
                 <span>{item.question}</span>
-                <span aria-hidden className="shrink-0 text-[24px] font-normal">
-                  {isOpen ? "−" : "+"}
-                </span>
               </button>
               <motion.div
                 id={panelId}

@@ -10,7 +10,7 @@ export function EditorialHeader({ dark = false }: { dark?: boolean }) {
         <Link href="/about" className="absolute left-[50px] top-[42px]">
           About
         </Link>
-        <Link href="/#cutpilot-mobile" className="absolute left-[163px] top-[42px]">
+        <Link href="/cutpilot" className="absolute left-[163px] top-[42px]">
           Cutpilot™
         </Link>
         <Link href="/" aria-label="Articut home" className="absolute left-1/2 top-[30px] h-[41px] w-[215px] -translate-x-1/2">

@@ -15,7 +15,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   headingClassName:
     "mobile-feature-heading absolute left-1/2 top-[40px] z-10 w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
   sectionClassName:
-    "absolute left-0 top-[492px] h-[580px] w-full overflow-hidden bg-black text-white",
+    "absolute left-0 top-[492px] h-[760px] w-full overflow-hidden bg-black text-white",
   enablePngSequence: true,
   sequence: {
     path: "/images/sequence/mobile/cutpilot_3D_Mobile_HigRes{index}.webp",
@@ -24,13 +24,13 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     frameHeight: 1740,
     indexPadding: 3,
     preloadMediaQuery: "(max-width: 767px)",
-    startAt: 1.05,
-    duration: 3.3,
+    startAt: 1.5,
+    duration: 4.6,
     canvasClassName: "absolute inset-0 z-0 h-full w-full object-cover",
   },
   features: FEATURES,
   featuresClassName:
-    "absolute left-1/2 top-[426px] w-[330px] -translate-x-1/2 text-center text-[12px] leading-[17px]",
+    "absolute left-1/2 top-[566px] w-[330px] -translate-x-1/2 text-center text-[12px] leading-[17px]",
   featureItemClassName: "flex items-center justify-center gap-[10px]",
   showFeatureBullets: true,
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-[#e04d26]",
@@ -38,7 +38,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     href: "/cutpilot",
     label: "Explore Cutpilot™",
     className:
-      "feature-cta-hover absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
+      "feature-cta-hover absolute left-1/2 top-[638px] h-[46px] w-[241px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
     contentClassName:
       "pointer-events-auto absolute inset-0 flex items-center justify-center text-[12px] text-[#e0e0e0]",
@@ -46,6 +46,9 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   detailsClassName: "z-10",
   animation: {
     animateDetails: true,
+    scrollStart: "top 58%",
+    scrollEnd: "top top",
+    scrollScrub: 0.5,
   },
 };
 
@@ -106,7 +109,7 @@ export const MOBILE_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
   headingClassName:
     "mobile-feature-heading absolute left-1/2 top-[40px] z-10 w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
   sectionClassName:
-    "absolute left-0 top-[2247px] h-[580px] w-full overflow-hidden bg-[#e04d26] text-white",
+    "absolute left-0 top-[2251px] h-[580px] w-full overflow-hidden bg-[#e04d26] text-white",
   backgroundImage: {
     src: "/figma/scissors-hero.png",
     alt: "Articut scissors",
@@ -126,7 +129,7 @@ export const MOBILE_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
     "absolute left-1/2 top-1/2 z-20 h-[478px] w-[796px] -translate-x-1/2 -translate-y-1/2",
   features: CUTSCISSORS_FEATURES,
   featuresClassName:
-    "absolute left-[32px] top-[426px] w-[330px] text-center text-[12px] leading-[17px]",
+    "absolute left-1/2 top-[426px] w-[330px] -translate-x-1/2 text-center text-[12px] leading-[17px]",
   featureItemClassName: "flex items-center justify-center gap-[10px]",
   showFeatureBullets: true,
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-white",

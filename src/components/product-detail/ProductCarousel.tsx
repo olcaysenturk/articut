@@ -6,20 +6,16 @@ import { useReducedMotion } from "motion/react";
 
 const SLIDES = [
   {
-    src: "/images/product-detail/cutpilot-photo-1.jpg",
+    src: "/images/product-detail/cutpilot-slider-1.jpg",
     alt: "Open Cutpilot package and tool on a sofa",
   },
   {
-    src: "/images/product-detail/cutpilot-photo-2.jpg",
+    src: "/images/product-detail/cutpilot-slider-2.jpg",
     alt: "Cutpilot tool below a bathroom mirror",
   },
   {
-    src: "/images/product-detail/cutpilot-photo-3.jpg",
+    src: "/images/product-detail/cutpilot-slider-3.jpg",
     alt: "Cutpilot package on a yellow table",
-  },
-  {
-    src: "/images/product-detail/cutpilot-photo-4.jpg",
-    alt: "Cutpilot packaging on a cream chair",
   },
 ];
 
@@ -74,7 +70,7 @@ export function ProductCarousel() {
   );
 
   return (
-    <section className="relative h-[calc(100svh-62px)] overflow-hidden md:h-[calc(100svh-100px)]" data-product-carousel>
+    <section className="relative aspect-[16/9] w-full overflow-hidden" data-product-carousel>
       <div
         className="flex h-full w-full"
         style={{
@@ -106,8 +102,8 @@ export function ProductCarousel() {
             aria-current={index === activeIndex}
             disabled={isTransitioning && index !== activeIndex}
             onClick={() => goToSlide(index)}
-            className={`size-[14px] cursor-pointer rounded-full transition-colors disabled:cursor-default md:size-[22px] ${
-              index === activeIndex ? "bg-[#e04d26]" : "bg-[#e0e0e0]"
+            className={`size-[14px] cursor-pointer rounded-full transition-[background-color,transform] duration-300 ease-out active:scale-125 disabled:cursor-default md:size-[22px] ${
+              index === activeIndex ? "scale-125 bg-[#e04d26]" : "scale-100 bg-[#e0e0e0] hover:scale-110"
             }`}
           />
         ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { getOrCreateCart } from "@/app/actions/cart-actions";
 import { CartItem } from "@/components/commerce/CartItem";
@@ -10,7 +10,6 @@ import { useScrollLock } from "@/components/ui/useScrollLock";
 import { drawerVariants, overlayVariants } from "@/lib/animation/motion-config";
 import { formatCompactMoney } from "@/features/cart/cart-utils";
 import { useCartStore } from "@/features/cart/cart-store";
-import type { Cart } from "@/types/shopify";
 
 const PAYMENT_MARKS = [
   { src: "/figma/afterpay.svg", alt: "Afterpay", width: 57, height: 12 },
@@ -24,10 +23,12 @@ const cartTransition = { duration: 0.52, ease: [0.22, 1, 0.36, 1] as const };
 
 export function CartDrawer() {
   const isDrawerOpen = useCartStore((state) => state.isDrawerOpen);
+  const cart = useCartStore((state) => state.cart);
+  const setCart = useCartStore((state) => state.setCart);
+  const isCartLoading = useCartStore((state) => state.isLoading);
   const closeDrawer = useCartStore((state) => state.closeDrawer);
   const errorMessage = useCartStore((state) => state.errorMessage);
   const setError = useCartStore((state) => state.setError);
-  const [cart, setCart] = useState<Cart | null>(null);
   const [isPending, startTransition] = useTransition();
   const containerRef = useOverlayBehavior(isDrawerOpen, closeDrawer);
   useScrollLock(isDrawerOpen);
@@ -42,7 +43,7 @@ export function CartDrawer() {
       }
       setError(result.error);
     });
-  }, [setError]);
+  }, [setCart, setError]);
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -107,21 +108,21 @@ export function CartDrawer() {
                 className="h-full overflow-y-auto overscroll-y-contain touch-pan-y"
                 aria-live="polite"
               >
-                {isPending && !cart ? (
+                {(isCartLoading || (isPending && !cart)) ? (
                   <div className="grid h-full place-items-center text-[14px] text-black/45">Loading...</div>
                 ) : null}
 
-                {cart && cart.lines.length === 0 ? (
+                {!isCartLoading && cart && cart.lines.length === 0 ? (
                   <div className="grid h-full place-items-center px-[32px] text-center text-[20px]">
                     Your cart is empty.
                   </div>
                 ) : null}
 
-                {cart?.lines.map((line) => (
+                {!isCartLoading && cart?.lines.map((line) => (
                   <CartItem key={line.id} line={line} onChange={refreshCart} />
                 ))}
               </div>
-              {cart && cart.lines.length > 0 ? (
+              {!isCartLoading && cart && cart.lines.length > 0 ? (
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[84px] bg-[linear-gradient(to_bottom,rgba(224,224,224,0.34),rgba(225,225,225,1))]"
@@ -129,7 +130,7 @@ export function CartDrawer() {
               ) : null}
             </div>
 
-            {cart && cart.lines.length > 0 ? (
+            {!isCartLoading && cart && cart.lines.length > 0 ? (
               <footer className="shrink-0 border-t-2 border-white/80 bg-[#dedede] px-[28px] pb-[26px] pt-[24px]">
                 <div className="flex items-center justify-between px-[22px] text-[22px] leading-none">
                   <span>Subtotal</span>

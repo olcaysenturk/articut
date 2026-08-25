@@ -12,7 +12,7 @@ import type { Product } from "@/types/shopify";
 
 export function MobileHome({ product }: { product: Product }) {
   return (
-    <div id="mobile-home" className="relative h-[3280px] w-full overflow-hidden bg-white text-[#e04d26]">
+    <div id="mobile-home" className="relative h-[calc(2831px+min(453px,115.27vw))] w-full overflow-hidden bg-white text-[#e04d26]">
       <MobileStickyHeader />
       <MobileHeroVideo />
       <FeatureSection config={MOBILE_CUTPILOT_FEATURE_CONFIG} />

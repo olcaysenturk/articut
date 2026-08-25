@@ -103,6 +103,26 @@ html {
   opacity: 1;
 }
 
+.video-playback-button {
+  display: inline-flex;
+  width: 76px;
+  height: 76px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #e04d26;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 460ms ease;
+}
+
+.video-playback-button.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .video-mute-button {
   display: inline-flex;
   width: 38px;
@@ -159,7 +179,7 @@ html {
 .ribbon-marquee-mark {
   display: block;
   position: relative;
-  top: 15px;
+  top: 0.16em;
   width: 0.58em;
   height: 0.27em;
   flex: none;
@@ -169,6 +189,16 @@ html {
 
 .ribbon-marquee-reverse {
   animation-direction: reverse;
+}
+
+.footer-link-arrow {
+  transform: translateY(0.04em);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-link-with-arrow:hover .footer-link-arrow,
+.footer-link-with-arrow:focus-visible .footer-link-arrow {
+  transform: translate(0.18em, -0.14em);
 }
 
 @keyframes ribbon-marquee {

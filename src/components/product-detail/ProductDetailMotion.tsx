@@ -33,6 +33,10 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       const featureOverlayPanel = root.querySelector<HTMLElement>("[data-feature-overlay-panel]");
       const featureOverlayTrack = root.querySelector<HTMLElement>("[data-feature-overlay-track]");
       const featureOverlayItems = gsap.utils.toArray<HTMLElement>("[data-feature-overlay-item]", root);
+      const scrollSnapIgnoreSections = gsap.utils.toArray<HTMLElement>(
+        "[data-scroll-snap-ignore]:not([data-product-reveal])",
+        root,
+      );
       const footer = root.querySelector<HTMLElement>("[data-site-footer]");
 
       if (introStory) {
@@ -46,6 +50,7 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         const revealedOnLoad = [heroProduct, heroTitle, heroCopy, badge, combLeft, combRight, combFrameText];
         gsap.set(revealedOnLoad, { clearProps: "all" });
         gsap.set(revealedOnLoad, { opacity: 1 });
+        gsap.set(scrollSnapIgnoreSections, { clearProps: "all", opacity: 1 });
         gsap.set(featureOverlayItems, { opacity: (index) => (index === 0 ? 1 : 0) });
         gsap.set(introSecondary, { clearProps: "all", opacity: 1 });
         gsap.set(introPrimaryLeft, { clipPath: "polygon(-16% 0%, -16% 0%, -32% 100%, -32% 100%)" });
@@ -91,6 +96,24 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       });
 
       const responsiveMotion = gsap.matchMedia();
+      const scrollSnapRevealTriggers = scrollSnapIgnoreSections.map((section) => {
+        gsap.set(section, { opacity: 0, y: 24 });
+        return ScrollTrigger.create({
+          trigger: section,
+          start: "top 82%",
+          once: true,
+          onEnter: () => {
+            gsap.to(section, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out",
+              clearProps: "transform",
+            });
+          },
+        });
+      });
+
       responsiveMotion.add(mediaQueries.tabletUp, () => {
         if (!hero || !heroProduct) {
           return;
@@ -140,9 +163,9 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         const introWipe = gsap.timeline({
           scrollTrigger: {
             trigger: introStory,
-            start: isTabletUp ? "top bottom" : "top center",
-            end: "center center",
-            scrub: 0.35,
+            start: isTabletUp ? "top 56%" : "top 60%",
+            end: isTabletUp ? "top -18%" : "top -10%",
+            scrub: 0.9,
             invalidateOnRefresh: true,
           },
         });
@@ -173,23 +196,23 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       if (combStage && combLeft && combRight) {
         gsap.set(combLeft, {
           xPercent: -20,
-          rotate: 215,
-          opacity: 0,
+          rotate: 35,
+          opacity: 1,
           transformOrigin: "center center",
-          willChange: "transform, opacity",
+          willChange: "transform",
         });
         gsap.set(combRight, {
           xPercent: 20,
-          rotate: 145,
-          opacity: 0,
+          rotate: -35,
+          opacity: 1,
           transformOrigin: "center center",
-          willChange: "transform, opacity",
+          willChange: "transform",
         });
 
         const combTimeline = gsap.timeline({ paused: true });
         combTimeline
-          .to(combLeft, { xPercent: 0, rotate: 180, opacity: 1, duration: 1, ease: "none" }, 0)
-          .to(combRight, { xPercent: 0, rotate: 180, opacity: 1, duration: 1, ease: "none" }, 0);
+          .to(combLeft, { xPercent: 0, rotate: 0, duration: 1, ease: "none" }, 0)
+          .to(combRight, { xPercent: 0, rotate: 0, duration: 1, ease: "none" }, 0);
 
         const combScrollTrigger = ScrollTrigger.create({
           trigger: combStage,
@@ -206,20 +229,42 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         };
       }
 
-      if (badge && footer) {
-        gsap.to(badge, {
+      responsiveMotion.add(mediaQueries.tabletUp, () => {
+        if (!badge || !footer) {
+          return;
+        }
+
+        const badgeFooterTween = gsap.to(badge, {
           opacity: 0,
           duration: 0.4,
           ease: "power1.out",
           scrollTrigger: { trigger: footer, start: "top 90%", toggleActions: "play none none reverse" },
         });
-      }
+
+        return () => {
+          badgeFooterTween.scrollTrigger?.kill();
+          badgeFooterTween.kill();
+        };
+      });
 
       let featureOverlayCleanup: (() => void) | undefined;
       if (featureOverlaySection && featureOverlayPanel && featureOverlayTrack && featureOverlayItems.length) {
         const getCenteredY = (virtualIndex: number) => {
           const lowerIndex = Math.floor(virtualIndex);
-          const upperIndex = Math.min(featureOverlayItems.length - 1, Math.ceil(virtualIndex));
+          const lastIndex = featureOverlayItems.length - 1;
+
+          if (lowerIndex >= lastIndex) {
+            const lastItem = featureOverlayItems[lastIndex];
+            const previousItem = featureOverlayItems[Math.max(0, lastIndex - 1)];
+            const lastCenter = lastItem.offsetTop + lastItem.offsetHeight / 2;
+            const previousCenter = previousItem.offsetTop + previousItem.offsetHeight / 2;
+            const step = Math.max(1, lastCenter - previousCenter);
+            const extraProgress = virtualIndex - lastIndex;
+
+            return featureOverlayPanel.offsetHeight / 2 - (lastCenter + step * extraProgress);
+          }
+
+          const upperIndex = Math.ceil(virtualIndex);
           const progress = virtualIndex - lowerIndex;
           const lowerItem = featureOverlayItems[lowerIndex];
           const upperItem = featureOverlayItems[upperIndex];
@@ -230,7 +275,7 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         };
 
         const updateFeatureOverlay = (progress: number) => {
-          const virtualIndex = progress * (featureOverlayItems.length - 1);
+          const virtualIndex = progress * featureOverlayItems.length;
           gsap.set(featureOverlayTrack, { y: getCenteredY(virtualIndex) });
           featureOverlayItems.forEach((item, index) => {
             const distance = Math.abs(index - virtualIndex);
@@ -258,6 +303,7 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       return () => {
         combCleanup?.();
         featureOverlayCleanup?.();
+        scrollSnapRevealTriggers.forEach((trigger) => trigger.kill());
         responsiveMotion.revert();
       };
     },

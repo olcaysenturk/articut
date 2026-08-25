@@ -1,4 +1,6 @@
 import { VideoMuteButton } from "@/components/media/VideoMuteButton";
+import { VideoPlaybackButton } from "@/components/media/VideoPlaybackButton";
+import { HERO_VIDEO_POSTER_URL, MOBILE_HERO_VIDEO_URL } from "@/config/hero-video";
 
 export function MobileHeroVideo() {
   return (
@@ -10,10 +12,11 @@ export function MobileHeroVideo() {
         loop
         playsInline
         preload="metadata"
-        poster="/images/hero-poster.png"
+        poster={HERO_VIDEO_POSTER_URL}
       >
-        <source src="/videos/hero.mp4" type="video/mp4" />
+        <source src={MOBILE_HERO_VIDEO_URL} type="video/mp4" />
       </video>
+      <VideoPlaybackButton className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 scale-[0.82]" />
       <VideoMuteButton className="absolute bottom-[18px] right-[18px] z-20 scale-[0.82]" />
     </section>
   );

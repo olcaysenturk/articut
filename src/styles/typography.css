@@ -68,12 +68,19 @@ p {
 }
 
 .legal-copy p,
-.legal-copy li,
-.about-story p {
+.legal-copy li {
   line-height: 1.08;
 }
 
+.about-story p {
+  line-height: 1;
+}
+
 @media (min-width: 768px) {
+  .about-story p {
+    line-height: 1.4;
+  }
+
   .legal-copy .legal-section {
     margin-bottom: var(--legal-section-gap);
   }

@@ -63,12 +63,8 @@ function WordRibbon({ activeIndex }: { activeIndex: number | null }) {
 
 function StepCircle({
   step,
-  onEnter,
-  onLeave,
 }: {
   step: (typeof STEPS)[number];
-  onEnter: () => void;
-  onLeave: () => void;
 }) {
   const circleRef = useRef<HTMLDivElement>(null);
   useSettleZoom(circleRef);
@@ -77,8 +73,6 @@ function StepCircle({
     <div
       ref={circleRef}
       data-step-circle
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
       className="settle-zoom relative mx-auto aspect-square w-full max-w-[272px] origin-center overflow-hidden rounded-full border-[3px] border-[#e04d26] bg-[#fab446] transition-transform duration-300 ease-out will-change-transform hover:scale-110"
     >
       <Image src={step.image} alt={`${step.title} Cutpilot`} fill sizes="(max-width: 767px) 150px, 272px" className="object-cover" />
@@ -118,12 +112,34 @@ export function StepsSection() {
       <div className="overflow-hidden md:flex md:h-[112svh] md:min-h-[780px] md:flex-col">
         <WordRibbon activeIndex={hoveredIndex} />
         <div className="bg-white px-8 py-12 md:flex md:flex-1 md:items-center md:px-[50px] md:py-[72px]">
-          <div className="grid w-full grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-12 md:gap-x-6 md:gap-y-0">
+          <div className="mx-auto grid w-full max-w-[1340px] grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-6 md:gap-y-0">
             {STEPS.map((step, index) => (
-              <article key={step.title} data-step-card className="text-center md:px-4">
-                <StepCircle step={step} onEnter={() => setHoveredIndex(index)} onLeave={() => setHoveredIndex(null)} />
-                <p className="mx-auto mt-6 max-w-[310px] text-[14px] leading-[1.05] md:text-[18px]">
-                  <strong className="font-semibold">{step.title}</strong> {step.description.slice(step.title.length)}
+              <article
+                key={step.title}
+                data-step-card
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="group text-center md:px-4"
+              >
+                <StepCircle step={step} />
+                <p className="relative mx-auto mt-6 max-w-[310px] text-[14px] leading-[1.05] md:text-[18px]">
+                  <span aria-hidden="true" className="invisible block font-bold">
+                    <strong>{step.title}</strong> {step.description.slice(step.title.length)}
+                  </span>
+                  <span
+                    className={`absolute inset-0 block transition-opacity duration-300 ease-out ${
+                      hoveredIndex === index ? "opacity-0" : "opacity-100 group-hover:opacity-0"
+                    }`}
+                  >
+                    <strong className="font-semibold">{step.title}</strong> {step.description.slice(step.title.length)}
+                  </span>
+                  <span
+                    className={`absolute inset-0 block font-bold transition-opacity duration-300 ease-out ${
+                      hoveredIndex === index ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                    }`}
+                  >
+                    <strong>{step.title}</strong> {step.description.slice(step.title.length)}
+                  </span>
                 </p>
               </article>
             ))}

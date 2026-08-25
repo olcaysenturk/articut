@@ -8,7 +8,7 @@ export function MobileProductSection({ product }: { product: Product }) {
   const variant = product.variants.find((item) => item.available) ?? product.variants[0];
 
   return (
-    <section id="product-mobile" className="absolute left-0 top-[1072px] h-[699px] w-full overflow-hidden">
+    <section id="product-mobile" className="absolute left-0 top-[1252px] h-[699px] w-full overflow-hidden">
       <CutpilotPackageImage imageClassName="scale-[1.045] object-cover" sizes="393px" />
       <ProductPaymentReveal
         button={

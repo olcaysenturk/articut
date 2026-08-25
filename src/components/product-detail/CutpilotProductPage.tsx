@@ -95,9 +95,18 @@ export function CutpilotProductPage({ product }: { product: Product }) {
       <section data-product-hero className="relative h-[533px] overflow-hidden bg-[#a5a5a5] md:h-dvh md:min-h-[620px]">
         <ProductHeader />
         <div className="absolute inset-x-0 top-[30%] z-0 flex justify-center">
-          <h1 data-hero-title className="product-hero-title text-white">
-            cutpilot
-          </h1>
+          <h1 className="sr-only">Cutpilot</h1>
+          <Image
+            data-hero-title
+            src="/figma/cutpilot-wordmark-white.svg"
+            alt=""
+            width={393}
+            height={108}
+            priority
+            aria-hidden="true"
+            sizes="100vw"
+            className="w-screen max-w-none"
+          />
         </div>
         <div className="absolute inset-x-0 top-[19%] z-10 flex justify-center md:top-[-4%]">
           <Image
@@ -113,9 +122,9 @@ export function CutpilotProductPage({ product }: { product: Product }) {
         </div>
       </section>
 
-      <section data-intro-story className="relative h-[50svh] min-h-[340px] overflow-hidden bg-[#fab446]">
-        <div data-intro-stage className="relative h-full overflow-hidden bg-[#fab446]">
-          <div data-intro-secondary className="absolute inset-0 z-0 flex items-center justify-center bg-[#e04d26] px-8 py-[58px] text-center text-[#fab446] md:py-10">
+      <section data-intro-story className="relative h-[50svh] min-h-[340px] overflow-hidden bg-[#FAB446]">
+        <div data-intro-stage className="relative h-full overflow-hidden bg-[#FAB446]">
+          <div data-intro-secondary className="absolute inset-0 z-0 flex items-center justify-center bg-[#E04D26] px-8 py-[58px] text-center text-[#FAB446] md:py-10">
             <p className="max-w-[680px] text-[16px] font-medium leading-[1.08] md:max-w-[62vw] md:text-[clamp(14px,1.15vw,22px)] xl:max-w-[1160px]">
               Designed to follow the natural contours of any head shape, it lets you effortlessly select and trim to precise lengths from ½ inch to 3 inches. No guesswork, no mess. Perfect for busy moms keeping the kids&apos; hair neat and tidy between appointments, or roommates sharing quick, professional-looking touch-ups without the hassle. Save time, money, and trips out. Get salon-quality results right at home!
             </p>
@@ -131,7 +140,7 @@ export function CutpilotProductPage({ product }: { product: Product }) {
                     ? "polygon(0% 0%, 59% 0%, 43% 100%, 0% 100%)"
                     : "polygon(59% 0%, 100% 0%, 100% 100%, 43% 100%)",
               }}
-              className="absolute inset-0 z-10 flex items-center justify-center bg-[#fab446] px-8 py-[58px] text-center text-[#d9d9d9] md:py-10"
+              className="absolute inset-0 z-10 flex items-center justify-center bg-[#FAB446] px-8 py-[58px] text-center text-[#d9d9d9] md:py-10"
             >
               <p className="max-w-[760px] text-[16px] font-semibold leading-[1.08] md:text-[clamp(16px,1.25vw,24px)]">
                 Tired of pricey salon trips or uneven DIY cuts?<br />Our innovative home hair cutting tool is your new best friend!
@@ -150,45 +159,67 @@ export function CutpilotProductPage({ product }: { product: Product }) {
 
       <StepsSection />
 
-      <section className="relative h-[calc(100svh-62px)] overflow-hidden md:h-[calc(100svh-100px)] md:min-h-[650px]">
+      <section className="relative h-[550px] overflow-hidden md:h-[calc(100svh-100px)] md:min-h-[650px]">
         <CutpilotPackageImage src={`${PRODUCT_ASSET}/package-room.jpg`} alt="Cutpilot product packaging" sizes="100vw" />
         <div className="absolute inset-x-0 bottom-[34px] md:bottom-[36px]">
           <ProductPurchaseCta product={product} />
         </div>
       </section>
 
-      <section data-product-reveal data-scroll-snap-ignore className="grid h-[350px] grid-cols-2 border-y-[3px] border-[#e04d26] md:h-[calc(100svh-100px)] md:min-h-[650px]">
-        <div className="relative overflow-hidden border-r-[3px] border-[#e04d26]">
-          <ResponsiveImage src={`${PRODUCT_ASSET}/gallery-left.jpg`} alt="Cutpilot package held above a model" sizes="50vw" className="object-cover" />
+      <section data-product-reveal data-scroll-snap-ignore className="grid grid-cols-2 border-y-[3px] border-[#e04d26]">
+        <div className="border-r-[3px] border-[#e04d26]">
+          <Image
+            src={`${PRODUCT_ASSET}/cutpilot-box-1.jpg`}
+            alt="Cutpilot package held above a model"
+            width={1440}
+            height={1620}
+            sizes="50vw"
+            className="h-auto w-full"
+          />
         </div>
-        <div className="relative overflow-hidden">
-          <ResponsiveImage src={`${PRODUCT_ASSET}/gallery-right.jpg`} alt="Open Cutpilot package" sizes="50vw" className="object-cover" />
+        <div>
+          <Image
+            src={`${PRODUCT_ASSET}/cutpilot-box-2.jpg`}
+            alt="Open Cutpilot package on a chair"
+            width={1440}
+            height={1620}
+            sizes="50vw"
+            className="h-auto w-full"
+          />
         </div>
       </section>
 
-      <section data-product-reveal data-scroll-snap-ignore className="relative h-[221px] overflow-hidden border-b-[3px] border-[#e04d26] md:h-[calc(100svh-100px)] md:min-h-[650px]">
-        <ResponsiveImage src={`${PRODUCT_ASSET}/package-table.jpg`} alt="Cutpilot components" className="object-cover" />
+      <section data-product-reveal data-scroll-snap-ignore className="border-b-[3px] border-[#e04d26]">
+        <Image
+          src={`${PRODUCT_ASSET}/cutpilot-combs-grid.jpg`}
+          alt="Cutpilot combs and attachments"
+          width={2880}
+          height={1620}
+          sizes="100vw"
+          className="h-auto w-full"
+        />
       </section>
 
-      <section data-comb-callout-section data-scroll-snap-ignore className="bg-[#d9d9d9] px-8 py-8 md:px-[50px] md:py-[50px]">
-        <div className="relative mx-auto min-h-[519px] max-w-[1339px] overflow-hidden border-[3px] border-[#e04d26] md:min-h-[710px]">
-          <div data-comb-frame className="relative mx-auto mt-6 h-[132px] w-[290px] md:mt-[80px] md:h-[315px] md:w-[695px]">
+      <section data-comb-callout-section data-scroll-snap-ignore className="bg-[#d9d9d9] px-[min(44px,7.9vw)] py-[min(46px,8.24vw)] md:px-[50px] md:py-[50px]">
+        <div className="relative mx-auto min-h-[min(736px,132vw)] max-w-[1339px] overflow-hidden border-[3px] border-[#e04d26] md:min-h-[710px]">
+          <div data-comb-frame className="relative mx-auto mt-[min(55px,9.86vw)] h-[min(190px,34vw)] w-[min(407px,73vw)] md:mt-[80px] md:h-[315px] md:w-[695px]">
             <CombCalloutFrame />
-            <div data-comb-frame-text className="absolute inset-0 flex items-center justify-center px-8 text-center text-[14px] font-semibold leading-[1.05] text-[#e04d26] md:text-[22px]">
+            <div data-comb-frame-text className="absolute inset-0 flex items-center justify-center px-8 text-center text-[clamp(14px,3.58vw,20px)] font-semibold leading-[1.05] text-[#e04d26] md:text-[22px]">
               A couple of extra combs,<br />if you prefer a right-hand Cutpilot grip
             </div>
           </div>
-          <div data-comb-stage className="relative mx-auto mt-4 h-[328px] w-full max-w-[1180px] md:mt-[40px] md:h-[340px]">
-            <Image data-comb-left src={`${PRODUCT_ASSET}/comb-left.png`} alt="Cutpilot comb attachment" width={1800} height={935} className="absolute left-[31px] top-0 w-[86%] rotate-180 object-contain md:left-0 md:w-[52%]" />
-            <Image data-comb-right src={`${PRODUCT_ASSET}/comb-right.png`} alt="Cutpilot reverse comb attachment" width={1800} height={790} className="absolute left-[31px] top-[164px] w-[86%] rotate-180 object-contain md:left-auto md:right-0 md:top-[48px] md:w-[52%]" />
+          <div data-comb-stage className="relative mx-auto mt-[min(72px,12.9vw)] h-[min(405px,72.6vw)] w-full max-w-[1180px] md:mt-[40px] md:h-[340px]">
+            <Image data-comb-left src={`${PRODUCT_ASSET}/comb-right.png`} alt="Cutpilot reverse comb attachment" width={628} height={324} className="relative left-[min(44px,7.9vw)] block w-[81%] object-contain md:absolute md:left-0 md:top-0 md:w-[50.5%]" />
+            <Image data-comb-right src={`${PRODUCT_ASSET}/comb-left.png`} alt="Cutpilot comb attachment" width={629} height={275} className="relative left-[min(44px,7.9vw)] mt-[10px] block w-[81%] object-contain md:absolute md:left-auto md:right-0 md:top-[48px] md:mt-0 md:w-[50.5%]" />
           </div>
         </div>
       </section>
 
       <section data-product-reveal data-scroll-snap-ignore className="bg-[#e04d26] px-[30px] py-[31px] md:px-[50px] md:py-[50px]">
         <div className="mx-auto max-w-[1343px] border-x-[3px] border-t-[3px] border-[#fab446] text-[#fab446]">
-          <div className="grid min-h-[76px] grid-cols-2 border-b-[3px] border-[#fab446] bg-[#fab446] text-[14px] font-semibold leading-[1.05] text-[#e04d26] md:min-h-[108px] md:text-[30px]">
-            <div className="flex items-center border-r-[3px] border-[#e04d26] px-2 md:justify-center md:border-[#fab446]">Hair Type</div>
+          <div className="relative grid min-h-[76px] grid-cols-2 border-b-[3px] border-[#fab446] bg-[#fab446] text-[14px] font-semibold leading-[1.05] text-[#e04d26] md:min-h-[108px] md:text-[30px]">
+            <div aria-hidden className="pointer-events-none absolute -bottom-[3px] -top-[3px] left-1/2 z-10 w-[3px] -translate-x-[calc(50%+1px)] bg-[#e04d26] md:bg-[#fab446]" />
+            <div className="flex items-center px-2 md:justify-center">Hair Type</div>
             <div className="flex items-center px-2 md:justify-center md:px-3 md:text-center">Best State for Using Cutpilot</div>
           </div>
           {HAIR_TYPES.map(([type, state]) => (
@@ -200,15 +231,15 @@ export function CutpilotProductPage({ product }: { product: Product }) {
         </div>
       </section>
 
-      <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[2200px] overflow-visible text-white">
+      <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[2800px] overflow-visible text-white">
         <div className="sticky top-15.5 h-[calc(100svh-62px)] overflow-hidden md:top-0 md:h-[calc(100vh)]">
           {/* eslint-disable-next-line @next/next/no-img-element -- plain img avoids Next's image optimizer, which deadlocks under this sticky section on high-DPR mobile */}
           <img src={`${PRODUCT_ASSET}/in-use.jpg`} alt="Cutpilot in use" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-[#e04d26]/10" />
-          <div data-feature-overlay-panel className="pointer-events-none absolute left-0 top-1/2 z-10 h-75 w-full -translate-y-1/2 overflow-hidden text-center text-[14px] font-semibold md:h-[360px] md:text-[30px]">
+          <div data-feature-overlay-panel className="pointer-events-none absolute left-0 top-1/2 z-10 h-75 w-full -translate-y-1/2 overflow-hidden text-center font-semibold md:h-[360px]">
             <div data-feature-overlay-track className="absolute left-0 top-0 flex w-full flex-col items-center gap-[90px]">
               {FEATURES.map((feature) => (
-                <p data-feature-overlay-item key={feature} className="flex shrink-0 items-center justify-center px-6 opacity-0 text-xl">
+                <p data-feature-overlay-item key={feature} className="flex shrink-0 items-center justify-center px-6 text-[22px] opacity-0">
                   {feature}
                 </p>
               ))}

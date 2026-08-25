@@ -36,8 +36,18 @@ type FeatureSectionAnimation = {
   animateHeading?: boolean;
   animateDetails?: boolean;
   animateProductImage?: boolean;
+  headingStartAt?: number;
+  headingDuration?: number;
+  headingStagger?: number;
+  headingScrollStart?: string;
+  headingScrollEnd?: string;
+  headingScrollScrub?: number | boolean;
   productImageStartAt?: number;
   productImageDuration?: number;
+  scrollStart?: string;
+  scrollEnd?: string;
+  scrollScrub?: number | boolean;
+  pin?: boolean;
 };
 
 type FeatureSectionBaseConfig = {
@@ -220,8 +230,8 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         gsap.set(headingRef.current, { overflow: "hidden" });
         gsap.set(headingLines, {
           display: "block",
-          opacity: (index) => Math.min(0.2 + index * 0.2, 0.6),
-          yPercent: (index) => 90 - index * 10,
+          opacity: 0,
+          yPercent: 100,
           force3D: true,
           willChange: "transform, opacity",
         });
@@ -247,15 +257,36 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       const timeline = gsap.timeline({ paused: true });
       const sequenceStart = sequence?.startAt ?? 0.4;
       const sequenceDuration = sequence?.duration ?? 3.3;
+      const headingStart = animation?.headingStartAt ?? 0;
+      const headingDuration = animation?.headingDuration ?? 0.9;
+      const headingStagger = animation?.headingStagger ?? 0.04;
+      const hasDedicatedHeadingScroll = animateHeading && Boolean(animation?.headingScrollStart);
       const productImageStart = animation?.productImageStartAt ?? (animateHeading ? 1.05 : 0);
       const productImageDuration =
         animation?.productImageDuration ?? (animateProductImage && animateHeading ? sequenceDuration : 0.8);
 
-      if (animateHeading) {
+      let headingScrollTrigger: ScrollTrigger | undefined;
+      let headingTimeline: gsap.core.Timeline | undefined;
+
+      if (animateHeading && hasDedicatedHeadingScroll) {
+        headingTimeline = gsap.timeline({ paused: true }).to(
+          headingLines,
+          { opacity: 1, yPercent: 0, duration: headingDuration, ease: "sine.out", stagger: headingStagger },
+          0,
+        );
+        headingScrollTrigger = ScrollTrigger.create({
+          trigger: stage,
+          start: animation?.headingScrollStart,
+          end: animation?.headingScrollEnd ?? "top top",
+          scrub: animation?.headingScrollScrub ?? animation?.scrollScrub ?? 0.35,
+          animation: headingTimeline,
+          invalidateOnRefresh: true,
+        });
+      } else if (animateHeading) {
         timeline.to(
           headingLines,
-          { opacity: 1, yPercent: 0, duration: 0.9, ease: "sine.out", stagger: 0.04 },
-          0,
+          { opacity: 1, yPercent: 0, duration: headingDuration, ease: "sine.out", stagger: headingStagger },
+          headingStart,
         );
       }
 
@@ -318,14 +349,18 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
       const scrollTrigger = ScrollTrigger.create({
         trigger: stage,
-        start: "top 78%",
-        end: "top top",
-        scrub: 0.35,
+        start: animation?.scrollStart ?? "top 78%",
+        end: animation?.scrollEnd ?? "top top",
+        scrub: animation?.scrollScrub ?? 0.35,
+        pin: animation?.pin,
+        anticipatePin: animation?.pin ? 1 : undefined,
         animation: timeline,
         invalidateOnRefresh: true,
       });
 
       return () => {
+        headingScrollTrigger?.kill();
+        headingTimeline?.kill();
         scrollTrigger.kill();
         timeline.kill();
       };
@@ -338,6 +373,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
   const Heading = config.headingLevel === 2 ? "h2" : "h1";
   const title = Array.isArray(config.title) ? config.title : [config.title];
+  const shouldHideHeadingInitially = animation?.animateHeading && Array.isArray(config.title);
 
   return (
     <section
@@ -359,6 +395,11 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
             aria-hidden={Array.isArray(config.title) || undefined}
             data-heading-line={Array.isArray(config.title) || undefined}
             className={Array.isArray(config.title) ? "block" : undefined}
+            style={
+              shouldHideHeadingInitially
+                ? { opacity: 0, transform: "translate3d(0, 100%, 0)" }
+                : undefined
+            }
           >
             {line}
           </span>

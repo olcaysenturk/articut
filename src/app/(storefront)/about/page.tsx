@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { EditorialFooter } from "@/components/editorial/EditorialFooter";
 import { EditorialHeader } from "@/components/editorial/EditorialHeader";
+import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { VideoMuteButton } from "@/components/media/VideoMuteButton";
 import { VideoPlaybackButton } from "@/components/media/VideoPlaybackButton";
 import { Reveal } from "@/components/motion/Reveal";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
+    <VideoLoadingGate>
     <div className="bg-[#d9d9d9] text-black">
       <section data-video-frame className="relative h-dvh overflow-hidden bg-black">
         <EditorialHeader dark />
@@ -34,7 +36,10 @@ export default function AboutPage() {
           <source src={ABOUT_HERO_VIDEO_URL} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/10" />
-        <VideoPlaybackButton className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2" />
+        <p className="pointer-events-none absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-8 text-center font-[family-name:var(--font-gamay-editorial)] text-[30px] font-semibold leading-none tracking-normal text-white md:px-24">
+          We are Articut™. An innovative company designing tools that make professional-quality haircuts possible at home.
+        </p>
+        <VideoPlaybackButton className="absolute bottom-[18px] left-[18px] z-20 scale-[0.82] md:bottom-[34px] md:left-[50px] md:scale-100" />
         <VideoMuteButton className="absolute bottom-[18px] right-[18px] z-20 scale-[0.82] md:bottom-[34px] md:right-[50px] md:scale-100" />
       </section>
 
@@ -86,5 +91,6 @@ export default function AboutPage() {
 
       <EditorialFooter />
     </div>
+    </VideoLoadingGate>
   );
 }

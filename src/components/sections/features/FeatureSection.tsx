@@ -48,6 +48,7 @@ type FeatureSectionAnimation = {
   scrollEnd?: string;
   scrollScrub?: number | boolean;
   pin?: boolean;
+  pinAnticipate?: number;
 };
 
 type FeatureSectionBaseConfig = {
@@ -259,6 +260,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       const sequenceDuration = sequence?.duration ?? 3.3;
       const headingStart = animation?.headingStartAt ?? 0;
       const headingDuration = animation?.headingDuration ?? 0.9;
+      const headingFadeDuration = headingDuration * 1.65;
       const headingStagger = animation?.headingStagger ?? 0.04;
       const hasDedicatedHeadingScroll = animateHeading && Boolean(animation?.headingScrollStart);
       const productImageStart = animation?.productImageStartAt ?? (animateHeading ? 1.05 : 0);
@@ -269,11 +271,18 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       let headingTimeline: gsap.core.Timeline | undefined;
 
       if (animateHeading && hasDedicatedHeadingScroll) {
-        headingTimeline = gsap.timeline({ paused: true }).to(
-          headingLines,
-          { opacity: 1, yPercent: 0, duration: headingDuration, ease: "sine.out", stagger: headingStagger },
-          0,
-        );
+        headingTimeline = gsap
+          .timeline({ paused: true })
+          .to(
+            headingLines,
+            { yPercent: 0, duration: headingDuration, ease: "sine.out", stagger: headingStagger },
+            0,
+          )
+          .to(
+            headingLines,
+            { opacity: 1, duration: headingFadeDuration, ease: "power1.out", stagger: headingStagger },
+            0,
+          );
         headingScrollTrigger = ScrollTrigger.create({
           trigger: stage,
           start: animation?.headingScrollStart,
@@ -283,11 +292,17 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
           invalidateOnRefresh: true,
         });
       } else if (animateHeading) {
-        timeline.to(
-          headingLines,
-          { opacity: 1, yPercent: 0, duration: headingDuration, ease: "sine.out", stagger: headingStagger },
-          headingStart,
-        );
+        timeline
+          .to(
+            headingLines,
+            { yPercent: 0, duration: headingDuration, ease: "sine.out", stagger: headingStagger },
+            headingStart,
+          )
+          .to(
+            headingLines,
+            { opacity: 1, duration: headingFadeDuration, ease: "power1.out", stagger: headingStagger },
+            headingStart,
+          );
       }
 
       const playhead = { frame: 0 };
@@ -353,7 +368,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         end: animation?.scrollEnd ?? "top top",
         scrub: animation?.scrollScrub ?? 0.35,
         pin: animation?.pin,
-        anticipatePin: animation?.pin ? 1 : undefined,
+        anticipatePin: animation?.pin ? (animation.pinAnticipate ?? 1) : undefined,
         animation: timeline,
         invalidateOnRefresh: true,
       });
@@ -397,7 +412,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
             className={Array.isArray(config.title) ? "block" : undefined}
             style={
               shouldHideHeadingInitially
-                ? { opacity: 0, transform: "translate3d(0, 100%, 0)" }
+                ? { opacity: 0 }
                 : undefined
             }
           >

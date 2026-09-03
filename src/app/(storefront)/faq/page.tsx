@@ -67,7 +67,7 @@ export default function FaqPage() {
         <div className="relative z-10">
           <EditorialHeader dark />
           <div className="grid grid-cols-[52px_minmax(0,1fr)] gap-x-[18px] px-[32px] pb-[42px] pt-[39px] md:grid-cols-[290px_minmax(0,1000px)] md:gap-[50px] md:px-[50px] md:pb-32 md:pt-[163px]">
-            <aside className="contents md:block">
+            <aside className="contents md:sticky md:top-[50px] md:block md:self-start">
               <h1 className="faq-title text-white">FAQ</h1>
               <FaqSectionNav />
             </aside>
@@ -76,25 +76,21 @@ export default function FaqPage() {
                 id="products"
                 title="Products"
                 questions={productQuestions}
-                initialOpenIndex={0}
               />
               <FaqAccordion
                 id="shipping"
                 title="Shipping"
                 questions={placeholderQuestions}
-                initialOpenIndex={0}
               />
               <FaqAccordion
                 id="orders"
                 title="Orders and Payments"
                 questions={placeholderQuestions.slice(0, 4)}
-                initialOpenIndex={0}
               />
               <FaqAccordion
                 id="returns"
                 title="Returns and Refunds"
                 questions={placeholderQuestions.slice(0, 4)}
-                initialOpenIndex={0}
               />
             </div>
           </div>

@@ -22,7 +22,7 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     frameWidth: 1440,
     frameHeight: 810,
     indexPadding: 3,
-    startAt: 1.85,
+    startAt: 0.65,
     duration: 5.4,
     canvasClassName:
       "absolute left-0 top-1/2 z-20 h-auto w-full -translate-y-1/2 object-contain xl:inset-0 xl:h-full xl:translate-y-0 xl:object-cover",
@@ -49,12 +49,13 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     headingDuration: 1.35,
     headingStagger: 0.14,
     headingScrollStart: "top 50%",
-    headingScrollEnd: "top 18%",
+    headingScrollEnd: "top -8%",
     headingScrollScrub: 0.45,
     scrollStart: "top top",
     scrollEnd: "+=220%",
-    scrollScrub: 0.55,
+    scrollScrub: 0.85,
     pin: true,
+    pinAnticipate: 0.15,
   },
 };
 

@@ -1,13 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
-import { CartButton } from "@/components/commerce/CartButton";
 import { CombCalloutFrame } from "@/components/product-detail/CombCalloutFrame";
 import { EditorialFooter } from "@/components/editorial/EditorialFooter";
-import { MobileStickyHeader } from "@/components/layout/MobileStickyHeader";
 import { ProductAddBadge } from "@/components/product-detail/ProductAddBadge";
 import { ProductCarousel } from "@/components/product-detail/ProductCarousel";
 import { ProductDetailMotion } from "@/components/product-detail/ProductDetailMotion";
 import { ProductFaq } from "@/components/product-detail/ProductFaq";
+import { ProductHeader } from "@/components/product-detail/ProductHeader";
 import { ProductMediaStrip } from "@/components/product-detail/ProductMediaStrip";
 import { ProductPurchaseCta } from "@/components/product-detail/ProductPurchaseCta";
 import { StepsSection } from "@/components/product-detail/StepsSection";
@@ -29,28 +27,6 @@ const FEATURES = [
   "full control with easy-to-hold grips",
   "6 adjustable length options",
 ];
-
-function ProductHeader() {
-  return (
-    <>
-      <div className="md:hidden">
-        <MobileStickyHeader />
-      </div>
-      <header className="absolute left-0 top-0 z-40 hidden h-[100px] w-full text-[14px] font-bold text-[#e04d26] md:block">
-        <Link href="/about" className="absolute left-[50px] top-[42px] leading-none">
-          About
-        </Link>
-        <Link href="/cutpilot" className="absolute left-[163px] top-[42px] leading-none">
-          Cutpilot™
-        </Link>
-        <Link href="/" aria-label="Articut home" className="absolute left-1/2 top-[30px] h-[41px] w-[215px] -translate-x-1/2">
-          <Image src="/figma/articut-logo.svg" alt="Articut" fill priority className="object-contain" />
-        </Link>
-        <CartButton className="absolute right-[50px] top-[42px] text-[14px] leading-none" />
-      </header>
-    </>
-  );
-}
 
 function ResponsiveImage({
   src,
@@ -123,8 +99,8 @@ export function CutpilotProductPage({ product }: { product: Product }) {
       </section>
 
       <section data-intro-story className="relative h-[50svh] min-h-[340px] overflow-hidden bg-[#FAB446]">
-        <div data-intro-stage className="relative h-full overflow-hidden bg-[#FAB446]">
-          <div data-intro-secondary className="absolute inset-0 z-0 flex items-center justify-center bg-[#E04D26] px-8 py-[58px] text-center text-[#FAB446] md:py-10">
+        <div data-intro-stage className="relative h-full overflow-hidden bg-[#E04D26]">
+          <div data-intro-secondary className="absolute inset-0 z-0 flex items-center justify-center bg-[#d9d9d9] px-8 py-[58px] text-center text-[#E04D26] md:py-10">
             <p className="max-w-[680px] text-[16px] font-medium leading-[1.08] md:max-w-[62vw] md:text-[clamp(14px,1.15vw,22px)] xl:max-w-[1160px]">
               Designed to follow the natural contours of any head shape, it lets you effortlessly select and trim to precise lengths from ½ inch to 3 inches. No guesswork, no mess. Perfect for busy moms keeping the kids&apos; hair neat and tidy between appointments, or roommates sharing quick, professional-looking touch-ups without the hassle. Save time, money, and trips out. Get salon-quality results right at home!
             </p>
@@ -140,7 +116,7 @@ export function CutpilotProductPage({ product }: { product: Product }) {
                     ? "polygon(0% 0%, 59% 0%, 43% 100%, 0% 100%)"
                     : "polygon(59% 0%, 100% 0%, 100% 100%, 43% 100%)",
               }}
-              className="absolute inset-0 z-10 flex items-center justify-center bg-[#FAB446] px-8 py-[58px] text-center text-[#d9d9d9] md:py-10"
+              className="absolute inset-0 z-10 flex items-center justify-center bg-[#E04D26] px-8 py-[58px] text-center text-[#d9d9d9] md:py-10"
             >
               <p className="max-w-[760px] text-[16px] font-semibold leading-[1.08] md:text-[clamp(16px,1.25vw,24px)]">
                 Tired of pricey salon trips or uneven DIY cuts?<br />Our innovative home hair cutting tool is your new best friend!
@@ -159,32 +135,32 @@ export function CutpilotProductPage({ product }: { product: Product }) {
 
       <StepsSection />
 
-      <section className="relative h-[550px] overflow-hidden md:h-[calc(100svh-100px)] md:min-h-[650px]">
+      <section className="relative h-[550px] overflow-hidden md:h-screen">
         <CutpilotPackageImage src={`${PRODUCT_ASSET}/package-room.jpg`} alt="Cutpilot product packaging" sizes="100vw" />
         <div className="absolute inset-x-0 bottom-[34px] md:bottom-[36px]">
           <ProductPurchaseCta product={product} />
         </div>
       </section>
 
-      <section data-product-reveal data-scroll-snap-ignore className="grid grid-cols-2 border-y-[3px] border-[#e04d26]">
-        <div className="border-r-[3px] border-[#e04d26]">
+      <section data-product-reveal data-scroll-snap-ignore className="grid grid-cols-2 border-y-[3px] border-[#e04d26] min-h-[90vh]">
+        <div className="border-r-[3px] border-[#e04d26] overflow-hidden">
           <Image
             src={`${PRODUCT_ASSET}/cutpilot-box-1.jpg`}
             alt="Cutpilot package held above a model"
             width={1440}
             height={1620}
             sizes="50vw"
-            className="h-auto w-full"
+            className="h-full w-full object-cover"
           />
         </div>
-        <div>
+        <div className="overflow-hidden">
           <Image
             src={`${PRODUCT_ASSET}/cutpilot-box-2.jpg`}
             alt="Open Cutpilot package on a chair"
             width={1440}
             height={1620}
             sizes="50vw"
-            className="h-auto w-full"
+            className="h-full w-full object-cover"
           />
         </div>
       </section>
@@ -218,7 +194,7 @@ export function CutpilotProductPage({ product }: { product: Product }) {
       <section data-product-reveal data-scroll-snap-ignore className="bg-[#e04d26] px-[30px] py-[31px] md:px-[50px] md:py-[50px]">
         <div className="mx-auto max-w-[1343px] border-x-[3px] border-t-[3px] border-[#fab446] text-[#fab446]">
           <div className="relative grid min-h-[76px] grid-cols-2 border-b-[3px] border-[#fab446] bg-[#fab446] text-[14px] font-semibold leading-[1.05] text-[#e04d26] md:min-h-[108px] md:text-[30px]">
-            <div aria-hidden className="pointer-events-none absolute -bottom-[3px] -top-[3px] left-1/2 z-10 w-[3px] -translate-x-[calc(50%+1px)] bg-[#e04d26] md:bg-[#fab446]" />
+            <div aria-hidden className="pointer-events-none absolute -top-[3px] -bottom-[3px] left-1/2 z-10 w-[3.5px] -translate-x-[calc(50%+1.2px)] bg-[#e04d26]" />
             <div className="flex items-center px-2 md:justify-center">Hair Type</div>
             <div className="flex items-center px-2 md:justify-center md:px-3 md:text-center">Best State for Using Cutpilot</div>
           </div>
@@ -231,7 +207,7 @@ export function CutpilotProductPage({ product }: { product: Product }) {
         </div>
       </section>
 
-      <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[2800px] overflow-visible text-white">
+      <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[2000px] overflow-visible bg-[#e04d26] text-white">
         <div className="sticky top-15.5 h-[calc(100svh-62px)] overflow-hidden md:top-0 md:h-[calc(100vh)]">
           {/* eslint-disable-next-line @next/next/no-img-element -- plain img avoids Next's image optimizer, which deadlocks under this sticky section on high-DPR mobile */}
           <img src={`${PRODUCT_ASSET}/in-use.jpg`} alt="Cutpilot in use" className="absolute inset-0 h-full w-full object-cover" />

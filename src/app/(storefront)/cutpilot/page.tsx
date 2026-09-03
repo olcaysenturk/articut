@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { CutpilotProductPage } from "@/components/product-detail/CutpilotProductPage";
 import { env } from "@/lib/env";
 import { toProduct } from "@/lib/shopify/mappers";
@@ -32,5 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CutpilotPage() {
   const product = await loadProduct();
 
-  return <CutpilotProductPage product={product} />;
+  return (
+    <VideoLoadingGate>
+      <CutpilotProductPage product={product} />
+    </VideoLoadingGate>
+  );
 }

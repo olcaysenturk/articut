@@ -44,7 +44,7 @@ export function ProductFaq() {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex min-h-[76px] w-full cursor-pointer items-center px-5 text-left text-[14px] font-semibold transition-colors hover:bg-[#e04d26] hover:text-[#fff4de] md:min-h-[117px] md:px-[64px] md:text-[30px]"
+                className="flex min-h-[76px] w-full cursor-pointer items-center justify-center px-5 text-center text-[14px] font-semibold transition-colors hover:bg-[#e04d26] hover:text-[#fff4de] md:min-h-[117px] md:px-[64px] md:text-[30px]"
               >
                 <span>{item.question}</span>
               </button>
@@ -53,9 +53,9 @@ export function ProductFaq() {
                 initial={false}
                 animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
                 transition={reduceMotion ? { duration: 0 } : { duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="overflow-hidden bg-[#e04d26] text-[#fff4de]"
+                className="overflow-hidden text-[#e04d26]"
               >
-                <p className="px-5 py-7 text-[14px] leading-[1.25] md:px-[64px] md:py-[48px] md:text-[22px]">
+                <p className="px-5 py-7 text-center text-[14px] leading-[1.25] md:px-[64px] md:py-[48px] md:text-[22px]">
                   {item.answer}
                 </p>
               </motion.div>

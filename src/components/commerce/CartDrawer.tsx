@@ -45,6 +45,13 @@ export function CartDrawer() {
     });
   }, [setCart, setError]);
 
+  // Prefetch the cart as soon as the app mounts so it's already warm by the
+  // time the user opens the drawer, instead of showing a loading state then.
+  useEffect(() => {
+    refreshCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (isDrawerOpen) {
       refreshCart();

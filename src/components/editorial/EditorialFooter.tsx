@@ -6,7 +6,7 @@ function FooterArrow() {
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="footer-link-arrow ml-[0.28em] inline-block size-[0.82em]"
+      className="footer-link-arrow relative top-[-0.12em] ml-[0.28em] inline-block size-[0.82em] align-middle"
     >
       <path
         d="M4.8 20.7L17.1 8.4H8.3V5.2h14.1v14.1h-3.2v-8.7L7.1 22.9Z"
@@ -53,9 +53,9 @@ export function EditorialFooter() {
         <Image src="/figma/footer-logo.svg" alt="Articut" fill sizes="calc(100vw - 100px)" className="object-contain" />
       </div>
 
-      <div className="relative z-10 text-[min(8px,2.04vw)] uppercase leading-none md:absolute md:bottom-[16px] md:left-[50px] md:right-[50px] md:grid md:grid-cols-3 md:items-end md:gap-2 md:text-[14px] md:leading-none">
+      <div className="relative z-10 text-[min(7px,1.79vw)] uppercase leading-none md:absolute md:bottom-[16px] md:left-[50px] md:right-[50px] md:grid md:grid-cols-3 md:items-end md:gap-2 md:text-[12px] md:leading-none">
         <p className="absolute bottom-0 left-0 md:static">© 2026 ARTICUT</p>
-        <p className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap text-center md:static md:translate-x-0">ALL RIGHTS RESERVED</p>
+        <p className="absolute inset-x-0 bottom-0 whitespace-nowrap text-center md:static">ALL RIGHTS RESERVED</p>
         <p className="absolute bottom-0 right-0 text-right md:static">
           <a href="https://artistudyo.com" target="_blank" rel="noreferrer">
             WEBSITE BY ARTI STÜDYO

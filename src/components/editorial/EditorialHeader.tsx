@@ -1,11 +1,22 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { CartButton } from "@/components/commerce/CartButton";
 import { MobileScissorMenuButton } from "@/components/layout/MobileScissorMenuButton";
+import { useAutoHideHeader } from "@/lib/hooks/useAutoHideHeader";
 
 export function EditorialHeader({ dark = false }: { dark?: boolean }) {
+  const isVisible = useAutoHideHeader();
+
   return (
-    <header className="relative z-40 h-[64px] w-full text-[14px] font-medium md:h-[100px]">
+    <>
+      <div className="hidden md:block md:h-[100px]" aria-hidden />
+      <header
+        className={`relative z-40 h-[64px] w-full text-[14px] font-medium md:fixed md:inset-x-0 md:top-0 md:h-[100px] md:transition-transform md:duration-300 md:ease-out ${
+          isVisible ? "md:translate-y-0" : "md:-translate-y-full"
+        }`}
+      >
       <nav className="hidden md:block" aria-label="Primary navigation">
         <Link href="/about" className="absolute left-[50px] top-[42px]">
           About
@@ -37,6 +48,7 @@ export function EditorialHeader({ dark = false }: { dark?: boolean }) {
         />
       </Link>
       <MobileScissorMenuButton tone={dark ? "black" : "accent"} />
-    </header>
+      </header>
+    </>
   );
 }

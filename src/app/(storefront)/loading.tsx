@@ -1,5 +1,6 @@
-import { BrandLoader } from "@/components/loading/BrandLoader";
+// import { BrandLoader } from "@/components/loading/BrandLoader";
 
 export default function Loading() {
-  return <BrandLoader />;
+  // Temporarily disabled — re-enable by restoring `return <BrandLoader />;`
+  return null;
 }

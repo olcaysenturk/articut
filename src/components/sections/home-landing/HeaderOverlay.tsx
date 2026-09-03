@@ -1,10 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { CartButton } from "@/components/commerce/CartButton";
+import { useAutoHideHeader } from "@/lib/hooks/useAutoHideHeader";
 
 export function HeaderOverlay() {
+  const isVisible = useAutoHideHeader();
+
   return (
-    <header className="absolute left-0 top-0 z-30 h-[100px] w-full text-[14px] font-bold text-[#e04d26]">
+    <header
+      className={`left-0 top-0 z-30 h-[100px] w-full text-[14px] font-bold text-[#e04d26] md:fixed md:inset-x-0 md:transition-transform md:duration-300 md:ease-out ${
+        isVisible ? "md:translate-y-0" : "md:-translate-y-full"
+      } absolute`}
+    >
       <div className="relative mx-auto h-full w-full">
         <Link href="/about" className="absolute left-[50px] top-[42px] leading-none">
           About

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { HomeLanding } from "@/components/sections/home-landing/HomeLanding";
 import { env } from "@/lib/env";
 import { toProduct } from "@/lib/shopify/mappers";
@@ -54,12 +55,12 @@ export default async function HomePage() {
   };
 
   return (
-    <>
+    <VideoLoadingGate>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
       <HomeLanding product={product} />
-    </>
+    </VideoLoadingGate>
   );
 }

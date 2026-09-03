@@ -23,6 +23,8 @@ h4 {
   font-weight: 800;
   line-height: 100%;
   letter-spacing: 0;
+  margin-bottom: -0.14em;
+  padding-bottom: 0.14em;
   text-align: center;
   text-transform: uppercase;
 }
@@ -33,6 +35,8 @@ h4 {
   font-weight: 700;
   line-height: 90%;
   letter-spacing: 0;
+  margin-bottom: -0.14em;
+  padding-bottom: 0.14em;
   text-align: center;
   text-transform: uppercase;
 }

@@ -117,11 +117,11 @@ export function VideoPlaybackButton({ className = "" }: VideoPlaybackButtonProps
       className={`video-playback-button ${isVisible ? "is-visible" : ""} ${className}`}
     >
       {isPaused ? (
-        <svg aria-hidden="true" className="h-[46px] w-[36px]" viewBox="0 0 36 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" className="h-[24px] w-[19px]" viewBox="0 0 36 46" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 0V45.2136L35.525 22.6068L0 0Z" fill="currentColor" />
         </svg>
       ) : (
-        <svg aria-hidden="true" className="h-[46px] w-[34px]" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" className="h-[24px] w-[18px]" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="13.4455" height="45.0818" fill="currentColor" />
           <rect x="20.5635" width="13.4455" height="45.0818" fill="currentColor" />
         </svg>

@@ -37,6 +37,7 @@ export const metadata: Metadata = {
     template: "%s | Articut",
   },
   description: "Articut",
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -12,7 +12,10 @@ export function DesktopPackShowcase() {
     >
       <div
         className="absolute inset-0 overflow-hidden bg-[#fab446] [container-type:size]"
-        style={{ border: "max(1px, 0.2083cqw) solid #e04d26" }}
+        style={{
+          borderTop: "max(1px, 0.2083cqw) solid #e04d26",
+          borderBottom: "max(1px, 0.2083cqw) solid #e04d26",
+        }}
       >
         <RibbonMarquee className="absolute left-[10.5556%] top-0 h-[18.5185%] w-[78.8889%]" />
         <RibbonMarquee

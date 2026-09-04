@@ -8,13 +8,17 @@ import { MobileFooter } from "@/components/sections/home-landing/mobile/MobileFo
 import { MobileHeroVideo } from "@/components/sections/home-landing/mobile/MobileHeroVideo";
 import { MobilePackShowcase } from "@/components/sections/home-landing/mobile/MobilePackShowcase";
 import { MobileProductSection } from "@/components/sections/home-landing/mobile/MobileProductSection";
+import type { CmsContent } from "@/types/cms";
 import type { Product } from "@/types/shopify";
 
-export function MobileHome({ product }: { product: Product }) {
+export function MobileHome({ cmsContent, product }: { cmsContent: CmsContent; product: Product }) {
   return (
     <div id="mobile-home" className="relative h-[calc(2831px+min(453px,115.27vw))] w-full overflow-hidden bg-white text-[#e04d26]">
       <MobileStickyHeader />
-      <MobileHeroVideo />
+      <MobileHeroVideo
+        posterUrl={cmsContent.home.mobileHeroPoster.src}
+        videoUrl={cmsContent.home.mobileHeroVideoUrl}
+      />
       <FeatureSection config={MOBILE_CUTPILOT_FEATURE_CONFIG} />
       <MobileProductSection product={product} />
       <MobilePackShowcase />

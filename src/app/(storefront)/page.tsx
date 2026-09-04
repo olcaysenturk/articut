@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { HomeLanding } from "@/components/sections/home-landing/HomeLanding";
+import { getCmsContent } from "@/lib/cms-content";
 import { env } from "@/lib/env";
 import { toProduct } from "@/lib/shopify/mappers";
 import { getProductByHandle } from "@/lib/shopify/queries/product";
+
+export const dynamic = "force-dynamic";
 
 async function loadProduct() {
   const shopifyProduct = await getProductByHandle(env.SHOPIFY_PRODUCT_HANDLE);
@@ -36,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const product = await loadProduct();
+  const [cmsContent, product] = await Promise.all([getCmsContent(), loadProduct()]);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -60,7 +63,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <HomeLanding product={product} />
+      <HomeLanding cmsContent={cmsContent} product={product} />
     </VideoLoadingGate>
   );
 }

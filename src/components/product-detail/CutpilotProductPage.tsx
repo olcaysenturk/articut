@@ -10,6 +10,7 @@ import { ProductMediaStrip } from "@/components/product-detail/ProductMediaStrip
 import { ProductPurchaseCta } from "@/components/product-detail/ProductPurchaseCta";
 import { StepsSection } from "@/components/product-detail/StepsSection";
 import { CutpilotPackageImage } from "@/components/sections/product/CutpilotPackageImage";
+import type { CmsImage, CmsMediaItem } from "@/types/cms";
 import type { Product } from "@/types/shopify";
 
 const PRODUCT_ASSET = "/images/product-detail";
@@ -56,14 +57,17 @@ function ResponsiveVideo({ src, className }: { src: string; className: string })
   );
 }
 
-const GALLERY_ITEMS = [
-  { type: "image" as const, src: `${PRODUCT_ASSET}/gallery-left.jpg`, alt: "Cutpilot lifestyle 1" },
-  { type: "video" as const, src: "/videos/gallery-video-1.mp4" },
-  { type: "image" as const, src: `${PRODUCT_ASSET}/package-room.jpg`, alt: "Cutpilot lifestyle 3" },
-  { type: "video" as const, src: "/videos/gallery-video-2.mp4" },
-];
-
-export function CutpilotProductPage({ product }: { product: Product }) {
+export function CutpilotProductPage({
+  mediaStrip,
+  packageImage,
+  product,
+  sliderImages,
+}: {
+  mediaStrip: CmsMediaItem[];
+  packageImage: CmsImage;
+  product: Product;
+  sliderImages: CmsImage[];
+}) {
   return (
     <ProductDetailMotion>
     <main className="overflow-x-clip bg-[#d9d9d9] text-[#e04d26]">
@@ -130,13 +134,13 @@ export function CutpilotProductPage({ product }: { product: Product }) {
       </section>
 
       <div data-scroll-snap-ignore>
-        <ProductCarousel />
+        <ProductCarousel slides={sliderImages} />
       </div>
 
       <StepsSection />
 
       <section className="relative h-[550px] overflow-hidden md:h-screen">
-        <CutpilotPackageImage src={`${PRODUCT_ASSET}/package-room.jpg`} alt="Cutpilot product packaging" sizes="100vw" />
+        <CutpilotPackageImage src={packageImage.src} alt={packageImage.alt} sizes="100vw" />
         <div className="absolute inset-x-0 bottom-[34px] md:bottom-[36px]">
           <ProductPurchaseCta product={product} />
         </div>
@@ -229,9 +233,9 @@ export function CutpilotProductPage({ product }: { product: Product }) {
       </div>
 
       <ProductMediaStrip>
-        {GALLERY_ITEMS.map((item) => (
+        {mediaStrip.map((item, index) => (
           <div
-            key={item.src}
+            key={`${item.type}-${item.src}-${index}`}
             className="relative w-[165px] shrink-0 snap-start overflow-hidden border-r-[3px] border-[#e04d26] last:border-r-0 md:w-auto md:shrink md:snap-align-none"
           >
             {item.type === "image" ? (

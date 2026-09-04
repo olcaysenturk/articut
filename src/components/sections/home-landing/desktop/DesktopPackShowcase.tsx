@@ -3,7 +3,13 @@ import { RibbonMarquee } from "@/components/sections/home-landing/RibbonMarquee"
 
 const YELLOW = "#fab446";
 
-export function DesktopPackShowcase() {
+export function DesktopPackShowcase({
+  imageAlt = "Cutpilot tool",
+  imageSrc = "/figma/cutpilot-pack.png",
+}: {
+  imageAlt?: string;
+  imageSrc?: string;
+}) {
   return (
     <section
       className="relative h-dvh overflow-hidden"
@@ -37,8 +43,8 @@ export function DesktopPackShowcase() {
         </div>
         <div className="absolute left-[10.5556%] top-[18.5185%] h-[62.963%] w-[78.8889%] overflow-hidden">
           <Image
-            src="/figma/cutpilot-pack.png"
-            alt="Cutpilot tool"
+            src={imageSrc}
+            alt={imageAlt}
             fill
             sizes="(min-aspect-ratio: 16/9) 78.9dvh, 78.9vw"
             className="object-cover"

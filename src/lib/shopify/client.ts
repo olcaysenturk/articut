@@ -6,6 +6,7 @@ export const shopifyClient = createStorefrontApiClient({
   storeDomain: env.SHOPIFY_STORE_DOMAIN,
   apiVersion: env.SHOPIFY_API_VERSION,
   publicAccessToken: env.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+  customFetchApi: (url, init) => fetch(url, { ...init, cache: "no-store" }),
 });
 
 export class ShopifyApiError extends Error {

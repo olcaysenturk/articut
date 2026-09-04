@@ -3,8 +3,9 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
+import type { CmsImage } from "@/types/cms";
 
-const SLIDES = [
+const DEFAULT_SLIDES = [
   {
     src: "/images/product-detail/cutpilot-slider-1.jpg",
     alt: "Open Cutpilot package and tool on a sofa",
@@ -22,11 +23,12 @@ const SLIDES = [
 const AUTO_ADVANCE_MS = 4200;
 const SLIDE_TRANSITION_MS = 720;
 
-export function ProductCarousel() {
+export function ProductCarousel({ slides = DEFAULT_SLIDES }: { slides?: CmsImage[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const transitionTimerRef = useRef<number | undefined>(undefined);
   const reduceMotion = useReducedMotion();
+  const visibleSlides = slides.length > 0 ? slides : DEFAULT_SLIDES;
 
   const changeSlide = useCallback(
     (index: number) => {
@@ -56,11 +58,11 @@ export function ProductCarousel() {
     if (reduceMotion || isTransitioning) return;
 
     const timer = window.setTimeout(() => {
-      changeSlide((activeIndex + 1) % SLIDES.length);
+      changeSlide((activeIndex + 1) % visibleSlides.length);
     }, AUTO_ADVANCE_MS);
 
     return () => window.clearTimeout(timer);
-  }, [activeIndex, changeSlide, isTransitioning, reduceMotion]);
+  }, [activeIndex, changeSlide, isTransitioning, reduceMotion, visibleSlides.length]);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -80,7 +82,7 @@ export function ProductCarousel() {
             : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
         }}
       >
-        {SLIDES.map((slide, index) => (
+        {visibleSlides.map((slide, index) => (
           <div key={slide.src} className="relative h-full w-full shrink-0">
           <Image
             src={slide.src}
@@ -94,7 +96,7 @@ export function ProductCarousel() {
         ))}
       </div>
       <div className="absolute bottom-[28px] left-1/2 z-10 flex -translate-x-1/2 gap-[10px] md:bottom-[32px]">
-        {SLIDES.map((slide, index) => (
+        {visibleSlides.map((slide, index) => (
           <button
             key={slide.src}
             type="button"

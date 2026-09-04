@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { CutpilotProductPage } from "@/components/product-detail/CutpilotProductPage";
+import { getCmsContent } from "@/lib/cms-content";
 import { env } from "@/lib/env";
 import { toProduct } from "@/lib/shopify/mappers";
 import { getProductByHandle } from "@/lib/shopify/queries/product";
+
+export const dynamic = "force-dynamic";
 
 async function loadProduct() {
   const shopifyProduct = await getProductByHandle(env.SHOPIFY_PRODUCT_HANDLE);
@@ -31,11 +34,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CutpilotPage() {
-  const product = await loadProduct();
+  const [cmsContent, product] = await Promise.all([getCmsContent(), loadProduct()]);
 
   return (
     <VideoLoadingGate>
-      <CutpilotProductPage product={product} />
+      <CutpilotProductPage
+        mediaStrip={cmsContent.productDetail.mediaStrip}
+        packageImage={cmsContent.productDetail.packageImage}
+        product={product}
+        sliderImages={cmsContent.productDetail.slider}
+      />
     </VideoLoadingGate>
   );
 }

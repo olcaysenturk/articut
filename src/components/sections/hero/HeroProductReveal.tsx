@@ -61,9 +61,15 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
 
 type HeroProductRevealProps = {
   header: ReactNode;
+  posterUrl?: string;
+  videoUrl?: string;
 };
 
-export function HeroProductReveal({ header }: HeroProductRevealProps) {
+export function HeroProductReveal({
+  header,
+  posterUrl = HERO_VIDEO_POSTER_URL,
+  videoUrl = HERO_VIDEO_URL,
+}: HeroProductRevealProps) {
   return (
     <>
       <section
@@ -77,11 +83,11 @@ export function HeroProductReveal({ header }: HeroProductRevealProps) {
           autoPlay
           muted
           loop
-          playsInline
-          preload="metadata"
-          poster={HERO_VIDEO_POSTER_URL}
-        >
-          <source src={HERO_VIDEO_URL} type="video/mp4" />
+        playsInline
+        preload="metadata"
+        poster={posterUrl}
+      >
+          <source src={videoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/10" />
         <VideoPlaybackButton className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2" />

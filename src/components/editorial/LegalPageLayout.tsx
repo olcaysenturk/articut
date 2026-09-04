@@ -39,11 +39,26 @@ export function LegalPageLayout({
   );
 }
 
-export function LegalSection({ title, children }: { title: string; children: ReactNode }) {
+export function LegalSection({
+  title,
+  children,
+  html,
+}: {
+  title: string;
+  children?: ReactNode;
+  html?: string;
+}) {
   return (
     <section className="legal-section mb-[54px] md:mb-[66px]">
       <h2 className="mb-[28px] md:mb-[42px]">{title}</h2>
-      <div className="space-y-[18px] md:space-y-[24px]">{children}</div>
+      {html ? (
+        <div
+          className="space-y-[18px] md:space-y-[24px]"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ) : (
+        <div className="space-y-[18px] md:space-y-[24px]">{children}</div>
+      )}
     </section>
   );
 }

@@ -33,6 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# dashboard login credentials (hashed, but shouldn't live in version control)
+/data/dashboard-credentials.json
+
 # vercel
 .vercel
 

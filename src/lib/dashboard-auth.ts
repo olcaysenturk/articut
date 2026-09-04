@@ -33,53 +33,69 @@ async function readCredentials(): Promise<StoredCredentials> {
       passwordHash: hashPassword(initialPassword, salt),
     };
 
-    await mkdir(path.dirname(CREDENTIALS_PATH), { recursive: true });
-    await writeFile(CREDENTIALS_PATH, JSON.stringify(credentials, null, 2), "utf8");
+    try {
+      await mkdir(path.dirname(CREDENTIALS_PATH), { recursive: true });
+      await writeFile(CREDENTIALS_PATH, JSON.stringify(credentials, null, 2), "utf8");
+    } catch {
+      // Filesystem may not be writable (e.g., on Netlify). Return in-memory credentials only.
+    }
 
     return credentials;
   }
 }
 
 export async function getDashboardUsername(): Promise<string> {
-  const envUsername = process.env.DASHBOARD_USERNAME;
-  if (envUsername) {
-    return envUsername;
-  }
+  try {
+    const envUsername = process.env.DASHBOARD_USERNAME;
+    if (envUsername) {
+      return envUsername;
+    }
 
-  const credentials = await readCredentials();
-  return credentials.username;
+    const credentials = await readCredentials();
+    return credentials.username;
+  } catch {
+    return process.env.DASHBOARD_USERNAME || "admin";
+  }
 }
 
 export async function checkCredentials(username: string, password: string): Promise<boolean> {
-  const envUsername = process.env.DASHBOARD_USERNAME;
-  const envPassword = process.env.DASHBOARD_PASSWORD;
+  try {
+    const envUsername = process.env.DASHBOARD_USERNAME;
+    const envPassword = process.env.DASHBOARD_PASSWORD;
 
-  if (envUsername && envPassword) {
-    return username === envUsername && password === envPassword;
+    if (envUsername && envPassword) {
+      return username === envUsername && password === envPassword;
+    }
+
+    const credentials = await readCredentials();
+
+    if (username !== credentials.username) return false;
+
+    const candidateHash = hashPassword(password, credentials.salt);
+    const candidateBuffer = Buffer.from(candidateHash);
+    const expectedBuffer = Buffer.from(credentials.passwordHash);
+
+    if (candidateBuffer.length !== expectedBuffer.length) return false;
+    return timingSafeEqual(candidateBuffer, expectedBuffer);
+  } catch {
+    return false;
   }
-
-  const credentials = await readCredentials();
-
-  if (username !== credentials.username) return false;
-
-  const candidateHash = hashPassword(password, credentials.salt);
-  const candidateBuffer = Buffer.from(candidateHash);
-  const expectedBuffer = Buffer.from(credentials.passwordHash);
-
-  if (candidateBuffer.length !== expectedBuffer.length) return false;
-  return timingSafeEqual(candidateBuffer, expectedBuffer);
 }
 
 export async function verifyCurrentPassword(password: string): Promise<boolean> {
-  const envUsername = process.env.DASHBOARD_USERNAME;
-  const envPassword = process.env.DASHBOARD_PASSWORD;
+  try {
+    const envUsername = process.env.DASHBOARD_USERNAME;
+    const envPassword = process.env.DASHBOARD_PASSWORD;
 
-  if (envUsername && envPassword) {
-    return password === envPassword;
+    if (envUsername && envPassword) {
+      return password === envPassword;
+    }
+
+    const credentials = await readCredentials();
+    return checkCredentials(credentials.username, password);
+  } catch {
+    return false;
   }
-
-  const credentials = await readCredentials();
-  return checkCredentials(credentials.username, password);
 }
 
 export function isUsingEnvironmentVariables(): boolean {

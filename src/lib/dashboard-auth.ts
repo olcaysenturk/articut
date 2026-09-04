@@ -41,11 +41,23 @@ async function readCredentials(): Promise<StoredCredentials> {
 }
 
 export async function getDashboardUsername(): Promise<string> {
+  const envUsername = process.env.DASHBOARD_USERNAME;
+  if (envUsername) {
+    return envUsername;
+  }
+
   const credentials = await readCredentials();
   return credentials.username;
 }
 
 export async function checkCredentials(username: string, password: string): Promise<boolean> {
+  const envUsername = process.env.DASHBOARD_USERNAME;
+  const envPassword = process.env.DASHBOARD_PASSWORD;
+
+  if (envUsername && envPassword) {
+    return username === envUsername && password === envPassword;
+  }
+
   const credentials = await readCredentials();
 
   if (username !== credentials.username) return false;
@@ -59,11 +71,28 @@ export async function checkCredentials(username: string, password: string): Prom
 }
 
 export async function verifyCurrentPassword(password: string): Promise<boolean> {
+  const envUsername = process.env.DASHBOARD_USERNAME;
+  const envPassword = process.env.DASHBOARD_PASSWORD;
+
+  if (envUsername && envPassword) {
+    return password === envPassword;
+  }
+
   const credentials = await readCredentials();
   return checkCredentials(credentials.username, password);
 }
 
+export function isUsingEnvironmentVariables(): boolean {
+  return !!(process.env.DASHBOARD_USERNAME && process.env.DASHBOARD_PASSWORD);
+}
+
 export async function updateCredentials(newUsername: string, newPassword: string): Promise<void> {
+  if (isUsingEnvironmentVariables()) {
+    throw new Error(
+      "Cannot update credentials when using environment variables. Update DASHBOARD_USERNAME and DASHBOARD_PASSWORD in your deployment settings."
+    );
+  }
+
   const salt = randomBytes(16).toString("hex");
   const credentials: StoredCredentials = {
     username: newUsername,

@@ -54,7 +54,7 @@ function PasswordInput({
   );
 }
 
-export function ProfileForm({ currentUsername }: { currentUsername: string }) {
+export function ProfileForm({ currentUsername, isUsingEnvironmentVariables }: { currentUsername: string; isUsingEnvironmentVariables?: boolean }) {
   const [state, formAction, isPending] = useActionState(updateProfileAction, undefined);
   const initial = currentUsername.slice(0, 1).toUpperCase() || "?";
 
@@ -86,8 +86,16 @@ export function ProfileForm({ currentUsername }: { currentUsername: string }) {
           {state.success}
         </div>
       ) : null}
+      {isUsingEnvironmentVariables ? (
+        <div className="flex items-center gap-3 rounded-lg bg-blue-50 px-4 py-3 text-sm font-medium text-blue-700">
+          <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Credentials are managed via environment variables. Update them in your deployment settings.
+        </div>
+      ) : null}
 
-      <form id="profile-form" action={formAction} className="space-y-6">
+      <form id="profile-form" action={formAction} className="space-y-6" style={{ opacity: isUsingEnvironmentVariables ? 0.5 : 1, pointerEvents: isUsingEnvironmentVariables ? "none" : "auto" }}>
         <section className="rounded-lg border border-[#d0d0d0] bg-white p-6">
           <div className="mb-4 flex items-center gap-3">
             <span className="grid size-9 place-items-center rounded-lg bg-[#fab446]/20 text-[#e04d26]">

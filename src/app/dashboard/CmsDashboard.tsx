@@ -15,7 +15,6 @@ import type { CmsContent, CmsImage, CmsMediaItem } from "@/types/cms";
 import { FaqForm } from "./faq/FaqForm";
 import { TermsForm } from "./terms/TermsForm";
 import { PrivacyForm } from "./privacy/PrivacyForm";
-import { ProfileForm } from "./profile/ProfileForm";
 
 export type ActivePanel =
   | "about-hero"
@@ -30,8 +29,7 @@ export type ActivePanel =
   | "product-detail"
   | "faq"
   | "terms"
-  | "privacy"
-  | "profile";
+  | "privacy";
 
 type ManagedImage = CmsImage & {
   file?: File;
@@ -97,7 +95,6 @@ const panels = [
   { key: "faq" as const, label: "FAQ", icon: "faq" },
   { key: "terms" as const, label: "Terms & Conditions", icon: "terms" },
   { key: "privacy" as const, label: "Privacy Policy", icon: "terms" },
-  { key: "profile" as const, label: "Profile", icon: "profile" },
 ];
 
 function createBlankImage(): ManagedImage {
@@ -161,7 +158,6 @@ function formIdForPanel(panel: ActivePanel) {
   if (panel === "faq") return "faq-form";
   if (panel === "terms") return "terms-form";
   if (panel === "privacy") return "privacy-form";
-  if (panel === "profile") return "profile-form";
   return "home-form";
 }
 
@@ -175,7 +171,6 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "faq") return "FAQ";
   if (panel === "terms") return "Terms & Conditions";
   if (panel === "privacy") return "Privacy Policy";
-  if (panel === "profile") return "Profile";
 
   return homePanels.find((item) => item.key === panel)?.label ?? "Homepage";
 }
@@ -221,6 +216,14 @@ function Icon({ name }: { name: string }) {
     );
   }
 
+  if (name === "sales") {
+    return (
+      <svg className="h-5 w-5" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.5l4.5-4.5 4 4L20 4.5M20 4.5h-4.5M20 4.5V9M4 19.5h16" />
+      </svg>
+    );
+  }
+
   return (
     <svg className="h-5 w-5" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
       <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2m14 0V8a2 2 0 00-2-2h-3M5 11V8a2 2 0 012-2h3m0 0V4h4v2m-4 0h4" />
@@ -252,6 +255,12 @@ function DashboardShell({
       const url = new URL(window.location.href);
       url.searchParams.delete("saved");
       window.history.replaceState({}, "", url.toString());
+
+      const timeout = window.setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+
+      return () => window.clearTimeout(timeout);
     }
   }, [isSaved]);
 
@@ -292,24 +301,15 @@ function DashboardShell({
               {panels.map((panel) => {
                 const isAboutPanel = panel.key === "about";
                 const isProductPanel = panel.key === "product";
-                const isFaqPanel = panel.key === "faq";
-                const isTermsPanel = panel.key === "terms";
-                const isPrivacyPanel = panel.key === "privacy";
-                const isProfilePanel = panel.key === "profile";
+                const isHomePanel = panel.key === "homepage";
+                const childPanels = "children" in panel ? panel.children : null;
                 const isActive = isAboutPanel
                   ? activePanel.startsWith("about-")
                   : isProductPanel
                     ? activePanel.startsWith("product-")
-                    : isFaqPanel
-                      ? activePanel === "faq"
-                      : isTermsPanel
-                        ? activePanel === "terms"
-                        : isPrivacyPanel
-                          ? activePanel === "privacy"
-                          : isProfilePanel
-                            ? activePanel === "profile"
-                            : activePanel.startsWith("home-");
-                const childPanels = "children" in panel ? panel.children : null;
+                    : isHomePanel
+                      ? activePanel.startsWith("home-")
+                      : activePanel === panel.key;
 
                 return (
                   <div key={panel.key}>
@@ -326,16 +326,10 @@ function DashboardShell({
                           onPanelChange("about-hero");
                         } else if (isProductPanel) {
                           onPanelChange("product-package");
-                        } else if (isFaqPanel) {
-                          onPanelChange("faq");
-                        } else if (isTermsPanel) {
-                          onPanelChange("terms");
-                        } else if (isPrivacyPanel) {
-                          onPanelChange("privacy");
-                        } else if (isProfilePanel) {
-                          onPanelChange("profile");
-                        } else {
+                        } else if (isHomePanel) {
                           onPanelChange("home-desktop");
+                        } else {
+                          onPanelChange(panel.key as ActivePanel);
                         }
                       }}
                       className={`relative flex w-full items-center py-3 text-left text-sm font-semibold transition-colors duration-150 hover:text-[#e04d26] ${
@@ -403,15 +397,13 @@ function DashboardShell({
                 <div className="text-[16px] font-semibold text-[#1f1f1f]">{activeLabel}</div>
               </div>
               <div className="flex items-center gap-3">
-                {activePanel !== "profile" ? (
-                  <button
-                    type="submit"
-                    form={formIdForPanel(activePanel)}
-                    className="rounded-lg bg-[#e04d26] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c9411f]"
-                  >
-                    Save changes
-                  </button>
-                ) : null}
+                <button
+                  type="submit"
+                  form={formIdForPanel(activePanel)}
+                  className="rounded-lg bg-[#e04d26] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c9411f]"
+                >
+                  Save changes
+                </button>
                 <form action={logoutAction}>
                   <button
                     type="submit"
@@ -1352,6 +1344,7 @@ export function CmsDashboard({
   savePrivacyAction,
   logoutAction: logoutActionProp,
   currentUsername,
+  isUsingEnvironmentVariables,
 }: {
   content: CmsContent;
   isSaved: boolean;
@@ -1364,6 +1357,7 @@ export function CmsDashboard({
   savePrivacyAction: typeof savePrivacyContentAction;
   currentUsername: string;
   logoutAction: typeof logoutAction;
+  isUsingEnvironmentVariables?: boolean;
 }) {
   const [activePanel, setActivePanel] = useState<ActivePanel>(initialPanel);
   const [aboutHeroTitle, setAboutHeroTitle] = useState(content.about.heroTitle);
@@ -1716,9 +1710,6 @@ export function CmsDashboard({
         />
       ) : null}
 
-      {activePanel === "profile" ? (
-        <ProfileForm currentUsername={currentUsername} />
-      ) : null}
     </DashboardShell>
   );
 }

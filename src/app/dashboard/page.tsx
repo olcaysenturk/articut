@@ -4,7 +4,7 @@ import { saveAboutContentAction, saveHomeContentAction, saveProductDetailContent
 import { CmsDashboard, type ActivePanel } from "@/app/dashboard/CmsDashboard";
 import { logoutAction } from "@/app/dashboard/login/actions";
 import { getCmsContent } from "@/lib/cms-content";
-import { DASHBOARD_SESSION_COOKIE, verifySessionToken, getDashboardUsername } from "@/lib/dashboard-auth";
+import { DASHBOARD_SESSION_COOKIE, verifySessionToken, getDashboardUsername, isUsingEnvironmentVariables } from "@/lib/dashboard-auth";
 
 export const metadata = {
   title: "Dashboard",
@@ -26,8 +26,7 @@ function parsePanel(panel: string | undefined): ActivePanel {
     panel === "product-detail" ||
     panel === "faq" ||
     panel === "terms" ||
-    panel === "privacy" ||
-    panel === "profile"
+    panel === "privacy"
   ) {
     return panel;
   }
@@ -67,6 +66,7 @@ export default async function DashboardPage({
       savePrivacyAction={savePrivacyContentAction}
       logoutAction={logoutAction}
       currentUsername={currentUsername}
+      isUsingEnvironmentVariables={isUsingEnvironmentVariables()}
     />
   );
 }

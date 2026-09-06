@@ -32,13 +32,13 @@ export function ProductFaq() {
 
   return (
     <section className="bg-[#d9d9d9] px-8 py-8 text-[#e04d26] md:px-[50px] md:py-[50px]">
-      <div className="mx-auto max-w-[1340px] border-x border-t border-[#e04d26] md:border-x-[3px] md:border-t-[3px]">
+      <div className="mx-auto max-w-[1340px] border-x-[3px] border-t-[3px] border-[#e04d26]">
         {ITEMS.map((item, index) => {
           const isOpen = openIndex === index;
           const panelId = `cutpilot-faq-panel-${index}`;
 
           return (
-            <div key={item.question} className="border-b border-[#e04d26] md:border-b-[3px]">
+            <div key={item.question} className="border-b-[3px] border-[#e04d26]">
               <button
                 type="button"
                 aria-expanded={isOpen}

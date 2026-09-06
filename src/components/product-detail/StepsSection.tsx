@@ -65,10 +65,14 @@ function StepCircle({
   step,
   onMouseEnter,
   onMouseLeave,
+  onPointerDown,
+  isActive,
 }: {
   step: (typeof STEPS)[number];
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onPointerDown?: () => void;
+  isActive: boolean;
 }) {
   const circleRef = useRef<HTMLDivElement>(null);
   useSettleZoom(circleRef);
@@ -79,14 +83,15 @@ function StepCircle({
       data-step-circle
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="settle-zoom group relative mx-auto aspect-square w-full max-w-[272px] origin-center overflow-hidden rounded-full border-[3px] border-[#e04d26] bg-[#fab446] transition-transform duration-300 ease-out will-change-transform hover:scale-110"
+      onPointerDown={onPointerDown}
+      className={`settle-zoom group relative mx-auto aspect-square w-full max-w-[272px] origin-center overflow-hidden rounded-full border-[3px] border-[#e04d26] bg-[#fab446] transition-transform duration-300 ease-out will-change-transform hover:scale-110 ${isActive ? "scale-110" : ""}`}
     >
       <Image
         src={step.image}
         alt={`${step.title} Cutpilot`}
         fill
         sizes="(max-width: 767px) 150px, 272px"
-        className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.15]"
+        className={`object-cover transition-transform duration-300 ease-out group-hover:scale-[1.15] ${isActive ? "scale-[1.15]" : ""}`}
       />
     </div>
   );
@@ -131,9 +136,16 @@ export function StepsSection() {
                 data-step-card
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onPointerDown={() => setHoveredIndex(index)}
                 className="group text-center md:px-4"
               >
-                <StepCircle step={step} onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
+                <StepCircle
+                  step={step}
+                  isActive={hoveredIndex === index}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onPointerDown={() => setHoveredIndex(index)}
+                />
                 <p
                   className="mx-auto mt-6 max-w-[310px] text-[14px] font-normal leading-[1.05] md:text-[18px]"
                   style={{ WebkitTextStroke: hoveredIndex === index ? "0.5px currentColor" : "0px currentColor" }}

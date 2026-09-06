@@ -166,6 +166,13 @@ html {
   display: inline-flex;
   align-items: center;
   flex: none;
+  margin-top: -8px;
+}
+
+@media (min-width: 768px) {
+  .ribbon-marquee-word {
+    margin-top: -22px;
+  }
 }
 
 .ribbon-marquee-separator {

@@ -6,7 +6,13 @@ import type { CmsMediaItem } from "@/types/cms";
 
 const AUTO_ADVANCE_MS = 4500;
 
-export function DesktopImageShowcase({ images }: { images: CmsMediaItem[] }) {
+export function DesktopImageShowcase({
+  images,
+  className = "relative h-dvh overflow-hidden bg-black",
+}: {
+  images: CmsMediaItem[];
+  className?: string;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const visibleImages: CmsMediaItem[] = images.length > 0 ? images : [
     {
@@ -27,7 +33,7 @@ export function DesktopImageShowcase({ images }: { images: CmsMediaItem[] }) {
   }, [activeIndex, visibleImages.length]);
 
   return (
-    <section className="relative h-dvh overflow-hidden bg-black" data-node-id="1:554">
+    <section className={className} data-node-id="1:554">
       {visibleImages.map((item, index) =>
         item.type === "video" ? (
           <video

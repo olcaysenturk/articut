@@ -15,7 +15,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   headingClassName:
     "mobile-feature-heading absolute left-1/2 top-[40px] z-10 w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
   sectionClassName:
-    "absolute left-0 top-[492px] h-[760px] w-full overflow-hidden bg-black text-white",
+    "absolute left-0 top-[620px] h-[760px] w-full overflow-hidden bg-black text-white",
   enablePngSequence: true,
   sequence: {
     path: "/images/sequence/mobile/cutpilot_3D_Mobile_HigRes{index}.webp",
@@ -26,7 +26,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     preloadMediaQuery: "(max-width: 767px)",
     startAt: 1.5,
     duration: 4.6,
-    canvasClassName: "absolute inset-0 z-0 h-full w-full object-cover",
+    canvasClassName: "absolute inset-0 z-0 h-full w-full origin-center -translate-y-[15px] scale-[1.03] object-cover",
   },
   features: FEATURES,
   featuresClassName:
@@ -109,7 +109,7 @@ export const MOBILE_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
   headingClassName:
     "mobile-feature-heading absolute left-1/2 top-[40px] z-10 w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
   sectionClassName:
-    "absolute left-0 top-[2251px] h-[580px] w-full overflow-hidden bg-[#e04d26] text-white",
+    "absolute left-0 top-[2379px] h-[580px] w-full overflow-hidden bg-[#e04d26] text-white",
   backgroundImage: {
     src: "/figma/scissors-hero.png",
     alt: "Articut scissors",

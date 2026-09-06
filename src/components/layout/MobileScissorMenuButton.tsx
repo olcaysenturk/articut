@@ -172,8 +172,8 @@ export function MobileScissorMenuButton({
       >
         <motion.div
           aria-hidden="true"
-          initial={{ x: "100%", y: "-100%", rotate: -45 }}
-          animate={isOpen ? { x: "0%", y: "0%", rotate: -45 } : { x: "100%", y: "-100%", rotate: -45 }}
+          initial={{ x: "100%", y: "-100%", rotate: -119 }}
+          animate={isOpen ? { x: "0%", y: "0%", rotate: -119 } : { x: "100%", y: "-100%", rotate: -119 }}
           transition={isOpen ? panelTransition : { ...panelTransition, delay: 0.12 }}
           className="absolute right-[-75vmax] top-[-75vmax] h-[250vmax] w-[250vmax] origin-center bg-black"
         />
@@ -203,7 +203,7 @@ export function MobileScissorMenuButton({
                 animate={isOpen ? "visible" : "hidden"}
                 className="absolute left-0 right-0 top-[60px] px-[32px]"
               >
-                <ul className="flex flex-col items-center gap-[46px]">
+                <ul className="flex -translate-y-[20px] flex-col items-center gap-[30px]">
                   {MENU_LINKS.map((link) => (
                     <motion.li
                       key={link.href}
@@ -219,6 +219,18 @@ export function MobileScissorMenuButton({
                       </Link>
                     </motion.li>
                   ))}
+                  <motion.li
+                    variants={menuItem}
+                    transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <button
+                      type="button"
+                      onClick={showCart}
+                      className="font-[family-name:var(--font-body)] text-[40px] font-semibold leading-none"
+                    >
+                      Cart
+                    </button>
+                  </motion.li>
                 </ul>
               </motion.nav>
 
@@ -237,13 +249,12 @@ export function MobileScissorMenuButton({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: 0.48, duration: 0.35 }}
-                className="absolute inset-x-[31px] bottom-[35px] grid grid-cols-3 items-center text-[11px] leading-none"
+                className="absolute inset-x-[31px] bottom-[35px] grid grid-cols-2 items-center text-[11px] leading-none"
               >
                 <a href="mailto:info@articut.com" className="footer-link-with-arrow whitespace-nowrap">
                   info@articut.com
                   <MenuArrow />
                 </a>
-                <button type="button" onClick={showCart} className="cursor-pointer text-center">Cart</button>
                 <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link-with-arrow text-right">
                   Instagram
                   <MenuArrow />

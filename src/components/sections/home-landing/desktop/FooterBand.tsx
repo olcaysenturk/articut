@@ -66,7 +66,7 @@ export function FooterBand() {
         rel="noreferrer"
         className="absolute bottom-[16px] right-[50px] text-right text-[14px] uppercase leading-none"
       >
-        WEBSITE BY ARTI STÜDYO
+        DESIGNED BY ARTI STÜDYO®
       </a>
       <div className="absolute bottom-[50px] left-[50px] aspect-[670/131] w-[calc(100%-100px)]">
         <Image

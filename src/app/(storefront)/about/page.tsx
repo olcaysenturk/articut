@@ -38,7 +38,7 @@ export default async function AboutPage() {
   return (
     <VideoLoadingGate>
     <div className="bg-[#d9d9d9] text-black">
-      <section data-video-frame className="relative h-dvh overflow-hidden bg-black">
+      <section data-video-frame className="relative h-[420px] overflow-hidden bg-black md:h-dvh">
         <EditorialHeader dark />
         <video
           className="absolute inset-0 h-full w-full object-cover"
@@ -53,7 +53,7 @@ export default async function AboutPage() {
           <source src={about.heroVideoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/10" />
-        <p className="pointer-events-none absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-8 text-center font-[family-name:var(--font-gamay-editorial)] text-[30px] font-semibold leading-none tracking-normal text-white md:px-24">
+        <p className="pointer-events-none absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-8 text-center font-[family-name:var(--font-gamay-editorial)] text-[24px] font-semibold leading-none tracking-normal text-white md:px-24 md:text-[30px]">
           {about.heroTitle.split("\n").map((line, i, arr) => (
             <React.Fragment key={i}>
               {line}

@@ -7,6 +7,24 @@ import { AddToCartButton } from "@/components/commerce/AddToCartButton";
 import { formatCompactMoney } from "@/features/cart/cart-utils";
 import type { Product } from "@/types/shopify";
 
+function CartArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="mx-[0.4em] inline-block size-[0.8em]"
+      style={{ position: "relative", top: 2 }}
+    >
+      <path d="M4 12h16M14 6l6 6-6 6" />
+    </svg>
+  );
+}
+
 const PAYMENT_METHODS = [
   { src: "/figma/afterpay.svg", alt: "Afterpay", width: 65, height: 14 },
   { src: "/figma/apple-pay.svg", alt: "Apple Pay", width: 33, height: 14 },
@@ -44,9 +62,13 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
             variantId={variant?.id ?? null}
             quantity={1}
             disabled={!variant || !product.available}
-            label={`Add to Cart    →    ${price}`}
-            className="h-full w-full cursor-pointer whitespace-pre bg-transparent px-4 text-[14px] font-normal text-[#e0e0e0] md:px-8 md:text-[20px]"
-          />
+            label={`Add to Cart, ${price}`}
+            className="h-full w-full cursor-pointer bg-transparent px-4 text-[14px] font-normal text-[#e0e0e0] md:px-8 md:text-[20px]"
+          >
+            Add to Cart
+            <CartArrowIcon />
+            {price}
+          </AddToCartButton>
         </motion.div>
       </div>
       <motion.div

@@ -228,7 +228,6 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       }
 
       if (animateHeading) {
-        gsap.set(headingRef.current, { overflow: "hidden" });
         gsap.set(headingLines, {
           display: "block",
           opacity: 0,
@@ -236,6 +235,13 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
           force3D: true,
           willChange: "transform, opacity",
         });
+        // Each line starts one line-height below its resting spot. Without
+        // extra room at the bottom, overflow clipping cuts straight through
+        // the glyphs mid-rise instead of just fading them in. Padding the
+        // box by one line-height gives that motion somewhere to live.
+        const lastLine = headingLines[headingLines.length - 1];
+        const lineBuffer = lastLine?.getBoundingClientRect().height ?? 0;
+        gsap.set(headingRef.current, { overflow: "hidden", paddingBottom: lineBuffer });
       }
 
       if (animateDetails) {

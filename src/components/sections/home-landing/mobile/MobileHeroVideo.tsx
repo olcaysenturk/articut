@@ -10,9 +10,12 @@ export function MobileHeroVideo({
   videoUrl?: string;
 }) {
   return (
-    <section data-video-frame className="absolute left-0 top-0 h-[492px] w-full overflow-hidden bg-black">
+    <section
+      data-video-frame
+      className="absolute left-0 top-0 h-[620px] w-full overflow-hidden bg-black md:h-[492px]"
+    >
       <video
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-[620px] w-full object-cover md:h-[492px]"
         autoPlay
         muted
         loop

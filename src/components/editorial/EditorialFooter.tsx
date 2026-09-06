@@ -58,7 +58,7 @@ export function EditorialFooter() {
         <p className="absolute inset-x-0 bottom-0 whitespace-nowrap text-center md:static">ALL RIGHTS RESERVED</p>
         <p className="absolute bottom-0 right-0 text-right md:static">
           <a href="https://artistudyo.com" target="_blank" rel="noreferrer">
-            WEBSITE BY ARTI STÜDYO
+            DESIGNED BY ARTI STÜDYO®
           </a>
         </p>
       </div>

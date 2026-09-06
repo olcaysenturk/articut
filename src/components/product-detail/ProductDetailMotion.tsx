@@ -15,6 +15,7 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       if (!root) return;
 
       const reduceMotion = window.matchMedia(mediaQueries.reducedMotion).matches;
+      const isTabletUp = window.matchMedia(mediaQueries.tabletUp).matches;
       const hero = root.querySelector<HTMLElement>("[data-product-hero]");
       const heroProduct = root.querySelector<HTMLElement>("[data-hero-product]");
       const heroTitle = root.querySelector<HTMLElement>("[data-hero-title]");
@@ -60,7 +61,6 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
 
       const loader = document.querySelector<HTMLElement>(".initial-loader-overlay");
       const loaderDelay = loader && window.getComputedStyle(loader).visibility !== "hidden" ? 1.35 : 0.1;
-      const isTabletUp = window.matchMedia(mediaQueries.tabletUp).matches;
       const heroProductRotate = isTabletUp ? -0.8 : -20;
       let heroReady = false;
       gsap.set(heroProduct, {
@@ -96,23 +96,25 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       });
 
       const responsiveMotion = gsap.matchMedia();
-      const scrollSnapRevealTriggers = scrollSnapIgnoreSections.map((section) => {
-        gsap.set(section, { opacity: 0, y: 24 });
-        return ScrollTrigger.create({
-          trigger: section,
-          start: "top 82%",
-          once: true,
-          onEnter: () => {
-            gsap.to(section, {
-              opacity: 1,
-              y: 0,
-              duration: 0.6,
-              ease: "power2.out",
-              clearProps: "transform",
+      const scrollSnapRevealTriggers = isTabletUp
+        ? scrollSnapIgnoreSections.map((section) => {
+            gsap.set(section, { opacity: 0, y: 24 });
+            return ScrollTrigger.create({
+              trigger: section,
+              start: "top 82%",
+              once: true,
+              onEnter: () => {
+                gsap.to(section, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.6,
+                  ease: "power2.out",
+                  clearProps: "transform",
+                });
+              },
             });
-          },
-        });
-      });
+          })
+        : [];
 
       responsiveMotion.add(mediaQueries.tabletUp, () => {
         if (!hero || !heroProduct) {

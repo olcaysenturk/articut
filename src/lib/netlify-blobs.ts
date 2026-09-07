@@ -7,20 +7,28 @@ const CMS_CONTENT_KEY = "cms/content.json";
 const CMS_MEDIA_PREFIX = "cms-media";
 const DASHBOARD_CREDENTIALS_KEY = "dashboard/credentials.json";
 
-function hasBlobRuntime() {
-  return process.env.NETLIFY === "true" || Boolean(process.env.NETLIFY_SITE_ID && process.env.NETLIFY_AUTH_TOKEN);
-}
-
 function cmsStore() {
-  if (!hasBlobRuntime()) {
+  try {
+    const siteID = process.env.NETLIFY_SITE_ID;
+    const token = process.env.NETLIFY_AUTH_TOKEN;
+
+    if (!siteID || !token) {
+      // Netlify Functions provide the Blobs context automatically at runtime.
+      // During a build this may throw, so the caller can use the local fallback.
+      if (process.env.NETLIFY !== "true") return null;
+      return getStore({ name: CMS_STORE_NAME });
+    }
+
+    return getStore({
+      name: CMS_STORE_NAME,
+      siteID,
+      token,
+    });
+  } catch {
+    // Allow production builds to use the checked-in CMS fallback when Blob
+    // credentials are unavailable or invalid.
     return null;
   }
-
-  return getStore({
-    name: CMS_STORE_NAME,
-    siteID: process.env.NETLIFY_SITE_ID,
-    token: process.env.NETLIFY_AUTH_TOKEN,
-  });
 }
 
 export function cmsMediaUrl(key: string) {

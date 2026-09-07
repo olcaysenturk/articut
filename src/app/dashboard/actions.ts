@@ -38,6 +38,12 @@ async function uploadedImagePath(formData: FormData, name: string) {
   const blob = await uploadCmsMedia(value, baseName || "image");
   if (blob) return cmsMediaUrl(blob.key);
 
+  if (process.env.NETLIFY === "true") {
+    throw new Error(
+      "Media could not be uploaded because Netlify Blobs is not configured. Set NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN.",
+    );
+  }
+
   const { mkdir, writeFile } = await import("node:fs/promises");
   const path = await import("node:path");
   const fileName = `${Date.now()}-${baseName || "image"}${extension}`;

@@ -56,7 +56,7 @@ export function FooterBand() {
           <FooterArrow />
         </a>
       </div>
-      <p className="absolute bottom-[16px] left-[50px] text-[14px] uppercase leading-none">© 2026 ARTICUT</p>
+      <p className="absolute bottom-[16px] left-[50px] text-[14px] uppercase leading-none">© 2026 ARTICUT™</p>
       <p className="absolute bottom-[16px] left-1/2 -translate-x-1/2 text-[14px] uppercase leading-none">
         ALL RIGHTS RESERVED
       </p>

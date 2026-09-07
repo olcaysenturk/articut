@@ -57,14 +57,35 @@ function ResponsiveVideo({ src, className }: { src: string; className: string })
   );
 }
 
+function ProductRevealImage({ image, index, mobile = false }: { image: CmsImage; index: number; mobile?: boolean }) {
+  return (
+    <div
+      className={`flex overflow-hidden ${index % 2 === 0 ? "border-r-[3px] border-[#e04d26]" : ""} ${index >= 2 ? "border-t-[3px] border-[#e04d26]" : ""}`}
+    >
+      <Image
+        src={image.src}
+        alt={image.alt}
+        width={1920}
+        height={1080}
+        sizes="50vw"
+        className={mobile ? "h-auto w-full object-cover" : "h-full w-full object-cover"}
+      />
+    </div>
+  );
+}
+
 export function CutpilotProductPage({
   mediaStrip,
   packageImage,
+  productReveal,
+  productRevealMobile,
   product,
   sliderImages,
 }: {
   mediaStrip: CmsMediaItem[];
   packageImage: CmsImage;
+  productReveal: CmsImage[];
+  productRevealMobile: CmsImage[];
   product: Product;
   sliderImages: CmsImage[];
 }) {
@@ -146,26 +167,16 @@ export function CutpilotProductPage({
         </div>
       </section>
 
-      <section data-product-reveal data-scroll-snap-ignore className="grid grid-cols-2 border-y-[3px] border-[#e04d26] min-h-[90vh]">
-        <div className="border-r-[3px] border-[#e04d26] overflow-hidden">
-          <Image
-            src={`${PRODUCT_ASSET}/cutpilot-box-1.jpg`}
-            alt="Cutpilot package held above a model"
-            width={1440}
-            height={1620}
-            sizes="50vw"
-            className="h-full w-full object-cover"
-          />
+      <section data-product-reveal data-scroll-snap-ignore className="border-y-[3px] border-[#e04d26]">
+        <div className="hidden grid-cols-2 md:grid">
+          {productReveal.map((image, index) => (
+            <ProductRevealImage key={`${image.src}-${index}`} image={image} index={index} />
+          ))}
         </div>
-        <div className="overflow-hidden">
-          <Image
-            src={`${PRODUCT_ASSET}/cutpilot-box-2.jpg`}
-            alt="Open Cutpilot package on a chair"
-            width={1440}
-            height={1620}
-            sizes="50vw"
-            className="h-full w-full object-cover"
-          />
+        <div className="grid grid-cols-2 md:hidden">
+          {productRevealMobile.map((image, index) => (
+            <ProductRevealImage key={`${image.src}-${index}`} image={image} index={index} mobile />
+          ))}
         </div>
       </section>
 

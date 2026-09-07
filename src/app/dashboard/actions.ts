@@ -10,6 +10,18 @@ function field(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
 }
 
+function faqSectionIdFromTitle(title: string, fallbackIndex: number) {
+  const slug = title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+  return slug || `section-${fallbackIndex}`;
+}
+
 async function uploadedImagePath(formData: FormData, name: string) {
   const value = formData.get(name);
   if (!(value instanceof File) || value.size === 0) {
@@ -83,12 +95,13 @@ function revalidateCmsContent() {
 function dashboardRedirect(panel: string) {
   const allowedPanel =
     panel === "about" ||
-    panel === "home-desktop" ||
-    panel === "home-mobile" ||
+    panel === "home-hero" ||
+    panel === "home-product" ||
     panel === "home-pack-showcase" ||
     panel === "home-showcase" ||
     panel === "product-package" ||
     panel === "product-media-strip" ||
+    panel === "product-reveal" ||
     panel === "product-detail" ||
     panel === "faq" ||
     panel === "terms" ||
@@ -113,6 +126,11 @@ export async function saveHomeContentAction(formData: FormData) {
     "home-pack-showcase-image",
     content.home.packShowcaseImage.src,
   );
+  const productImage = await imageFromForm(
+    formData,
+    "home-product-image",
+    content.home.productImage.src,
+  );
   const showcaseIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^showcase-(\d+)-type$/)?.[1])
     .filter((index): index is string => Boolean(index))
@@ -130,6 +148,7 @@ export async function saveHomeContentAction(formData: FormData) {
       heroVideoUrl: field(formData, "home-hero-video-url"),
       mobileHeroVideoUrl: field(formData, "home-mobile-hero-video-url"),
       heroPoster: heroPoster ?? content.home.heroPoster,
+      productImage: productImage ?? content.home.productImage,
       packShowcaseImage: packShowcaseImage ?? content.home.packShowcaseImage,
       mobileHeroPoster: mobileHeroPoster ?? content.home.mobileHeroPoster,
       imageShowcase: imageShowcase.length > 0 ? imageShowcase : content.home.imageShowcase,
@@ -155,6 +174,26 @@ export async function saveProductDetailContentAction(formData: FormData) {
   const slider = (
     await Promise.all(
       sliderIndexes.map((index) => imageFromForm(formData, `slider-${index}`)),
+    )
+  ).filter((image): image is CmsImage => Boolean(image));
+  const productRevealIndexes = Array.from(formData.keys())
+    .map((key) => key.match(/^product-reveal-(\d+)-src$/)?.[1])
+    .filter((index): index is string => Boolean(index))
+    .map(Number)
+    .sort((a, b) => a - b);
+  const productReveal = (
+    await Promise.all(
+      productRevealIndexes.map((index) => imageFromForm(formData, `product-reveal-${index}`)),
+    )
+  ).filter((image): image is CmsImage => Boolean(image));
+  const productRevealMobileIndexes = Array.from(formData.keys())
+    .map((key) => key.match(/^product-reveal-mobile-(\d+)-src$/)?.[1])
+    .filter((index): index is string => Boolean(index))
+    .map(Number)
+    .sort((a, b) => a - b);
+  const productRevealMobile = (
+    await Promise.all(
+      productRevealMobileIndexes.map((index) => imageFromForm(formData, `product-reveal-mobile-${index}`)),
     )
   ).filter((image): image is CmsImage => Boolean(image));
   const mediaStripIndexes = Array.from(formData.keys())
@@ -189,6 +228,8 @@ export async function saveProductDetailContentAction(formData: FormData) {
       packageImage: packageImage ?? content.productDetail.packageImage,
       mediaStrip: mediaStrip.length > 0 ? mediaStrip : content.productDetail.mediaStrip,
       slider: slider.length > 0 ? slider : content.productDetail.slider,
+      productReveal: productReveal.length > 0 ? productReveal : content.productDetail.productReveal,
+      productRevealMobile: productRevealMobile.length > 0 ? productRevealMobile : content.productDetail.productRevealMobile,
     },
   });
 
@@ -212,6 +253,8 @@ export async function saveAboutContentAction(formData: FormData) {
     text: field(formData, `contact-${index}-text`),
     email: field(formData, `contact-${index}-email`),
   }));
+  const storyImageUpload = await uploadedImagePath(formData, "about-story-image");
+  const storyImageUrl = storyImageUpload || field(formData, "about-story-image-url") || content.about.storyImageUrl;
 
   await saveCmsContent({
     ...content,
@@ -221,7 +264,7 @@ export async function saveAboutContentAction(formData: FormData) {
       heroMobileVideoUrl: field(formData, "about-hero-mobile-video-url"),
       heroPosterUrl,
       storyContent: field(formData, "about-story-content"),
-      storyImageUrl: field(formData, "about-story-image-url"),
+      storyImageUrl,
       contactTitle: field(formData, "about-contact-title"),
       contactItems: contactItems.length > 0 ? contactItems : content.about.contactItems,
     },
@@ -239,7 +282,20 @@ export async function saveFaqContentAction(formData: FormData) {
     .map(Number)
     .sort((a, b) => a - b);
 
-  const sections = sectionIndexes.map((sectionIndex) => {
+  const usedSectionIds = new Set<string>();
+  const sections = sectionIndexes.map((sectionIndex, sectionPosition) => {
+    const title = field(formData, `section-${sectionIndex}-title`);
+    const requestedId = field(formData, `section-${sectionIndex}-id`);
+    const baseId = requestedId || faqSectionIdFromTitle(title, sectionPosition + 1);
+    let id = baseId;
+    let suffix = 2;
+
+    while (usedSectionIds.has(id)) {
+      id = `${baseId}-${suffix}`;
+      suffix += 1;
+    }
+    usedSectionIds.add(id);
+
     const questionIndexes = Array.from(formData.keys())
       .map((key) => key.match(new RegExp(`^section-${sectionIndex}-question-(\\d+)-text$`))?.[1])
       .filter((index): index is string => Boolean(index))
@@ -247,8 +303,8 @@ export async function saveFaqContentAction(formData: FormData) {
       .sort((a, b) => a - b);
 
     return {
-      id: field(formData, `section-${sectionIndex}-id`),
-      title: field(formData, `section-${sectionIndex}-title`),
+      id,
+      title,
       questions: questionIndexes
         .map((questionIndex) => ({
           question: field(formData, `section-${sectionIndex}-question-${questionIndex}-text`),

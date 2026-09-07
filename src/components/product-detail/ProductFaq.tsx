@@ -44,7 +44,7 @@ export function ProductFaq() {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex min-h-[76px] w-full cursor-pointer items-center justify-center px-5 text-center text-[14px] font-semibold transition-colors hover:bg-[#e04d26] hover:text-[#fff4de] md:min-h-[117px] md:px-[64px] md:text-[30px]"
+                className={`flex min-h-[76px] w-full cursor-pointer items-center justify-center px-5 text-center text-[14px] font-semibold transition-colors hover:bg-[#e04d26] hover:text-[#fff4de] md:min-h-[117px] md:px-[64px] md:text-[30px] ${isOpen ? "max-md:bg-[#e04d26] max-md:text-[#fff4de]" : ""}`}
               >
                 <span>{item.question}</span>
               </button>

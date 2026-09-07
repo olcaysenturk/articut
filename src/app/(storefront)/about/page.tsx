@@ -65,9 +65,9 @@ export default async function AboutPage() {
         <VideoMuteButton className="absolute bottom-[18px] right-[18px] z-20 scale-[0.82] md:bottom-[34px] md:right-[50px] md:scale-100" />
       </section>
 
-      <section className="flex h-[807px] flex-col items-center px-6 pt-[95px] text-center text-[#e04d26] md:h-[810px] md:justify-center md:pt-0">
-        <Image src="/images/editorial/story-mark.svg" alt="The story of a childhood dream" width={184} height={201} className="h-[201px] w-auto" />
-        <div className="about-story mt-[110px] max-w-[1114px] text-center text-[14px] leading-none md:mt-[70px] md:text-[22px] md:leading-[1.4]">
+      <section className="flex h-auto flex-col items-center px-6 pb-[100px] pt-[50px] text-center text-[#e04d26] md:h-[810px] md:justify-center md:pb-0 md:pt-0">
+        <Image src="/images/editorial/story-mark.svg" alt="The story of a childhood dream" width={184} height={201} className="h-[261px] w-auto md:h-[201px]" />
+        <div className="about-story mt-[50px] max-w-[1114px] text-center text-[14px] leading-none md:mt-[70px] md:text-[22px] md:leading-[1.4]">
           {paragraphs.map((paragraph, idx) => (
             <Reveal key={idx} delay={idx * 0.1}>
               <p className={idx > 0 ? "mt-[21px] md:mt-7" : ""}>

@@ -17,12 +17,13 @@ function parsePanel(panel: string | undefined): ActivePanel {
     panel === "about-hero" ||
     panel === "about-story" ||
     panel === "about-contact" ||
-    panel === "home-desktop" ||
-    panel === "home-mobile" ||
+    panel === "home-hero" ||
+    panel === "home-product" ||
     panel === "home-pack-showcase" ||
     panel === "home-showcase" ||
     panel === "product-package" ||
     panel === "product-media-strip" ||
+    panel === "product-reveal" ||
     panel === "product-detail" ||
     panel === "faq" ||
     panel === "terms" ||
@@ -32,7 +33,15 @@ function parsePanel(panel: string | undefined): ActivePanel {
     return panel;
   }
 
-  return "home-desktop";
+  if (panel === "product-reveal-desktop" || panel === "product-reveal-mobile") {
+    return "product-reveal";
+  }
+
+  if (panel === "home-desktop" || panel === "home-mobile") {
+    return "home-hero";
+  }
+
+  return "home-hero";
 }
 
 export default async function DashboardPage({

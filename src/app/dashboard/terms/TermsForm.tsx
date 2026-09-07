@@ -21,6 +21,7 @@ export function TermsForm({
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
   const [activeSectionIndex, setActiveSectionIndex] = useState<number | null>(null);
   const [dragState, setDragState] = useState<DragState>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggleSection = (index: number) => {
     setExpandedSections((prev) => {
@@ -75,8 +76,9 @@ export function TermsForm({
     setDragState(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSaving(true);
 
     const formData = new FormData();
     formData.append("active-panel", "terms");
@@ -86,7 +88,11 @@ export function TermsForm({
       formData.append(`legal-section-${index}-content`, section.content);
     });
 
-    onSubmit(formData);
+    try {
+      await onSubmit(formData);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -117,6 +123,7 @@ export function TermsForm({
       </aside>
 
       <form id="terms-form" onSubmit={handleSubmit} className="space-y-6">
+        {isSaving ? <div className="fixed inset-0 z-[100] grid place-items-center bg-black/25 px-4 backdrop-blur-[2px]" role="status"><div className="flex items-center gap-3 rounded-lg bg-white px-5 py-4 text-sm font-semibold text-[#1f1f1f] shadow-2xl"><span className="size-5 animate-spin rounded-full border-2 border-[#e04d26]/25 border-t-[#e04d26]" aria-hidden="true" />Saving changes...</div></div> : null}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="text-lg font-semibold text-[#1f1f1f]">Terms &amp; Conditions Sections</div>
           <button

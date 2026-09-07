@@ -11,6 +11,18 @@ type DragState = {
   questionIndex?: number;
 };
 
+function sectionIdFromTitle(title: string, fallbackIndex: number) {
+  const slug = title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+  return slug || `section-${fallbackIndex}`;
+}
+
 export function FaqForm({
   sections: initialSections,
   onSubmit,
@@ -25,6 +37,8 @@ export function FaqForm({
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [activeSectionIndex, setActiveSectionIndex] = useState<number | null>(null);
+  const [editingSectionIndex, setEditingSectionIndex] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggleSection = (index: number) => {
     setExpandedSections((prev) => {
@@ -52,11 +66,12 @@ export function FaqForm({
   };
 
   const addSection = () => {
+    const sectionIndex = sections.length + 1;
     setSections([
       ...sections,
       {
         tempId: crypto.randomUUID(),
-        id: "",
+        id: `section-${sectionIndex}`,
         title: "",
         questions: [],
       },
@@ -64,8 +79,14 @@ export function FaqForm({
   };
 
   const updateSection = (index: number, updates: Partial<ManagedFaqSection>) => {
+    const currentSection = sections[index];
+    const nextUpdates =
+      updates.title !== undefined && currentSection?.id.startsWith("section-")
+        ? { ...updates, id: sectionIdFromTitle(updates.title, index + 1) }
+        : updates;
+
     setSections((prev) =>
-      prev.map((s, i) => (i === index ? { ...s, ...updates } : s)),
+      prev.map((s, i) => (i === index ? { ...s, ...nextUpdates } : s)),
     );
   };
 
@@ -193,8 +214,9 @@ export function FaqForm({
     setDragState(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSaving(true);
 
     const formData = new FormData();
     formData.append("active-panel", "faq");
@@ -227,7 +249,11 @@ export function FaqForm({
       });
     });
 
-    onSubmit(formData);
+    try {
+      await onSubmit(formData);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -265,6 +291,7 @@ export function FaqForm({
       </aside>
 
       <form id="faq-form" onSubmit={handleSubmit} className="space-y-6">
+        {isSaving ? <div className="fixed inset-0 z-[100] grid place-items-center bg-black/25 px-4 backdrop-blur-[2px]" role="status"><div className="flex items-center gap-3 rounded-lg bg-white px-5 py-4 text-sm font-semibold text-[#1f1f1f] shadow-2xl"><span className="size-5 animate-spin rounded-full border-2 border-[#e04d26]/25 border-t-[#e04d26]" aria-hidden="true" />Saving changes...</div></div> : null}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="text-lg font-semibold text-[#1f1f1f]">FAQ Sections</div>
           <button
@@ -293,12 +320,13 @@ export function FaqForm({
                   : "border-[#d0d0d0] bg-white"
               } ${dragState ? "cursor-move" : ""}`}
             >
-              <button
-                type="button"
-                onClick={() => toggleSection(sectionIndex)}
-                className="w-full px-6 py-4 text-left"
-              >
-                <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 px-6 py-4">
+                <button
+                  type="button"
+                  onClick={() => toggleSection(sectionIndex)}
+                  className="min-w-0 flex-1 text-left"
+                >
+                  <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <svg
                       className={`h-5 w-5 transition-transform text-[#e04d26] ${
@@ -320,35 +348,34 @@ export function FaqForm({
                       </div>
                     </div>
                   </div>
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2"
-                  >
-                    <span className="text-xs text-[#999]">⋮⋮</span>
                   </div>
-                </div>
-              </button>
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Edit ${section.title || `Section ${sectionIndex + 1}`}`}
+                  title="Edit section title"
+                  onClick={() => {
+                    setActiveSectionIndex(sectionIndex);
+                    setExpandedSections((prev) => new Set(prev).add(sectionIndex));
+                    setEditingSectionIndex(sectionIndex);
+                  }}
+                  className="grid size-9 shrink-0 place-items-center rounded-md border border-[#e04d26]/25 text-[#e04d26] transition-colors hover:bg-[#fff3ef]"
+                >
+                  <svg className="size-4" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  </svg>
+                </button>
+              </div>
 
               {isExpanded ? (
                 <div className="border-t border-[#e0e0e0] px-6 py-4 space-y-4">
-                  <div className="grid grid-cols-2 gap-4 pb-4 border-b border-[#e0e0e0]">
-                    <label className="block text-sm">
-                      <span className="font-medium text-[#1f1f1f]">Section ID</span>
-                      <input
-                        type="text"
-                        placeholder="e.g., products"
-                        value={section.id}
-                        onChange={(e) =>
-                          updateSection(sectionIndex, { id: e.target.value })
-                        }
-                        className="mt-1 block w-full rounded-lg border border-[#b8b8b8] bg-white px-3 py-2 text-sm text-[#1f1f1f] focus:border-[#e04d26] focus:outline-none focus:ring-2 focus:ring-[#fab446]/45"
-                      />
-                    </label>
+                  <div className="grid gap-4 border-b border-[#e0e0e0] pb-4">
                     <label className="block text-sm">
                       <span className="font-medium text-[#1f1f1f]">Section Title</span>
                       <input
                         type="text"
                         placeholder="e.g., Products"
+                        autoFocus={editingSectionIndex === sectionIndex}
                         value={section.title}
                         onChange={(e) =>
                           updateSection(sectionIndex, { title: e.target.value })
@@ -356,6 +383,10 @@ export function FaqForm({
                         className="mt-1 block w-full rounded-lg border border-[#b8b8b8] bg-white px-3 py-2 text-sm text-[#1f1f1f] focus:border-[#e04d26] focus:outline-none focus:ring-2 focus:ring-[#fab446]/45"
                       />
                     </label>
+                    <div className="flex items-center justify-between gap-3 rounded-lg bg-[#fff7e4] px-3 py-2 text-xs text-[#6f6f6f]">
+                      <span>Section link ID is generated automatically.</span>
+                      <code className="font-semibold text-[#e04d26]">#{section.id || sectionIdFromTitle(section.title, sectionIndex + 1)}</code>
+                    </div>
                   </div>
 
                   <div className="space-y-3">

@@ -54,7 +54,7 @@ export function EditorialFooter() {
       </div>
 
       <div className="relative z-10 text-[min(7px,1.79vw)] uppercase leading-none md:absolute md:bottom-[16px] md:left-[50px] md:right-[50px] md:grid md:grid-cols-3 md:items-end md:gap-2 md:text-[12px] md:leading-none">
-        <p className="absolute bottom-0 left-0 md:static">© 2026 ARTICUT</p>
+        <p className="absolute bottom-0 left-0 md:static">© 2026 ARTICUT™</p>
         <p className="absolute inset-x-0 bottom-0 whitespace-nowrap text-center md:static">ALL RIGHTS RESERVED</p>
         <p className="absolute bottom-0 right-0 text-right md:static">
           <a href="https://artistudyo.com" target="_blank" rel="noreferrer">

@@ -44,6 +44,9 @@ type FeatureSectionAnimation = {
   headingScrollScrub?: number | boolean;
   productImageStartAt?: number;
   productImageDuration?: number;
+  animationStart?: string;
+  animationEnd?: string;
+  animationScrub?: number | boolean;
   scrollStart?: string;
   scrollEnd?: string;
   scrollScrub?: number | boolean;
@@ -275,6 +278,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
       let headingScrollTrigger: ScrollTrigger | undefined;
       let headingTimeline: gsap.core.Timeline | undefined;
+      let pinScrollTrigger: ScrollTrigger | undefined;
 
       if (animateHeading && hasDedicatedHeadingScroll) {
         headingTimeline = gsap
@@ -368,13 +372,22 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         );
       }
 
-      const scrollTrigger = ScrollTrigger.create({
+      if (animation?.pin) {
+        pinScrollTrigger = ScrollTrigger.create({
+          trigger: stage,
+          start: animation.scrollStart ?? "top top",
+          end: animation.scrollEnd ?? "+=220%",
+          pin: true,
+          anticipatePin: animation.pinAnticipate ?? 1,
+          invalidateOnRefresh: true,
+        });
+      }
+
+      const animationScrollTrigger = ScrollTrigger.create({
         trigger: stage,
-        start: animation?.scrollStart ?? "top 78%",
-        end: animation?.scrollEnd ?? "top top",
-        scrub: animation?.scrollScrub ?? 0.35,
-        pin: animation?.pin,
-        anticipatePin: animation?.pin ? (animation.pinAnticipate ?? 1) : undefined,
+        start: animation?.animationStart ?? animation?.scrollStart ?? "top 78%",
+        end: animation?.animationEnd ?? animation?.scrollEnd ?? "top top",
+        scrub: animation?.animationScrub ?? animation?.scrollScrub ?? 0.35,
         animation: timeline,
         invalidateOnRefresh: true,
       });
@@ -382,7 +395,8 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       return () => {
         headingScrollTrigger?.kill();
         headingTimeline?.kill();
-        scrollTrigger.kill();
+        pinScrollTrigger?.kill();
+        animationScrollTrigger.kill();
         timeline.kill();
       };
     },

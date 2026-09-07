@@ -39,9 +39,11 @@ export default async function CutpilotPage() {
   return (
     <VideoLoadingGate>
       <CutpilotProductPage
-        mediaStrip={cmsContent.productDetail.mediaStrip}
-        packageImage={cmsContent.productDetail.packageImage}
-        product={product}
+      mediaStrip={cmsContent.productDetail.mediaStrip}
+      packageImage={cmsContent.productDetail.packageImage}
+      productReveal={cmsContent.productDetail.productReveal}
+      productRevealMobile={cmsContent.productDetail.productRevealMobile}
+      product={product}
         sliderImages={cmsContent.productDetail.slider}
       />
     </VideoLoadingGate>

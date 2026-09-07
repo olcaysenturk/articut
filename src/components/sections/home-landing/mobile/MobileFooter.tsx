@@ -18,7 +18,7 @@ function FooterArrow() {
 
 export function MobileFooter() {
   return (
-    <footer id="about-mobile" className="absolute left-0 top-[2959px] h-[min(453px,115.27vw)] w-full overflow-hidden bg-[#a5a5a5] text-[#e04d26]">
+    <footer id="about-mobile" className="absolute left-0 top-[2779px] h-[min(453px,115.27vw)] w-full overflow-hidden bg-[#a5a5a5] text-[#e04d26]">
       <div className="absolute left-[min(32px,8.14vw)] top-[min(24px,6.11vw)] w-[min(48px,12.21vw)] text-[10px] leading-[24px]">
         <Link href="/" className="block">
           Home
@@ -60,7 +60,7 @@ export function MobileFooter() {
           className="object-contain"
         />
       </div>
-      <p className="absolute bottom-[min(14px,3.56vw)] left-[min(32px,8.14vw)] text-[min(8px,2.04vw)] uppercase leading-none">© 2026 ARTICUT</p>
+      <p className="absolute bottom-[min(14px,3.56vw)] left-[min(32px,8.14vw)] text-[min(8px,2.04vw)] uppercase leading-none">© 2026 ARTICUT™</p>
       <p className="absolute bottom-[min(14px,3.56vw)] left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-[min(8px,2.04vw)] leading-none">
         ALL RIGHTS RESERVED
       </p>

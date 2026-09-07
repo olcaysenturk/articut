@@ -7,6 +7,20 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    localPatterns: [
+      {
+        pathname: "/api/cms-media",
+      },
+      {
+        pathname: "/images/**",
+      },
+      {
+        pathname: "/figma/**",
+      },
+      {
+        pathname: "/uploads/**",
+      },
+    ],
     remotePatterns: [
       {
         protocol: "https",

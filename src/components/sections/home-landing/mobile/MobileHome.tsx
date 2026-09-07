@@ -11,18 +11,18 @@ import type { Product } from "@/types/shopify";
 
 export function MobileHome({ cmsContent, product }: { cmsContent: CmsContent; product: Product }) {
   return (
-    <div id="mobile-home" className="relative h-[calc(2959px+min(453px,115.27vw))] w-full overflow-hidden bg-white text-[#e04d26]">
+    <div id="mobile-home" className="relative h-[calc(2779px+min(453px,115.27vw))] w-full overflow-hidden bg-white text-[#e04d26]">
       <MobileStickyHeader />
       <MobileHeroVideo
         posterUrl={cmsContent.home.mobileHeroPoster.src}
         videoUrl={cmsContent.home.mobileHeroVideoUrl}
       />
       <FeatureSection config={MOBILE_CUTPILOT_FEATURE_CONFIG} />
-      <MobileProductSection product={product} />
+      <MobileProductSection product={product} image={cmsContent.home.productImage} />
       <MobilePackShowcase />
       <DesktopImageShowcase
         images={cmsContent.home.imageShowcase}
-        className="absolute left-0 top-[2379px] h-[580px] w-full overflow-hidden bg-black"
+        className="absolute left-0 top-[2199px] h-[580px] w-full overflow-hidden bg-black"
       />
       <MobileFooter />
     </div>

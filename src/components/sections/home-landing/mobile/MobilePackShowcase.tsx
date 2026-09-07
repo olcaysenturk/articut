@@ -3,7 +3,7 @@ import { RibbonMarquee } from "@/components/sections/home-landing/RibbonMarquee"
 
 export function MobilePackShowcase() {
   return (
-    <section className="absolute left-0 top-[2079px] h-[300px] w-full overflow-hidden bg-[#fab446] [container-type:size]">
+    <section className="absolute left-0 top-[1899px] h-[300px] w-full overflow-hidden bg-[#fab446] [container-type:size]">
       <RibbonMarquee className="absolute left-[52px] top-0 h-[52px] w-[calc(100%-104px)]" />
       <RibbonMarquee
         reverse

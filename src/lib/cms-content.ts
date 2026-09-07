@@ -217,6 +217,7 @@ const cmsContentSchema = z.object({
     heroVideoUrl: z.string().trim().min(1),
     mobileHeroVideoUrl: z.string().trim().min(1),
     heroPoster: imageSchema,
+    productImage: imageSchema,
     packShowcaseImage: imageSchema,
     mobileHeroPoster: imageSchema,
     imageShowcase: z.array(mediaItemSchema).min(1),
@@ -225,6 +226,8 @@ const cmsContentSchema = z.object({
     mediaStrip: z.array(mediaItemSchema).min(1),
     packageImage: imageSchema,
     slider: z.array(imageSchema).min(1),
+    productReveal: z.array(imageSchema).min(1),
+    productRevealMobile: z.array(imageSchema).min(1),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema).min(1),
@@ -258,6 +261,7 @@ const legacyCmsContentSchema = z.object({
     heroVideoUrl: z.string().trim().min(1),
     mobileHeroVideoUrl: z.string().trim().optional(),
     heroPoster: imageSchema.optional(),
+    productImage: imageSchema.optional(),
     packShowcaseImage: imageSchema.optional(),
     mobileHeroPoster: imageSchema.optional(),
     imageShowcase: z.array(mediaItemSchema).optional(),
@@ -266,6 +270,8 @@ const legacyCmsContentSchema = z.object({
     mediaStrip: z.array(mediaItemSchema).optional(),
     packageImage: imageSchema.optional(),
     slider: z.array(imageSchema).min(1),
+    productReveal: z.array(imageSchema).optional(),
+    productRevealMobile: z.array(imageSchema).optional(),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema),
@@ -316,6 +322,10 @@ export async function getCmsContent(): Promise<CmsContent> {
         src: "/images/hero-poster.png",
         alt: "Homepage hero poster",
       },
+      productImage: legacy.home.productImage ?? {
+        src: "/figma/cutpilot-tile.png",
+        alt: "Cutpilot package",
+      },
       packShowcaseImage: {
         src: "/figma/cutpilot-pack.png",
         alt: "Cutpilot tool",
@@ -356,6 +366,26 @@ export async function getCmsContent(): Promise<CmsContent> {
         },
       ],
       slider: legacy.productDetail.slider,
+      productReveal: legacy.productDetail.productReveal ?? [
+        {
+          src: "/images/product-detail/cutpilot-box-1.jpg",
+          alt: "Cutpilot package held above a model",
+        },
+        {
+          src: "/images/product-detail/cutpilot-box-2.jpg",
+          alt: "Open Cutpilot package on a chair",
+        },
+      ],
+      productRevealMobile: legacy.productDetail.productRevealMobile ?? legacy.productDetail.productReveal ?? [
+        {
+          src: "/images/product-detail/cutpilot-box-1.jpg",
+          alt: "Cutpilot package held above a model",
+        },
+        {
+          src: "/images/product-detail/cutpilot-box-2.jpg",
+          alt: "Open Cutpilot package on a chair",
+        },
+      ],
     },
     faq: legacy.faq ?? {
       sections: [

@@ -15,7 +15,7 @@ export function DesktopHome({ cmsContent, product }: { cmsContent: CmsContent; p
         posterUrl={cmsContent.home.heroPoster.src}
         videoUrl={cmsContent.home.heroVideoUrl}
       />
-      <DesktopProductSection product={product} />
+      <DesktopProductSection product={product} image={cmsContent.home.productImage} />
       <DesktopPackShowcase
         imageAlt={cmsContent.home.packShowcaseImage.alt}
         imageSrc={cmsContent.home.packShowcaseImage.src}

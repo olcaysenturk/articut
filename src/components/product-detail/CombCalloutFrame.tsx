@@ -82,7 +82,7 @@ export function CombCalloutFrame() {
       const cx = width / 2;
       const cy = height / 2;
       const isMobile = window.innerWidth < 768;
-      const strokeWidth = (isMobile ? 2 : 3) * ratio;
+      const strokeWidth = 3 * ratio;
       const outerBase = 12 * ratio;
       const innerBase = (isMobile ? 12 : 23) * ratio;
       const safeInset = strokeWidth * 1.5 + outerBase + 1 * ratio;

@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
 import { useEffect, useState, type DragEvent, type ReactNode } from "react";
 import type {
   saveAboutContentAction,
@@ -22,12 +23,13 @@ export type ActivePanel =
   | "about-hero"
   | "about-story"
   | "about-contact"
-  | "home-desktop"
-  | "home-mobile"
+  | "home-hero"
+  | "home-product"
   | "home-pack-showcase"
   | "home-showcase"
   | "product-package"
   | "product-media-strip"
+  | "product-reveal"
   | "product-detail"
   | "faq"
   | "terms"
@@ -61,14 +63,17 @@ const MEDIA_SPECS = {
   mobileHero: { width: 1080, height: 1350, ratioLabel: "4:5, vertical" },
   packShowcase: { width: 2200, height: 1000, ratioLabel: "~2.2:1, ultra-wide" },
   webShowcase: { width: 1920, height: 1080, ratioLabel: "16:9" },
+  storyImage: { width: 1920, height: 1080, ratioLabel: "16:9" },
   packageImage: { width: 2400, height: 1600, ratioLabel: "3:2" },
+  homeProduct: { width: 2400, height: 1600, ratioLabel: "3:2" },
   slider: { width: 1920, height: 1080, ratioLabel: "16:9" },
   mediaStrip: { width: 1080, height: 1920, ratioLabel: "9:16, vertical" },
+  productReveal: { width: 1920, height: 1080, ratioLabel: "16:9" },
 } as const satisfies Record<string, MediaDimensionSpec>;
 
 const homePanels = [
-  { key: "home-desktop" as const, label: "Desktop hero video" },
-  { key: "home-mobile" as const, label: "Mobile hero video" },
+  { key: "home-hero" as const, label: "Hero video" },
+  { key: "home-product" as const, label: "Product image" },
   { key: "home-pack-showcase" as const, label: "Pack showcase image" },
   { key: "home-showcase" as const, label: "Web image showcase" },
 ];
@@ -83,6 +88,7 @@ const panels = [
       { key: "product-package" as const, label: "Package image" },
       { key: "product-detail" as const, label: "Slider images" },
       { key: "product-media-strip" as const, label: "Media strip" },
+      { key: "product-reveal" as const, label: "Product reveal" },
     ],
   },
   {
@@ -172,6 +178,9 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "about-contact") return "Contact section";
   if (panel === "product-package") return "Package image";
   if (panel === "product-media-strip") return "Media strip";
+  if (panel === "product-reveal") return "Product reveal";
+  if (panel === "home-hero") return "Hero video";
+  if (panel === "home-product") return "Product image";
   if (panel === "product-detail") return "Slider images";
   if (panel === "faq") return "FAQ";
   if (panel === "terms") return "Terms & Conditions";
@@ -179,6 +188,16 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "profile") return "Profile & Security";
 
   return homePanels.find((item) => item.key === panel)?.label ?? "Homepage";
+}
+
+function descriptionForPanel(panel: ActivePanel) {
+  if (panel.startsWith("home-")) return "Manage the content shown on the homepage.";
+  if (panel.startsWith("product-")) return "Manage the product detail experience.";
+  if (panel.startsWith("about-")) return "Manage the brand story and contact content.";
+  if (panel === "faq") return "Keep customer questions and answers up to date.";
+  if (panel === "terms" || panel === "privacy") return "Manage the legal content shown to visitors.";
+  if (panel === "profile") return "Manage dashboard access and security.";
+  return "Manage your website content.";
 }
 
 function Icon({ name }: { name: string }) {
@@ -252,8 +271,26 @@ function DashboardShell({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showSavedToast, setShowSavedToast] = useState(isSaved);
-  const [expandedNavGroup, setExpandedNavGroup] = useState<string | null>(null);
+  const [expandedNavGroup, setExpandedNavGroup] = useState<string | null>(() => {
+    if (activePanel.startsWith("home-")) return "homepage";
+    if (activePanel.startsWith("product-")) return "product";
+    if (activePanel.startsWith("about-")) return "about";
+    return null;
+  });
   const activeLabel = labelForPanel(activePanel);
+  const activeDescription = descriptionForPanel(activePanel);
+
+  useEffect(() => {
+    if (activePanel.startsWith("home-")) {
+      setExpandedNavGroup("homepage");
+    } else if (activePanel.startsWith("product-")) {
+      setExpandedNavGroup("product");
+    } else if (activePanel.startsWith("about-")) {
+      setExpandedNavGroup("about");
+    } else {
+      setExpandedNavGroup(null);
+    }
+  }, [activePanel]);
 
   useEffect(() => {
     if (isSaved) {
@@ -333,7 +370,7 @@ function DashboardShell({
                         } else if (isProductPanel) {
                           onPanelChange("product-package");
                         } else if (isHomePanel) {
-                          onPanelChange("home-desktop");
+                          onPanelChange("home-hero");
                         } else {
                           onPanelChange(panel.key as ActivePanel);
                         }
@@ -397,23 +434,52 @@ function DashboardShell({
 
         <div className="min-w-0">
           <header className="sticky top-0 z-10 bg-[#f4f4f4] py-4 shadow-sm">
-            <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between gap-4 px-6">
+            <div className="mx-auto flex h-full max-w-[1440px] flex-wrap items-center justify-between gap-4 px-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#e04d26]">Dashboard</p>
                 <div className="text-[16px] font-semibold text-[#1f1f1f]">{activeLabel}</div>
+                <p className="mt-0.5 hidden text-xs text-[#6f6f6f] sm:block">{activeDescription}</p>
               </div>
               <div className="flex items-center gap-3">
+                <label className="sr-only" htmlFor="mobile-dashboard-panel">Navigate dashboard</label>
+                <select
+                  id="mobile-dashboard-panel"
+                  value={activePanel}
+                  onChange={(event) => onPanelChange(event.target.value as ActivePanel)}
+                  className="h-10 max-w-[150px] rounded-lg border border-[#b8b8b8] bg-white px-2 text-xs font-semibold text-[#1f1f1f] md:hidden"
+                >
+                  <optgroup label="Homepage">
+                    {homePanels.map((panel) => (
+                      <option key={panel.key} value={panel.key}>{panel.label}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Product Detail">
+                    {panels[1]?.children?.map((panel) => (
+                      <option key={panel.key} value={panel.key}>{panel.label}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="About">
+                    {panels[2]?.children?.map((panel) => (
+                      <option key={panel.key} value={panel.key}>{panel.label}</option>
+                    ))}
+                  </optgroup>
+                  <option value="faq">FAQ</option>
+                  <option value="terms">Terms &amp; Conditions</option>
+                  <option value="privacy">Privacy Policy</option>
+                  <option value="profile">Profile &amp; Security</option>
+                </select>
                 <button
                   type="submit"
                   form={formIdForPanel(activePanel)}
-                  className="rounded-lg bg-[#e04d26] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c9411f]"
+                  aria-label={`Save changes for ${activeLabel}`}
+                  className="hidden rounded-lg bg-[#e04d26] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#c9411f] md:inline-flex"
                 >
                   Save changes
                 </button>
                 <form action={logoutAction}>
                   <button
                     type="submit"
-                    className="rounded-lg border border-[#b8b8b8] px-4 py-2 text-sm font-semibold text-[#1f1f1f] transition-colors hover:bg-white"
+                    className="hidden rounded-lg border border-[#b8b8b8] px-4 py-2 text-sm font-semibold text-[#1f1f1f] transition-colors hover:bg-white md:inline-flex"
                   >
                     Log out
                   </button>
@@ -422,11 +488,20 @@ function DashboardShell({
             </div>
           </header>
 
-          <section className="mx-auto max-w-[1440px] px-6 py-8">
+          <section className="mx-auto max-w-[1440px] px-6 pb-28 pt-6 md:py-8">
             {children}
             {/* FAQ Form rendered here */}
           </section>
         </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[#e04d26]/20 bg-[#f4f4f4]/95 p-3 shadow-[0_-8px_24px_rgba(31,31,31,0.08)] backdrop-blur md:hidden">
+        <button
+          type="submit"
+          form={formIdForPanel(activePanel)}
+          className="flex h-12 w-full items-center justify-center rounded-lg bg-[#e04d26] text-sm font-semibold text-white transition-colors hover:bg-[#c9411f]"
+        >
+          Save changes
+        </button>
       </div>
       <AnimatePresence>
         {showSavedToast ? (
@@ -459,6 +534,21 @@ function DashboardShell({
         ) : null}
       </AnimatePresence>
     </main>
+  );
+}
+
+function SavingOverlay() {
+  const { pending } = useFormStatus();
+
+  if (!pending) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] grid place-items-center bg-black/25 px-4 backdrop-blur-[2px]" role="status" aria-live="polite">
+      <div className="flex items-center gap-3 rounded-lg bg-white px-5 py-4 text-sm font-semibold text-[#1f1f1f] shadow-2xl">
+        <span className="size-5 animate-spin rounded-full border-2 border-[#e04d26]/25 border-t-[#e04d26]" aria-hidden="true" />
+        Saving changes...
+      </div>
+    </div>
   );
 }
 
@@ -625,21 +715,51 @@ function FileInput({
   onPreview: (src: string, file: File) => void;
   spec: MediaDimensionSpec;
 }) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [warning, setWarning] = useState<string | null>(null);
+
+  async function handleFile(file: File) {
+    onPreview(URL.createObjectURL(file), file);
+    setWarning(await validateMediaFile(file, kind, spec));
+  }
+
   return (
-    <label className="block text-sm">
-      <span className="font-medium text-[#1f1f1f]">{label}</span>
+    <label
+      className={`block rounded-lg border border-dashed p-3 text-sm transition-colors ${
+        isDragging ? "border-[#e04d26] bg-[#fff0e9]" : "border-[#e04d26]/45 bg-[#fff7e4]"
+      }`}
+      onDragOver={(event) => {
+        event.preventDefault();
+        setIsDragging(true);
+      }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={(event) => {
+        event.preventDefault();
+        setIsDragging(false);
+        const file = event.dataTransfer.files[0];
+        if (file) void handleFile(file);
+      }}
+    >
+      <span className="flex items-center justify-between gap-3 font-medium text-[#1f1f1f]">
+        <span>{label}</span>
+        <span className="text-xs font-normal text-[#8a8a8a]">Drop or browse</span>
+      </span>
       <input
         accept={accept}
-        className="mt-1 block w-full cursor-pointer rounded-lg border border-dashed border-[#e04d26]/45 bg-[#fff7e4] px-3 py-3 text-sm text-[#1f1f1f] file:mr-4 file:rounded-md file:border-0 file:bg-[#e04d26] file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
+        className="sr-only"
         name={name}
         type="file"
         onChange={(event) => {
           const file = event.target.files?.[0];
           if (!file) return;
 
-          onPreview(URL.createObjectURL(file), file);
+          void handleFile(file);
         }}
       />
+      <span className="mt-3 flex cursor-pointer items-center justify-center rounded-md border border-[#e04d26]/25 bg-white px-3 py-2 text-xs font-semibold text-[#e04d26]">
+        Choose {kind}
+      </span>
+      {warning ? <span className="mt-2 block text-xs leading-[1.35] text-[#9a541b]">{warning}</span> : null}
     </label>
   );
 }
@@ -674,7 +794,7 @@ function VideoEditor({
   videoUrlName: string;
 }) {
   return (
-    <section className="rounded-lg bg-[#f4f4f4] p-6 shadow-sm">
+    <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
       <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">{title}</div>
       <div className="space-y-6">
         <div className={`grid gap-6 ${isMobile ? "lg:grid-cols-[220px_1fr]" : "lg:grid-cols-[360px_1fr]"}`}>
@@ -734,7 +854,7 @@ function SingleImageEditor({
   spec: MediaDimensionSpec;
 }) {
   return (
-    <section className="rounded-lg bg-[#f4f4f4] p-6 shadow-sm">
+    <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
       <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">{label}</div>
       <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
         <ImagePreview image={image} label={label} recommendedNote={specNote(spec)} />
@@ -795,7 +915,7 @@ function ImageListEditor({
   }
 
   return (
-    <section className="rounded-lg bg-[#f4f4f4] p-6 shadow-sm">
+    <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
         <div className="text-[16px] font-semibold text-[#1f1f1f]">{addLabel}</div>
         <button
@@ -1081,7 +1201,7 @@ function MediaStripEditor({
   }
 
   return (
-    <section className="rounded-lg bg-[#f4f4f4] p-6 shadow-sm">
+    <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
         <div className="text-[16px] font-semibold text-[#1f1f1f]">{title}</div>
         <button
@@ -1378,7 +1498,12 @@ export function CmsDashboard({
   });
   const [aboutHeroVideoUrl, setAboutHeroVideoUrl] = useState(content.about.heroVideoUrl);
   const [aboutHeroMobileVideoUrl, setAboutHeroMobileVideoUrl] = useState(content.about.heroMobileVideoUrl);
-  const [aboutStoryImageUrl, setAboutStoryImageUrl] = useState(content.about.storyImageUrl);
+  const [aboutHeroViewport, setAboutHeroViewport] = useState<"desktop" | "mobile">("desktop");
+  const [aboutStoryImage, setAboutStoryImage] = useState<ManagedImage>({
+    id: "about-story-image-0",
+    src: content.about.storyImageUrl,
+    alt: "About story image",
+  });
   const [aboutContactTitle, setAboutContactTitle] = useState(content.about.contactTitle);
   const [aboutContactItems, setAboutContactItems] = useState(content.about.contactItems);
   const [aboutStoryContent, setAboutStoryContent] = useState(content.about.storyContent);
@@ -1390,9 +1515,13 @@ export function CmsDashboard({
   const [packShowcaseImage, setPackShowcaseImage] = useState<ManagedImage>(
     toManagedImage(content.home.packShowcaseImage, "pack-showcase", 0),
   );
+  const [homeProductImage, setHomeProductImage] = useState<ManagedImage>(
+    toManagedImage(content.home.productImage, "home-product", 0),
+  );
   const [mobileHeroPoster, setMobileHeroPoster] = useState<ManagedImage>(
     toManagedImage(content.home.mobileHeroPoster, "mobile-hero-poster", 0),
   );
+  const [homeHeroViewport, setHomeHeroViewport] = useState<"desktop" | "mobile">("desktop");
   const [showcaseItems, setShowcaseItems] = useState<ManagedMediaItem[]>(
     content.home.imageShowcase.map((item, index) => toManagedMediaItem(item, "showcase", index)),
   );
@@ -1402,6 +1531,13 @@ export function CmsDashboard({
   const [slides, setSlides] = useState<ManagedImage[]>(
     content.productDetail.slider.map((image, index) => toManagedImage(image, "slider", index)),
   );
+  const [productRevealItems, setProductRevealItems] = useState<ManagedImage[]>(
+    content.productDetail.productReveal.map((image, index) => toManagedImage(image, "product-reveal", index)),
+  );
+  const [productRevealMobileItems, setProductRevealMobileItems] = useState<ManagedImage[]>(
+    content.productDetail.productRevealMobile.map((image, index) => toManagedImage(image, "product-reveal-mobile", index)),
+  );
+  const [productRevealViewport, setProductRevealViewport] = useState<"desktop" | "mobile">("desktop");
   const [mediaStripItems, setMediaStripItems] = useState<ManagedMediaItem[]>(
     content.productDetail.mediaStrip.map((item, index) => toManagedMediaItem(item, "media-strip", index)),
   );
@@ -1415,7 +1551,10 @@ export function CmsDashboard({
     formData.set("about-hero-video-url", aboutHeroVideoUrl);
     formData.set("about-hero-mobile-video-url", aboutHeroMobileVideoUrl);
     formData.set("about-story-content", aboutStoryContent);
-    formData.set("about-story-image-url", aboutStoryImageUrl);
+    formData.set("about-story-image-url", aboutStoryImage.src);
+    if (aboutStoryImage.file) {
+      formData.set("about-story-image-file", aboutStoryImage.file);
+    }
     formData.set("about-contact-title", aboutContactTitle);
     aboutContactItems.forEach((item, index) => {
       formData.set(`contact-${index}-text`, item.text);
@@ -1437,6 +1576,10 @@ export function CmsDashboard({
       formData.set("home-pack-showcase-image-file", packShowcaseImage.file);
     }
 
+    if (homeProductImage.file) {
+      formData.set("home-product-image-file", homeProductImage.file);
+    }
+
     appendManagedMediaFiles(formData, "showcase", showcaseItems);
     await saveHomeAction(formData);
   }
@@ -1447,6 +1590,8 @@ export function CmsDashboard({
     }
 
     appendManagedImageFiles(formData, "slider", slides);
+    appendManagedImageFiles(formData, "product-reveal", productRevealItems);
+    appendManagedImageFiles(formData, "product-reveal-mobile", productRevealMobileItems);
     appendManagedMediaFiles(formData, "media-strip", mediaStripItems);
     await saveProductDetailAction(formData);
   }
@@ -1464,6 +1609,7 @@ export function CmsDashboard({
         className={activePanel.startsWith("about-") ? "space-y-6" : "hidden"}
       >
         <input name="active-panel" type="hidden" value={activePanel} />
+        <SavingOverlay />
 
         <div className={activePanel === "about-hero" ? "space-y-6" : "hidden"}>
           <section className="rounded-lg bg-[#f4f4f4] p-6 shadow-sm">
@@ -1479,36 +1625,59 @@ export function CmsDashboard({
             </label>
           </section>
 
-          <VideoEditor
-            filePrefix="Current poster"
-            poster={aboutHeroPoster}
-            posterAltName="about-hero-poster-alt"
-            posterFileName="about-hero-poster-file"
-            posterSrcName="about-hero-poster-src"
-            posterTitle="Hero poster"
-            setPoster={setAboutHeroPoster}
-            setVideoUrl={setAboutHeroVideoUrl}
-            spec={MEDIA_SPECS.desktopHero}
-            title="Desktop hero video"
-            videoUrl={aboutHeroVideoUrl}
-            videoUrlName="about-hero-video-url"
-          />
+          <div className="inline-flex rounded-lg border border-[#d0d0d0] bg-white p-1 shadow-sm" role="tablist" aria-label="About hero viewport">
+            {(["desktop", "mobile"] as const).map((viewport) => (
+              <button
+                key={viewport}
+                type="button"
+                role="tab"
+                aria-selected={aboutHeroViewport === viewport}
+                onClick={() => setAboutHeroViewport(viewport)}
+                className={`rounded-md px-5 py-2 text-sm font-semibold capitalize transition-colors ${
+                  aboutHeroViewport === viewport
+                    ? "bg-[#e04d26] text-white"
+                    : "text-[#6f6f6f] hover:bg-[#fff7e4] hover:text-[#e04d26]"
+                }`}
+              >
+                {viewport}
+              </button>
+            ))}
+          </div>
 
-          <VideoEditor
-            filePrefix="Current mobile poster"
-            isMobile
-            poster={aboutHeroPoster}
-            posterAltName="about-hero-poster-alt"
-            posterFileName="about-hero-poster-file"
-            posterSrcName="about-hero-poster-src"
-            posterTitle="Hero poster"
-            setPoster={setAboutHeroPoster}
-            setVideoUrl={setAboutHeroMobileVideoUrl}
-            spec={MEDIA_SPECS.mobileHero}
-            title="Mobile hero video"
-            videoUrl={aboutHeroMobileVideoUrl}
-            videoUrlName="about-hero-mobile-video-url"
-          />
+          <div className={aboutHeroViewport === "desktop" ? "block" : "hidden"}>
+            <VideoEditor
+              filePrefix="Current poster"
+              poster={aboutHeroPoster}
+              posterAltName="about-hero-poster-alt"
+              posterFileName="about-hero-poster-file"
+              posterSrcName="about-hero-poster-src"
+              posterTitle="Hero poster"
+              setPoster={setAboutHeroPoster}
+              setVideoUrl={setAboutHeroVideoUrl}
+              spec={MEDIA_SPECS.desktopHero}
+              title="Desktop hero video"
+              videoUrl={aboutHeroVideoUrl}
+              videoUrlName="about-hero-video-url"
+            />
+          </div>
+
+          <div className={aboutHeroViewport === "mobile" ? "block" : "hidden"}>
+            <VideoEditor
+              filePrefix="Current mobile poster"
+              isMobile
+              poster={aboutHeroPoster}
+              posterAltName="about-hero-poster-alt"
+              posterFileName="about-hero-poster-file"
+              posterSrcName="about-hero-poster-src"
+              posterTitle="Hero poster"
+              setPoster={setAboutHeroPoster}
+              setVideoUrl={setAboutHeroMobileVideoUrl}
+              spec={MEDIA_SPECS.mobileHero}
+              title="Mobile hero video"
+              videoUrl={aboutHeroMobileVideoUrl}
+              videoUrlName="about-hero-mobile-video-url"
+            />
+          </div>
         </div>
 
         <section className={activePanel === "about-story" ? "rounded-lg bg-[#f4f4f4] p-6 shadow-sm" : "hidden"}>
@@ -1523,12 +1692,33 @@ export function CmsDashboard({
                 onChange={(e) => setAboutStoryContent(e.target.value)}
               />
             </label>
-            <TextInput
-              name="about-story-image-url"
-              label="Story image URL"
-              value={aboutStoryImageUrl}
-              onChange={setAboutStoryImageUrl}
-            />
+            <div className="rounded-xl border border-[#e5e5e5] bg-white p-5 shadow-sm">
+              <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">Story image</div>
+              <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
+                <ImagePreview
+                  image={aboutStoryImage}
+                  label="Story image"
+                  recommendedNote={specNote(MEDIA_SPECS.storyImage)}
+                />
+                <div className="space-y-4">
+                  <FileInput
+                    label="Upload story image"
+                    name="about-story-image-file"
+                    onPreview={(previewSrc, file) =>
+                      setAboutStoryImage((image) => ({ ...image, file, previewSrc }))
+                    }
+                    spec={MEDIA_SPECS.storyImage}
+                  />
+                  <TextInput
+                    name="about-story-image-url"
+                    label="Or use image URL"
+                    value={aboutStoryImage.src}
+                    onChange={(src) => setAboutStoryImage((image) => ({ ...image, src, file: undefined, previewSrc: undefined }))}
+                  />
+                  <p className="text-xs text-[#6f6f6f]">If both are provided, the uploaded image is used.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1606,7 +1796,29 @@ export function CmsDashboard({
         className={activePanel.startsWith("home-") ? "space-y-6" : "hidden"}
       >
         <input name="active-panel" type="hidden" value={activePanel} />
-        <div className={activePanel === "home-desktop" ? "block" : "hidden"}>
+        <SavingOverlay />
+        <div className={activePanel === "home-hero" ? "space-y-4" : "hidden"}>
+          <div className="inline-flex rounded-lg border border-[#d0d0d0] bg-white p-1 shadow-sm" role="tablist" aria-label="Homepage hero viewport">
+            {(["desktop", "mobile"] as const).map((viewport) => (
+              <button
+                key={viewport}
+                type="button"
+                role="tab"
+                aria-selected={homeHeroViewport === viewport}
+                onClick={() => setHomeHeroViewport(viewport)}
+                className={`rounded-md px-5 py-2 text-sm font-semibold capitalize transition-colors ${
+                  homeHeroViewport === viewport
+                    ? "bg-[#e04d26] text-white"
+                    : "text-[#6f6f6f] hover:bg-[#fff7e4] hover:text-[#e04d26]"
+                }`}
+              >
+                {viewport}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className={activePanel === "home-hero" && homeHeroViewport === "desktop" ? "block" : "hidden"}>
           <VideoEditor
             filePrefix="Current desktop poster"
             poster={heroPoster}
@@ -1623,7 +1835,7 @@ export function CmsDashboard({
           />
         </div>
 
-        <div className={activePanel === "home-mobile" ? "block" : "hidden"}>
+        <div className={activePanel === "home-hero" && homeHeroViewport === "mobile" ? "block" : "hidden"}>
           <VideoEditor
             filePrefix="Current mobile poster"
             isMobile
@@ -1651,6 +1863,16 @@ export function CmsDashboard({
           />
         </div>
 
+        <div className={activePanel === "home-product" ? "block" : "hidden"}>
+          <SingleImageEditor
+            fieldPrefix="home-product-image"
+            image={homeProductImage}
+            label="Homepage product image"
+            setImage={setHomeProductImage}
+            spec={MEDIA_SPECS.homeProduct}
+          />
+        </div>
+
         <div className={activePanel === "home-showcase" ? "block" : "hidden"}>
           <MediaStripEditor
             addLabel="Add media"
@@ -1669,6 +1891,7 @@ export function CmsDashboard({
         className={activePanel.startsWith("product-") ? "space-y-6" : "hidden"}
       >
         <input name="active-panel" type="hidden" value={activePanel} />
+        <SavingOverlay />
         <div className={activePanel === "product-package" ? "block" : "hidden"}>
           <SingleImageEditor
             fieldPrefix="product-package-image"
@@ -1695,6 +1918,45 @@ export function CmsDashboard({
             setItems={setMediaStripItems}
             spec={MEDIA_SPECS.mediaStrip}
           />
+        </div>
+
+        <div className={activePanel === "product-reveal" ? "space-y-4" : "hidden"}>
+          <div className="inline-flex rounded-lg border border-[#d0d0d0] bg-white p-1 shadow-sm" role="tablist" aria-label="Product reveal viewport">
+            {(["desktop", "mobile"] as const).map((viewport) => (
+              <button
+                key={viewport}
+                type="button"
+                role="tab"
+                aria-selected={productRevealViewport === viewport}
+                onClick={() => setProductRevealViewport(viewport)}
+                className={`rounded-md px-5 py-2 text-sm font-semibold capitalize transition-colors ${
+                  productRevealViewport === viewport
+                    ? "bg-[#e04d26] text-white"
+                    : "text-[#6f6f6f] hover:bg-[#fff7e4] hover:text-[#e04d26]"
+                }`}
+              >
+                {viewport}
+              </button>
+            ))}
+          </div>
+
+          {productRevealViewport === "desktop" ? (
+            <ImageListEditor
+              addLabel="Product reveal desktop images"
+              fieldPrefix="product-reveal"
+              images={productRevealItems}
+              setImages={setProductRevealItems}
+              spec={MEDIA_SPECS.productReveal}
+            />
+          ) : (
+            <ImageListEditor
+              addLabel="Product reveal mobile images"
+              fieldPrefix="product-reveal-mobile"
+              images={productRevealMobileItems}
+              setImages={setProductRevealMobileItems}
+              spec={MEDIA_SPECS.productReveal}
+            />
+          )}
         </div>
       </form>
 

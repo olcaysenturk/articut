@@ -47,6 +47,7 @@ export type CmsContent = {
     heroVideoUrl: string;
     mobileHeroVideoUrl: string;
     heroPoster: CmsImage;
+    productImage: CmsImage;
     packShowcaseImage: CmsImage;
     mobileHeroPoster: CmsImage;
     imageShowcase: CmsMediaItem[];
@@ -55,6 +56,8 @@ export type CmsContent = {
     mediaStrip: CmsMediaItem[];
     packageImage: CmsImage;
     slider: CmsImage[];
+    productReveal: CmsImage[];
+    productRevealMobile: CmsImage[];
   };
   faq: {
     sections: FaqSection[];

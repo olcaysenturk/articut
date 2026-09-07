@@ -16,11 +16,12 @@ function cmsStore() {
       // Netlify Functions provide the Blobs context automatically at runtime.
       // During a build this may throw, so the caller can use the local fallback.
       if (process.env.NETLIFY !== "true") return null;
-      return getStore({ name: CMS_STORE_NAME });
+      return getStore({ name: CMS_STORE_NAME, consistency: "strong" });
     }
 
     return getStore({
       name: CMS_STORE_NAME,
+      consistency: "strong",
       siteID,
       token,
     });

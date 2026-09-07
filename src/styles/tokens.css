@@ -15,14 +15,3 @@
   --header-height: 4.5rem;
   --radius-button: 999px;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #0a0a0a;
-    --color-foreground: #f5f5f5;
-    --color-accent: #f5f5f5;
-    --color-muted: #a0a0a0;
-    --color-border: #262626;
-    --color-surface: #141414;
-  }
-}

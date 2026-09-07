@@ -1,6 +1,3 @@
-// import { BrandLoader } from "@/components/loading/BrandLoader";
-
 export default function Loading() {
-  // Temporarily disabled — re-enable by restoring `return <BrandLoader />;`
-  return null;
+  return <div className="min-h-dvh bg-[#e04d26]" aria-label="Loading page" role="status" />;
 }

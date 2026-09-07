@@ -2,6 +2,7 @@ import "server-only";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
+import { readCmsContentBlob, writeCmsContentBlob } from "@/lib/netlify-blobs";
 import type { CmsContent, LegalSectionContent } from "@/types/cms";
 
 const DEFAULT_TERMS_SECTIONS: LegalSectionContent[] = [
@@ -281,7 +282,7 @@ const legacyCmsContentSchema = z.object({
 const CMS_CONTENT_PATH = path.join(process.cwd(), "data", "cms-content.json");
 
 export async function getCmsContent(): Promise<CmsContent> {
-  const raw = await readFile(CMS_CONTENT_PATH, "utf8");
+  const raw = (await readCmsContentBlob()) ?? await readFile(CMS_CONTENT_PATH, "utf8");
   const json = JSON.parse(raw);
   const parsed = cmsContentSchema.safeParse(json);
 
@@ -430,5 +431,7 @@ export async function getCmsContent(): Promise<CmsContent> {
 
 export async function saveCmsContent(content: CmsContent): Promise<void> {
   const parsed = cmsContentSchema.parse(content);
+  if (await writeCmsContentBlob(parsed)) return;
+
   await writeFile(CMS_CONTENT_PATH, `${JSON.stringify(parsed, null, 2)}\n`, "utf8");
 }

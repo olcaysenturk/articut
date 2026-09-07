@@ -1,10 +1,9 @@
 "use server";
 
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getCmsContent, saveCmsContent } from "@/lib/cms-content";
+import { cmsMediaUrl, uploadCmsMedia } from "@/lib/netlify-blobs";
 import type { CmsImage, CmsMediaItem } from "@/types/cms";
 
 function field(formData: FormData, name: string) {
@@ -17,13 +16,18 @@ async function uploadedImagePath(formData: FormData, name: string) {
     return null;
   }
 
-  const extension = path.extname(value.name).toLowerCase() || ".jpg";
-  const baseName = path
-    .basename(value.name, extension)
+  const extension = value.name.includes(".") ? value.name.slice(value.name.lastIndexOf(".")).toLowerCase() : ".jpg";
+  const baseName = value.name
+    .slice(0, value.name.length - extension.length)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")
     .slice(0, 48);
+  const blob = await uploadCmsMedia(value, baseName || "image");
+  if (blob) return cmsMediaUrl(blob.key);
+
+  const { mkdir, writeFile } = await import("node:fs/promises");
+  const path = await import("node:path");
   const fileName = `${Date.now()}-${baseName || "image"}${extension}`;
   const uploadDir = path.join(process.cwd(), "public", "uploads", "cms");
 
@@ -89,6 +93,7 @@ function dashboardRedirect(panel: string) {
     panel === "faq" ||
     panel === "terms" ||
     panel === "privacy"
+    || panel === "profile"
       ? panel
       : "about";
 

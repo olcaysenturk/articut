@@ -2,6 +2,7 @@ import "server-only";
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
+import { readDashboardCredentials, writeDashboardCredentials } from "@/lib/netlify-blobs";
 
 export const DASHBOARD_SESSION_COOKIE = "dashboard_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7; // 7 days
@@ -20,6 +21,16 @@ function hashPassword(password: string, salt: string): string {
 }
 
 async function readCredentials(): Promise<StoredCredentials> {
+  const remoteCredentials = await readDashboardCredentials();
+  if (
+    remoteCredentials &&
+    typeof remoteCredentials.username === "string" &&
+    typeof remoteCredentials.salt === "string" &&
+    typeof remoteCredentials.passwordHash === "string"
+  ) {
+    return remoteCredentials as StoredCredentials;
+  }
+
   try {
     const raw = await readFile(CREDENTIALS_PATH, "utf8");
     return JSON.parse(raw) as StoredCredentials;
@@ -46,11 +57,6 @@ async function readCredentials(): Promise<StoredCredentials> {
 
 export async function getDashboardUsername(): Promise<string> {
   try {
-    const envUsername = process.env.DASHBOARD_USERNAME;
-    if (envUsername) {
-      return envUsername;
-    }
-
     const credentials = await readCredentials();
     return credentials.username;
   } catch {
@@ -60,13 +66,6 @@ export async function getDashboardUsername(): Promise<string> {
 
 export async function checkCredentials(username: string, password: string): Promise<boolean> {
   try {
-    const envUsername = process.env.DASHBOARD_USERNAME;
-    const envPassword = process.env.DASHBOARD_PASSWORD;
-
-    if (envUsername && envPassword) {
-      return username === envUsername && password === envPassword;
-    }
-
     const credentials = await readCredentials();
 
     if (username !== credentials.username) return false;
@@ -84,13 +83,6 @@ export async function checkCredentials(username: string, password: string): Prom
 
 export async function verifyCurrentPassword(password: string): Promise<boolean> {
   try {
-    const envUsername = process.env.DASHBOARD_USERNAME;
-    const envPassword = process.env.DASHBOARD_PASSWORD;
-
-    if (envUsername && envPassword) {
-      return password === envPassword;
-    }
-
     const credentials = await readCredentials();
     return checkCredentials(credentials.username, password);
   } catch {
@@ -98,23 +90,15 @@ export async function verifyCurrentPassword(password: string): Promise<boolean> 
   }
 }
 
-export function isUsingEnvironmentVariables(): boolean {
-  return !!(process.env.DASHBOARD_USERNAME && process.env.DASHBOARD_PASSWORD);
-}
-
 export async function updateCredentials(newUsername: string, newPassword: string): Promise<void> {
-  if (isUsingEnvironmentVariables()) {
-    throw new Error(
-      "Cannot update credentials when using environment variables. Update DASHBOARD_USERNAME and DASHBOARD_PASSWORD in your deployment settings."
-    );
-  }
-
   const salt = randomBytes(16).toString("hex");
   const credentials: StoredCredentials = {
     username: newUsername,
     salt,
     passwordHash: hashPassword(newPassword, salt),
   };
+
+  if (await writeDashboardCredentials(credentials)) return;
 
   await mkdir(path.dirname(CREDENTIALS_PATH), { recursive: true });
   await writeFile(CREDENTIALS_PATH, JSON.stringify(credentials, null, 2), "utf8");

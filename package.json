@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@netlify/blobs": "^10.7.13",
     "@sentry/nextjs": "^10.69.0",
     "@shopify/storefront-api-client": "^1.0.10",
     "clsx": "^2.1.1",

@@ -7,6 +7,7 @@ import {
   getDashboardUsername,
   updateCredentials,
   verifyCurrentPassword,
+  verifySessionToken,
 } from "@/lib/dashboard-auth";
 
 type ProfileActionState = { error?: string; success?: string };
@@ -15,6 +16,11 @@ export async function updateProfileAction(
   _prevState: ProfileActionState | undefined,
   formData: FormData,
 ): Promise<ProfileActionState> {
+  const cookieStore = await cookies();
+  if (!verifySessionToken(cookieStore.get(DASHBOARD_SESSION_COOKIE)?.value)) {
+    return { error: "Your session has expired. Please sign in again." };
+  }
+
   const currentPassword = String(formData.get("current-password") ?? "");
   const newUsername = String(formData.get("new-username") ?? "").trim();
   const newPassword = String(formData.get("new-password") ?? "");
@@ -40,7 +46,6 @@ export async function updateProfileAction(
   await updateCredentials(newUsername, finalPassword);
 
   const { token, maxAge } = createSessionToken();
-  const cookieStore = await cookies();
   cookieStore.set(DASHBOARD_SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

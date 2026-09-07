@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, type DragEvent, type ReactNode } from "react";
 import type {
   saveAboutContentAction,
@@ -15,6 +16,7 @@ import type { CmsContent, CmsImage, CmsMediaItem } from "@/types/cms";
 import { FaqForm } from "./faq/FaqForm";
 import { TermsForm } from "./terms/TermsForm";
 import { PrivacyForm } from "./privacy/PrivacyForm";
+import { ProfileForm } from "./profile/ProfileForm";
 
 export type ActivePanel =
   | "about-hero"
@@ -29,7 +31,8 @@ export type ActivePanel =
   | "product-detail"
   | "faq"
   | "terms"
-  | "privacy";
+  | "privacy"
+  | "profile";
 
 type ManagedImage = CmsImage & {
   file?: File;
@@ -95,6 +98,7 @@ const panels = [
   { key: "faq" as const, label: "FAQ", icon: "faq" },
   { key: "terms" as const, label: "Terms & Conditions", icon: "terms" },
   { key: "privacy" as const, label: "Privacy Policy", icon: "terms" },
+  { key: "profile" as const, label: "Profile & Security", icon: "profile" },
 ];
 
 function createBlankImage(): ManagedImage {
@@ -158,6 +162,7 @@ function formIdForPanel(panel: ActivePanel) {
   if (panel === "faq") return "faq-form";
   if (panel === "terms") return "terms-form";
   if (panel === "privacy") return "privacy-form";
+  if (panel === "profile") return "profile-form";
   return "home-form";
 }
 
@@ -171,6 +176,7 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "faq") return "FAQ";
   if (panel === "terms") return "Terms & Conditions";
   if (panel === "privacy") return "Privacy Policy";
+  if (panel === "profile") return "Profile & Security";
 
   return homePanels.find((item) => item.key === panel)?.label ?? "Homepage";
 }
@@ -1344,7 +1350,6 @@ export function CmsDashboard({
   savePrivacyAction,
   logoutAction: logoutActionProp,
   currentUsername,
-  isUsingEnvironmentVariables,
 }: {
   content: CmsContent;
   isSaved: boolean;
@@ -1357,9 +1362,14 @@ export function CmsDashboard({
   savePrivacyAction: typeof savePrivacyContentAction;
   currentUsername: string;
   logoutAction: typeof logoutAction;
-  isUsingEnvironmentVariables?: boolean;
 }) {
+  const router = useRouter();
   const [activePanel, setActivePanel] = useState<ActivePanel>(initialPanel);
+
+  function handlePanelChange(panel: ActivePanel) {
+    setActivePanel(panel);
+    router.push(`/dashboard?panel=${encodeURIComponent(panel)}`, { scroll: false });
+  }
   const [aboutHeroTitle, setAboutHeroTitle] = useState(content.about.heroTitle);
   const [aboutHeroPoster, setAboutHeroPoster] = useState<ManagedImage>({
     id: "about-hero-poster-0",
@@ -1445,7 +1455,7 @@ export function CmsDashboard({
     <DashboardShell
       activePanel={activePanel}
       isSaved={isSaved}
-      onPanelChange={setActivePanel}
+      onPanelChange={handlePanelChange}
       logoutAction={logoutActionProp}
     >
       <form
@@ -1709,6 +1719,8 @@ export function CmsDashboard({
           onSubmit={savePrivacyAction}
         />
       ) : null}
+
+      {activePanel === "profile" ? <ProfileForm currentUsername={currentUsername} /> : null}
 
     </DashboardShell>
   );

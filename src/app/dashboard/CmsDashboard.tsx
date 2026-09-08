@@ -260,12 +260,14 @@ function DashboardShell({
   activePanel,
   children,
   isSaved,
+  saveVersion,
   onPanelChange,
   logoutAction,
 }: {
   activePanel: ActivePanel;
   children: ReactNode;
   isSaved: boolean;
+  saveVersion: number;
   onPanelChange: (panel: ActivePanel) => void;
   logoutAction: () => void;
 }) {
@@ -298,14 +300,12 @@ function DashboardShell({
       const url = new URL(window.location.href);
       url.searchParams.delete("saved");
       window.history.replaceState({}, "", url.toString());
-
-      const timeout = window.setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-
-      return () => window.clearTimeout(timeout);
     }
   }, [isSaved]);
+
+  useEffect(() => {
+    if (saveVersion > 0) setShowSavedToast(true);
+  }, [saveVersion]);
 
   useEffect(() => {
     if (!showSavedToast) return;
@@ -1485,6 +1485,12 @@ export function CmsDashboard({
 }) {
   const router = useRouter();
   const [activePanel, setActivePanel] = useState<ActivePanel>(initialPanel);
+  const [saveVersion, setSaveVersion] = useState(0);
+
+  async function completeSave() {
+    setSaveVersion((version) => version + 1);
+    router.refresh();
+  }
 
   function handlePanelChange(panel: ActivePanel) {
     setActivePanel(panel);
@@ -1561,6 +1567,7 @@ export function CmsDashboard({
       formData.set(`contact-${index}-email`, item.email);
     });
     await saveAboutAction(formData);
+    await completeSave();
   }
 
   async function submitHomeContent(formData: FormData) {
@@ -1582,6 +1589,7 @@ export function CmsDashboard({
 
     appendManagedMediaFiles(formData, "showcase", showcaseItems);
     await saveHomeAction(formData);
+    await completeSave();
   }
 
   async function submitProductDetailContent(formData: FormData) {
@@ -1594,12 +1602,14 @@ export function CmsDashboard({
     appendManagedImageFiles(formData, "product-reveal-mobile", productRevealMobileItems);
     appendManagedMediaFiles(formData, "media-strip", mediaStripItems);
     await saveProductDetailAction(formData);
+    await completeSave();
   }
 
   return (
     <DashboardShell
       activePanel={activePanel}
       isSaved={isSaved}
+      saveVersion={saveVersion}
       onPanelChange={handlePanelChange}
       logoutAction={logoutActionProp}
     >
@@ -1963,14 +1973,20 @@ export function CmsDashboard({
       {activePanel === "faq" ? (
         <FaqForm
           sections={content.faq.sections}
-          onSubmit={saveFaqAction}
+          onSubmit={async (formData) => {
+            await saveFaqAction(formData);
+            await completeSave();
+          }}
         />
       ) : null}
 
       {activePanel === "terms" ? (
         <TermsForm
           sections={content.terms.sections}
-          onSubmit={saveTermsAction}
+          onSubmit={async (formData) => {
+            await saveTermsAction(formData);
+            await completeSave();
+          }}
         />
       ) : null}
 
@@ -1978,7 +1994,10 @@ export function CmsDashboard({
         <PrivacyForm
           sections={content.privacy.sections}
           updated={content.privacy.updated}
-          onSubmit={savePrivacyAction}
+          onSubmit={async (formData) => {
+            await savePrivacyAction(formData);
+            await completeSave();
+          }}
         />
       ) : null}
 

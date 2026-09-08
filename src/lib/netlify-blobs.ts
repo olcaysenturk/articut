@@ -1,5 +1,6 @@
 import "server-only";
 
+import { createHash } from "node:crypto";
 import { getStore } from "@netlify/blobs";
 
 const CMS_STORE_NAME = "articut-cms";
@@ -11,18 +12,22 @@ function cmsStore() {
   const siteID = process.env.NETLIFY_SITE_ID;
   const token = process.env.NETLIFY_AUTH_TOKEN;
 
-  if (!siteID || !token) {
-    return null;
-  }
-
   try {
+    if (!siteID || !token) {
+      // Netlify Functions expose the site context to @netlify/blobs.
+      // The explicit credentials remain supported for local/CI execution.
+      if (process.env.NETLIFY !== "true") return null;
+      return getStore({ name: CMS_STORE_NAME, consistency: "strong" });
+    }
+
     return getStore({
       name: CMS_STORE_NAME,
       consistency: "strong",
       siteID,
       token,
     });
-  } catch {
+  } catch (error) {
+    console.error("Netlify Blobs store initialization failed", error);
     // Allow production builds to use the checked-in CMS fallback when Blob
     // credentials are unavailable or invalid.
     return null;
@@ -31,6 +36,10 @@ function cmsStore() {
 
 export function cmsMediaUrl(key: string) {
   return `/api/cms-media?key=${encodeURIComponent(key)}`;
+}
+
+function contentHash(data: ArrayBuffer) {
+  return createHash("sha256").update(Buffer.from(data)).digest("hex");
 }
 
 export async function readCmsContentBlob() {
@@ -72,7 +81,8 @@ export async function writeDashboardCredentials(credentials: {
   try {
     await store.setJSON(DASHBOARD_CREDENTIALS_KEY, credentials);
     return true;
-  } catch {
+  } catch (error) {
+    console.error("Netlify Blobs CMS content write failed", error);
     return false;
   }
 }
@@ -94,10 +104,22 @@ export async function uploadCmsMedia(file: File, baseName: string) {
   if (!store) return null;
 
   const extension = file.name.includes(".") ? file.name.slice(file.name.lastIndexOf(".")).toLowerCase() : ".bin";
-  const key = `${CMS_MEDIA_PREFIX}/${Date.now()}-${baseName || "file"}${extension}`;
+  const data = await file.arrayBuffer();
+  const hash = contentHash(data);
+  const key = `${CMS_MEDIA_PREFIX}/${Date.now()}-${hash.slice(0, 16)}-${baseName || "file"}${extension}`;
   const contentType = file.type || "application/octet-stream";
 
-  await store.set(key, await file.arrayBuffer(), { metadata: { contentType } });
+  try {
+    await store.set(key, data, { metadata: { contentType, sha256: hash } });
+
+    const saved = await store.get(key, { type: "arrayBuffer" });
+    if (contentHash(saved) !== hash) {
+      throw new Error(`Uploaded media verification failed for ${key}`);
+    }
+  } catch (error) {
+    console.error("Netlify Blobs media upload failed", error);
+    throw error;
+  }
   return { key, contentType };
 }
 

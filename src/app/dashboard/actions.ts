@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { getCmsContent, saveCmsContent } from "@/lib/cms-content";
 import { cmsMediaUrl, uploadCmsMedia } from "@/lib/netlify-blobs";
 import type { CmsImage, CmsMediaItem } from "@/types/cms";
@@ -98,27 +97,6 @@ function revalidateCmsContent() {
   revalidatePath("/dashboard");
 }
 
-function dashboardRedirect(panel: string) {
-  const allowedPanel =
-    panel === "about" ||
-    panel === "home-hero" ||
-    panel === "home-product" ||
-    panel === "home-pack-showcase" ||
-    panel === "home-showcase" ||
-    panel === "product-package" ||
-    panel === "product-media-strip" ||
-    panel === "product-reveal" ||
-    panel === "product-detail" ||
-    panel === "faq" ||
-    panel === "terms" ||
-    panel === "privacy"
-    || panel === "profile"
-      ? panel
-      : "about";
-
-  redirect(`/dashboard?panel=${allowedPanel}&saved=1`);
-}
-
 async function imageListFromForm(formData: FormData, prefix: string, indexes: number[]) {
   const images: CmsImage[] = [];
 
@@ -174,7 +152,6 @@ export async function saveHomeContentAction(formData: FormData) {
   });
 
   revalidateCmsContent();
-  dashboardRedirect(field(formData, "active-panel"));
 }
 
 export async function saveProductDetailContentAction(formData: FormData) {
@@ -244,7 +221,6 @@ export async function saveProductDetailContentAction(formData: FormData) {
   });
 
   revalidateCmsContent();
-  dashboardRedirect(field(formData, "active-panel"));
 }
 
 export async function saveAboutContentAction(formData: FormData) {
@@ -281,7 +257,6 @@ export async function saveAboutContentAction(formData: FormData) {
   });
 
   revalidateCmsContent();
-  dashboardRedirect(field(formData, "active-panel"));
 }
 
 export async function saveFaqContentAction(formData: FormData) {
@@ -334,7 +309,6 @@ export async function saveFaqContentAction(formData: FormData) {
   });
 
   revalidateCmsContent();
-  dashboardRedirect(field(formData, "active-panel"));
 }
 
 export async function saveTermsContentAction(formData: FormData) {
@@ -360,7 +334,6 @@ export async function saveTermsContentAction(formData: FormData) {
   });
 
   revalidateCmsContent();
-  dashboardRedirect(field(formData, "active-panel"));
 }
 
 export async function savePrivacyContentAction(formData: FormData) {
@@ -387,5 +360,4 @@ export async function savePrivacyContentAction(formData: FormData) {
   });
 
   revalidateCmsContent();
-  dashboardRedirect(field(formData, "active-panel"));
 }

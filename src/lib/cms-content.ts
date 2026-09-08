@@ -463,7 +463,7 @@ export async function saveCmsContent(content: CmsContent): Promise<void> {
   const parsed = cmsContentSchema.parse(content);
   if (await writeCmsContentBlob(parsed)) return;
 
-  if (process.env.NETLIFY === "true") {
+  if (process.env.NETLIFY === "true" || process.env.NODE_ENV === "production") {
     throw new Error(
       "CMS content could not be saved because Netlify Blobs is not configured. Set NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN.",
     );

@@ -11,12 +11,13 @@ const DASHBOARD_CREDENTIALS_KEY = "dashboard/credentials.json";
 function cmsStore() {
   const siteID = process.env.NETLIFY_SITE_ID;
   const token = process.env.NETLIFY_AUTH_TOKEN;
+  const hasNetlifyRuntimeContext = process.env.NETLIFY === "true" || process.env.NODE_ENV === "production";
 
   try {
     if (!siteID || !token) {
       // Netlify Functions expose the site context to @netlify/blobs.
       // The explicit credentials remain supported for local/CI execution.
-      if (process.env.NETLIFY !== "true") return null;
+      if (!hasNetlifyRuntimeContext) return null;
       return getStore({ name: CMS_STORE_NAME, consistency: "strong" });
     }
 

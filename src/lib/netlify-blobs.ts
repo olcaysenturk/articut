@@ -8,17 +8,14 @@ const CMS_MEDIA_PREFIX = "cms-media";
 const DASHBOARD_CREDENTIALS_KEY = "dashboard/credentials.json";
 
 function cmsStore() {
+  const siteID = process.env.NETLIFY_SITE_ID;
+  const token = process.env.NETLIFY_AUTH_TOKEN;
+
+  if (!siteID || !token) {
+    return null;
+  }
+
   try {
-    const siteID = process.env.NETLIFY_SITE_ID;
-    const token = process.env.NETLIFY_AUTH_TOKEN;
-
-    if (!siteID || !token) {
-      // Netlify Functions provide the Blobs context automatically at runtime.
-      // During a build this may throw, so the caller can use the local fallback.
-      if (process.env.NETLIFY !== "true") return null;
-      return getStore({ name: CMS_STORE_NAME, consistency: "strong" });
-    }
-
     return getStore({
       name: CMS_STORE_NAME,
       consistency: "strong",

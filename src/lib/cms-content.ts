@@ -169,6 +169,11 @@ const imageSchema = z.object({
   alt: z.string().trim(),
 });
 
+const revealSectionSchema = z.discriminatedUnion("layout", [
+  z.object({ layout: z.literal("single"), images: z.array(imageSchema).min(1) }),
+  z.object({ layout: z.literal("grid"), images: z.array(imageSchema).min(2) }),
+]);
+
 const mediaItemSchema = z.discriminatedUnion("type", [
   imageSchema.extend({
     type: z.literal("image"),
@@ -225,9 +230,22 @@ const cmsContentSchema = z.object({
   productDetail: z.object({
     mediaStrip: z.array(mediaItemSchema).min(1),
     packageImage: imageSchema,
+    featureBackgroundMobile: imageSchema.optional(),
+    featureBackground: imageSchema.default({ src: "/images/product-detail/in-use.jpg", alt: "Cutpilot in use" }),
+    featureTexts: z.array(z.string().trim().min(1)).min(1).default([
+      "compatible with most hair types",
+      "full control with easy-to-hold grips",
+      "6 adjustable length options",
+    ]),
+    combsImage: imageSchema.default({
+      src: "/images/product-detail/cutpilot-combs-grid.jpg",
+      alt: "Cutpilot combs and attachments",
+    }),
     slider: z.array(imageSchema).min(1),
     productReveal: z.array(imageSchema).min(1),
     productRevealMobile: z.array(imageSchema).min(1),
+    revealSections: z.array(revealSectionSchema).optional(),
+    revealSectionsMobile: z.array(revealSectionSchema).optional(),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema).min(1),
@@ -269,9 +287,15 @@ const legacyCmsContentSchema = z.object({
   productDetail: z.object({
     mediaStrip: z.array(mediaItemSchema).optional(),
     packageImage: imageSchema.optional(),
+    featureBackgroundMobile: imageSchema.optional(),
+    featureBackground: imageSchema.optional(),
+    featureTexts: z.array(z.string().trim().min(1)).min(1).optional(),
+    combsImage: imageSchema.optional(),
     slider: z.array(imageSchema).min(1),
     productReveal: z.array(imageSchema).optional(),
     productRevealMobile: z.array(imageSchema).optional(),
+    revealSections: z.array(revealSectionSchema).optional(),
+    revealSectionsMobile: z.array(revealSectionSchema).optional(),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema),
@@ -341,6 +365,15 @@ export async function getCmsContent(): Promise<CmsContent> {
       }],
     },
     productDetail: {
+      featureBackgroundMobile: legacy.productDetail.featureBackgroundMobile,
+      featureBackground: legacy.productDetail.featureBackground ?? { src: "/images/product-detail/in-use.jpg", alt: "Cutpilot in use" },
+      featureTexts: legacy.productDetail.featureTexts ?? ["compatible with most hair types", "full control with easy-to-hold grips", "6 adjustable length options"],
+      revealSections: legacy.productDetail.revealSections,
+      revealSectionsMobile: legacy.productDetail.revealSectionsMobile,
+      combsImage: legacy.productDetail.combsImage ?? {
+        src: "/images/product-detail/cutpilot-combs-grid.jpg",
+        alt: "Cutpilot combs and attachments",
+      },
       packageImage: {
         src: "/images/product-detail/package-room.jpg",
         alt: "Cutpilot product packaging",

@@ -17,3 +17,32 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
 }
+
+.media-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0 0 0 / 28%) transparent;
+}
+
+.media-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.media-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.media-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(0 0 0 / 28%);
+}
+
+.media-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(0 0 0 / 45%);
+}
+
+.media-scrollbar::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { CutpilotProductPage } from "@/components/product-detail/CutpilotProductPage";
+import { getRevealSections } from "@/lib/product-reveal";
 import { getCmsContent } from "@/lib/cms-content";
 import { env } from "@/lib/env";
 import { toProduct } from "@/lib/shopify/mappers";
@@ -41,8 +42,11 @@ export default async function CutpilotPage() {
       <CutpilotProductPage
       mediaStrip={cmsContent.productDetail.mediaStrip}
       packageImage={cmsContent.productDetail.packageImage}
-      productReveal={cmsContent.productDetail.productReveal}
-      productRevealMobile={cmsContent.productDetail.productRevealMobile}
+      featureBackground={cmsContent.productDetail.featureBackground}
+      featureBackgroundMobile={cmsContent.productDetail.featureBackgroundMobile}
+      featureTexts={cmsContent.productDetail.featureTexts}
+      revealSections={getRevealSections(cmsContent.productDetail, "desktop")}
+      revealSectionsMobile={getRevealSections(cmsContent.productDetail, "mobile")}
       product={product}
         sliderImages={cmsContent.productDetail.slider}
       />

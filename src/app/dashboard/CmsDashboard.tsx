@@ -13,7 +13,8 @@ import type {
   savePrivacyContentAction,
 } from "@/app/dashboard/actions";
 import type { logoutAction } from "@/app/dashboard/login/actions";
-import type { CmsContent, CmsImage, CmsMediaItem } from "@/types/cms";
+import type { CmsContent, CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
+import { getRevealSections } from "@/lib/product-reveal";
 import { FaqForm } from "./faq/FaqForm";
 import { TermsForm } from "./terms/TermsForm";
 import { PrivacyForm } from "./privacy/PrivacyForm";
@@ -27,6 +28,7 @@ export type ActivePanel =
   | "home-product"
   | "home-pack-showcase"
   | "home-showcase"
+  | "product-features"
   | "product-package"
   | "product-media-strip"
   | "product-reveal"
@@ -65,6 +67,7 @@ const MEDIA_SPECS = {
   webShowcase: { width: 1920, height: 1080, ratioLabel: "16:9" },
   storyImage: { width: 1920, height: 1080, ratioLabel: "16:9" },
   packageImage: { width: 2400, height: 1600, ratioLabel: "3:2" },
+  combsImage: { width: 2880, height: 1620, ratioLabel: "16:9" },
   homeProduct: { width: 2400, height: 1600, ratioLabel: "3:2" },
   slider: { width: 1920, height: 1080, ratioLabel: "16:9" },
   mediaStrip: { width: 1080, height: 1920, ratioLabel: "9:16, vertical" },
@@ -89,6 +92,7 @@ const panels = [
       { key: "product-detail" as const, label: "Slider images" },
       { key: "product-media-strip" as const, label: "Media strip" },
       { key: "product-reveal" as const, label: "Product reveal" },
+      { key: "product-features" as const, label: "Feature overlay" },
     ],
   },
   {
@@ -176,6 +180,7 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "about-hero") return "Hero section";
   if (panel === "about-story") return "Story section";
   if (panel === "about-contact") return "Contact section";
+  if (panel === "product-features") return "Feature overlay";
   if (panel === "product-package") return "Package image";
   if (panel === "product-media-strip") return "Media strip";
   if (panel === "product-reveal") return "Product reveal";
@@ -840,13 +845,105 @@ function VideoEditor({
   );
 }
 
+type ManagedRevealSection = { id: string; layout: CmsRevealSection["layout"]; images: ManagedImage[] };
+
+function toManagedSections(sections: CmsRevealSection[], prefix: string): ManagedRevealSection[] {
+  return sections.map((section, index) => ({
+    id: `${prefix}-${index}`,
+    layout: section.layout,
+    images: section.images.map((image, imageIndex) => toManagedImage(image, `${prefix}-${index}`, imageIndex)),
+  }));
+}
+
+function appendRevealSections(formData: FormData, prefix: string, sections: ManagedRevealSection[]) {
+  if (sections.some((section) => section.images.some((image) => !image.src && !image.file))) {
+    throw new Error("Upload every image in the product reveal sections before saving.");
+  }
+  formData.set(prefix, JSON.stringify(sections.map((section) => ({
+    layout: section.layout,
+    images: section.images.map(({ src, alt }) => ({ src, alt })),
+  }))));
+  sections.forEach((section, index) => section.images.forEach((image, imageIndex) => {
+    if (image.file) formData.set(`${prefix}-${index}-${imageIndex}-file`, image.file);
+  }));
+}
+
+function RevealSectionsEditor({ sections, setSections }: {
+  sections: ManagedRevealSection[];
+  setSections: (updater: (items: ManagedRevealSection[]) => ManagedRevealSection[]) => void;
+}) {
+  const [choosingLayout, setChoosingLayout] = useState(false);
+  const buttonClass = "rounded-lg border border-[#e04d26]/30 px-3 py-2 text-sm font-semibold text-[#e04d26] hover:bg-[#fff3ef] disabled:opacity-40";
+  function addSection(layout: CmsRevealSection["layout"]) {
+    setSections((items) => [...items, {
+      id: crypto.randomUUID(), layout,
+      images: Array.from({ length: layout === "grid" ? 2 : 1 }, () => createBlankImage()),
+    }]);
+    setChoosingLayout(false);
+  }
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="font-semibold">Product reveal sections</h2>
+        <button type="button" className={buttonClass} onClick={() => setChoosingLayout(true)}>Add section</button>
+      </div>
+      {choosingLayout && (
+        <div className="rounded-xl border border-[#e04d26]/30 bg-white p-5">
+          <p className="mb-3 font-semibold">How should this section appear?</p>
+          <div className="flex flex-wrap gap-3">
+            <button type="button" className={buttonClass} onClick={() => addSection("single")}>Single image</button>
+            <button type="button" className={buttonClass} onClick={() => addSection("grid")}>Two-image grid</button>
+            <button type="button" className={buttonClass} onClick={() => setChoosingLayout(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+      {sections.map((section, index) => (
+        <section key={section.id} className="space-y-3 rounded-xl border border-[#d0d0d0] p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="font-semibold">{index + 1}. {section.layout === "grid" ? "Two-image grid" : "Single image"}</h3>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" className={buttonClass} onClick={() => setSections((items) => items.map((item) => item.id === section.id ? { ...item, images: [...item.images, createBlankImage()] } : item))}>Add image</button>
+              <button type="button" className={buttonClass} disabled={index === 0} onClick={() => setSections((items) => moveItem(items, index, index - 1))}>Move up</button>
+              <button type="button" className={buttonClass} disabled={index === sections.length - 1} onClick={() => setSections((items) => moveItem(items, index, index + 1))}>Move down</button>
+              <button type="button" className={buttonClass} onClick={() => setSections((items) => items.filter((item) => item.id !== section.id))}>Remove</button>
+            </div>
+          </div>
+          <div className={`grid gap-4 ${section.layout === "grid" ? "md:grid-cols-2" : "grid-cols-1"}`}>
+          {section.images.map((image, imageIndex) => (
+            <div key={image.id} className="min-w-0 space-y-2">
+            <SingleImageEditor
+              compact={section.layout === "grid"}
+              fieldPrefix={`reveal-editor-${section.id}-${imageIndex}`}
+              image={image}
+              label={section.layout === "grid" ? `Row ${Math.floor(imageIndex / 2) + 1} — ${imageIndex % 2 === 0 ? "Left" : "Right"} image` : `Image ${imageIndex + 1}`}
+              spec={section.layout === "grid" ? MEDIA_SPECS.productReveal : MEDIA_SPECS.combsImage}
+              setImage={(update) => setSections((items) => items.map((item) => item.id === section.id
+                ? { ...item, images: item.images.map((current, position) => position === imageIndex ? update(current) : current) }
+                : item))}
+            />
+            <button type="button" className={buttonClass}
+              disabled={section.images.length <= (section.layout === "grid" ? 2 : 1)}
+              onClick={() => setSections((items) => items.map((item) => item.id === section.id
+                ? { ...item, images: item.images.filter((current) => current.id !== image.id) } : item))}
+            >Remove image</button>
+            </div>
+          ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 function SingleImageEditor({
+  compact = false,
   fieldPrefix,
   image,
   label,
   setImage,
   spec,
 }: {
+  compact?: boolean;
   fieldPrefix: string;
   image: ManagedImage;
   label: string;
@@ -856,7 +953,7 @@ function SingleImageEditor({
   return (
     <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
       <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">{label}</div>
-      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+      <div className={`grid gap-6 ${compact ? "grid-cols-1" : "lg:grid-cols-[360px_1fr]"}`}>
         <ImagePreview image={image} label={label} recommendedNote={specNote(spec)} />
         <div className="space-y-4">
           <input name={`${fieldPrefix}-src`} type="hidden" value={image.src} />
@@ -1531,18 +1628,21 @@ export function CmsDashboard({
   const [showcaseItems, setShowcaseItems] = useState<ManagedMediaItem[]>(
     content.home.imageShowcase.map((item, index) => toManagedMediaItem(item, "showcase", index)),
   );
+  const [featureBackground, setFeatureBackground] = useState<ManagedImage>(
+    toManagedImage(content.productDetail.featureBackground, "product-feature-background", 0),
+  );
+  const [featureBackgroundMobile, setFeatureBackgroundMobile] = useState<ManagedImage>(
+    toManagedImage(content.productDetail.featureBackgroundMobile ?? content.productDetail.featureBackground, "product-feature-background-mobile", 0),
+  );
+  const [featureTexts, setFeatureTexts] = useState(content.productDetail.featureTexts.join("\n"));
   const [productPackageImage, setProductPackageImage] = useState<ManagedImage>(
     toManagedImage(content.productDetail.packageImage, "product-package", 0),
   );
   const [slides, setSlides] = useState<ManagedImage[]>(
     content.productDetail.slider.map((image, index) => toManagedImage(image, "slider", index)),
   );
-  const [productRevealItems, setProductRevealItems] = useState<ManagedImage[]>(
-    content.productDetail.productReveal.map((image, index) => toManagedImage(image, "product-reveal", index)),
-  );
-  const [productRevealMobileItems, setProductRevealMobileItems] = useState<ManagedImage[]>(
-    content.productDetail.productRevealMobile.map((image, index) => toManagedImage(image, "product-reveal-mobile", index)),
-  );
+  const [revealSections, setRevealSections] = useState(() => toManagedSections(getRevealSections(content.productDetail, "desktop"), "desktop"));
+  const [revealSectionsMobile, setRevealSectionsMobile] = useState(() => toManagedSections(getRevealSections(content.productDetail, "mobile"), "mobile"));
   const [productRevealViewport, setProductRevealViewport] = useState<"desktop" | "mobile">("desktop");
   const [mediaStripItems, setMediaStripItems] = useState<ManagedMediaItem[]>(
     content.productDetail.mediaStrip.map((item, index) => toManagedMediaItem(item, "media-strip", index)),
@@ -1593,13 +1693,15 @@ export function CmsDashboard({
   }
 
   async function submitProductDetailContent(formData: FormData) {
+    if (featureBackgroundMobile.file) formData.set("product-feature-background-mobile-file", featureBackgroundMobile.file);
+    if (featureBackground.file) formData.set("product-feature-background-file", featureBackground.file);
     if (productPackageImage.file) {
       formData.set("product-package-image-file", productPackageImage.file);
     }
 
     appendManagedImageFiles(formData, "slider", slides);
-    appendManagedImageFiles(formData, "product-reveal", productRevealItems);
-    appendManagedImageFiles(formData, "product-reveal-mobile", productRevealMobileItems);
+    appendRevealSections(formData, "reveal-sections", revealSections);
+    appendRevealSections(formData, "reveal-sections-mobile", revealSectionsMobile);
     appendManagedMediaFiles(formData, "media-strip", mediaStripItems);
     await saveProductDetailAction(formData);
     await completeSave();
@@ -1902,6 +2004,34 @@ export function CmsDashboard({
       >
         <input name="active-panel" type="hidden" value={activePanel} />
         <SavingOverlay />
+        <div className={activePanel === "product-features" ? "space-y-4" : "hidden"}>
+          <div className="grid gap-4 md:grid-cols-2 [&>section]:min-w-0">
+          <SingleImageEditor
+            compact
+            fieldPrefix="product-feature-background"
+            image={featureBackground}
+            label="Desktop background image"
+            setImage={setFeatureBackground}
+            spec={MEDIA_SPECS.webShowcase}
+          />
+          <SingleImageEditor
+            compact
+            fieldPrefix="product-feature-background-mobile"
+            image={featureBackgroundMobile}
+            label="Mobile background image"
+            setImage={setFeatureBackgroundMobile}
+            spec={MEDIA_SPECS.mediaStrip}
+          />
+          </div>
+          <p className="text-sm text-[#6f6f6f]">The desktop image is used by default. Upload a different image to customize the mobile background.</p>
+          <label className="block rounded-xl border border-[#e5e5e5] bg-white p-6 text-sm shadow-sm">
+            <span className="font-semibold">Animated text</span>
+            <span id="feature-texts-help" className="mt-1 block text-xs text-[#6f6f6f]">Enter one message per line. Messages appear in this order while scrolling.</span>
+            <textarea name="product-feature-texts" aria-describedby="feature-texts-help" rows={6} required
+              value={featureTexts} onChange={(event) => setFeatureTexts(event.target.value)}
+              className="mt-3 w-full rounded-lg border border-[#b8b8b8] p-3 focus:border-[#e04d26] focus:outline-none" />
+          </label>
+        </div>
         <div className={activePanel === "product-package" ? "block" : "hidden"}>
           <SingleImageEditor
             fieldPrefix="product-package-image"
@@ -1950,23 +2080,11 @@ export function CmsDashboard({
             ))}
           </div>
 
-          {productRevealViewport === "desktop" ? (
-            <ImageListEditor
-              addLabel="Product reveal desktop images"
-              fieldPrefix="product-reveal"
-              images={productRevealItems}
-              setImages={setProductRevealItems}
-              spec={MEDIA_SPECS.productReveal}
-            />
-          ) : (
-            <ImageListEditor
-              addLabel="Product reveal mobile images"
-              fieldPrefix="product-reveal-mobile"
-              images={productRevealMobileItems}
-              setImages={setProductRevealMobileItems}
-              spec={MEDIA_SPECS.productReveal}
-            />
-          )}
+          <RevealSectionsEditor
+            key={productRevealViewport}
+            sections={productRevealViewport === "desktop" ? revealSections : revealSectionsMobile}
+            setSections={productRevealViewport === "desktop" ? setRevealSections : setRevealSectionsMobile}
+          />
         </div>
       </form>
 

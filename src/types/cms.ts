@@ -3,6 +3,11 @@ export type CmsImage = {
   alt: string;
 };
 
+export type CmsRevealSection = {
+  layout: "single" | "grid";
+  images: CmsImage[];
+};
+
 export type CmsMediaItem =
   | {
       type: "image";
@@ -55,9 +60,15 @@ export type CmsContent = {
   productDetail: {
     mediaStrip: CmsMediaItem[];
     packageImage: CmsImage;
+    featureBackground: CmsImage;
+    featureBackgroundMobile?: CmsImage;
+    featureTexts: string[];
+    combsImage: CmsImage;
     slider: CmsImage[];
     productReveal: CmsImage[];
     productRevealMobile: CmsImage[];
+    revealSections?: CmsRevealSection[];
+    revealSectionsMobile?: CmsRevealSection[];
   };
   faq: {
     sections: FaqSection[];

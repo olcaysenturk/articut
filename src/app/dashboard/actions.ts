@@ -1,9 +1,10 @@
 "use server";
 
+import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { getCmsContent, saveCmsContent } from "@/lib/cms-content";
 import { cmsMediaUrl, uploadCmsMedia } from "@/lib/netlify-blobs";
-import type { CmsImage, CmsMediaItem } from "@/types/cms";
+import type { CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
 
 function field(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
@@ -154,6 +155,31 @@ export async function saveHomeContentAction(formData: FormData) {
   revalidateCmsContent();
 }
 
+async function revealSectionsFromForm(formData: FormData, prefix: string): Promise<CmsRevealSection[] | undefined> {
+  const raw = formData.get(prefix);
+  if (typeof raw !== "string") return undefined;
+  const draftImage = z.object({ src: z.string(), alt: z.string() });
+  const sections = z.array(z.discriminatedUnion("layout", [
+    z.object({ layout: z.literal("single"), images: z.array(draftImage).min(1) }),
+    z.object({ layout: z.literal("grid"), images: z.array(draftImage).min(2) }),
+  ])).parse(JSON.parse(raw));
+
+  // Validate every slot before starting uploads; a grid must have both images.
+  sections.forEach((section, index) => section.images.forEach((image, imageIndex) => {
+    const file = formData.get(`${prefix}-${index}-${imageIndex}-file`);
+    if (!image.src.trim() && !(file instanceof File && file.size > 0)) {
+      throw new Error("Upload every image in the product reveal sections before saving.");
+    }
+  }));
+  return Promise.all(sections.map(async (section, index) => ({
+    layout: section.layout,
+    images: await Promise.all(section.images.map(async (image, imageIndex) => ({
+      src: await uploadedImagePath(formData, `${prefix}-${index}-${imageIndex}-file`) ?? image.src.trim(),
+      alt: image.alt.trim(),
+    }))),
+  })));
+}
+
 export async function saveProductDetailContentAction(formData: FormData) {
   const content = await getCmsContent();
   const packageImage = await imageFromForm(
@@ -161,28 +187,23 @@ export async function saveProductDetailContentAction(formData: FormData) {
     "product-package-image",
     content.productDetail.packageImage.src,
   );
+  const featureBackground = formData.has("product-feature-background-src")
+    ? await imageFromForm(formData, "product-feature-background", content.productDetail.featureBackground.src)
+    : null;
+  const featureBackgroundMobile = formData.has("product-feature-background-mobile-src")
+    ? await imageFromForm(formData, "product-feature-background-mobile", content.productDetail.featureBackgroundMobile?.src)
+    : null;
+  const featureTexts = formData.has("product-feature-texts")
+    ? z.array(z.string().min(1)).min(1).parse(field(formData, "product-feature-texts").split(/\r?\n/).map((text) => text.trim()).filter(Boolean))
+    : content.productDetail.featureTexts;
   const sliderIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^slider-(\d+)-src$/)?.[1])
     .filter((index): index is string => Boolean(index))
     .map(Number)
     .sort((a, b) => a - b);
   const slider = await imageListFromForm(formData, "slider", sliderIndexes);
-  const productRevealIndexes = Array.from(formData.keys())
-    .map((key) => key.match(/^product-reveal-(\d+)-src$/)?.[1])
-    .filter((index): index is string => Boolean(index))
-    .map(Number)
-    .sort((a, b) => a - b);
-  const productReveal = await imageListFromForm(formData, "product-reveal", productRevealIndexes);
-  const productRevealMobileIndexes = Array.from(formData.keys())
-    .map((key) => key.match(/^product-reveal-mobile-(\d+)-src$/)?.[1])
-    .filter((index): index is string => Boolean(index))
-    .map(Number)
-    .sort((a, b) => a - b);
-  const productRevealMobile = await imageListFromForm(
-    formData,
-    "product-reveal-mobile",
-    productRevealMobileIndexes,
-  );
+  const revealSections = await revealSectionsFromForm(formData, "reveal-sections");
+  const revealSectionsMobile = await revealSectionsFromForm(formData, "reveal-sections-mobile");
   const mediaStripIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^media-strip-(\d+)-type$/)?.[1])
     .filter((index): index is string => Boolean(index))
@@ -190,33 +211,22 @@ export async function saveProductDetailContentAction(formData: FormData) {
     .sort((a, b) => a - b);
   const mediaStrip = (
     await Promise.all(
-      mediaStripIndexes.map(async (index): Promise<CmsMediaItem | null> => {
-        const prefix = `media-strip-${index}`;
-        const type = field(formData, `${prefix}-type`);
-
-        if (type === "image") {
-          const image = await imageFromForm(formData, prefix);
-          return image ? { type: "image", ...image } : null;
-        }
-
-        if (type === "video") {
-          const src = field(formData, `${prefix}-src`);
-          return src ? { type: "video", src } : null;
-        }
-
-        return null;
-      }),
+      mediaStripIndexes.map((index) => mediaItemFromForm(formData, `media-strip-${index}`)),
     )
   ).filter((item): item is CmsMediaItem => Boolean(item));
 
   await saveCmsContent({
     ...content,
     productDetail: {
+      ...content.productDetail,
+      featureBackground: featureBackground ?? content.productDetail.featureBackground,
+      featureBackgroundMobile: featureBackgroundMobile ?? content.productDetail.featureBackgroundMobile,
+      featureTexts,
+      revealSections: revealSections ?? content.productDetail.revealSections,
+      revealSectionsMobile: revealSectionsMobile ?? content.productDetail.revealSectionsMobile,
       packageImage: packageImage ?? content.productDetail.packageImage,
       mediaStrip: mediaStrip.length > 0 ? mediaStrip : content.productDetail.mediaStrip,
       slider: slider.length > 0 ? slider : content.productDetail.slider,
-      productReveal: productReveal.length > 0 ? productReveal : content.productDetail.productReveal,
-      productRevealMobile: productRevealMobile.length > 0 ? productRevealMobile : content.productDetail.productRevealMobile,
     },
   });
 

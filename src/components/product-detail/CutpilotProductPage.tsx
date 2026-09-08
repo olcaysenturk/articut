@@ -6,11 +6,12 @@ import { ProductCarousel } from "@/components/product-detail/ProductCarousel";
 import { ProductDetailMotion } from "@/components/product-detail/ProductDetailMotion";
 import { ProductFaq } from "@/components/product-detail/ProductFaq";
 import { ProductHeader } from "@/components/product-detail/ProductHeader";
+import { ProductMediaCard } from "@/components/product-detail/ProductMediaCard";
 import { ProductMediaStrip } from "@/components/product-detail/ProductMediaStrip";
 import { ProductPurchaseCta } from "@/components/product-detail/ProductPurchaseCta";
 import { StepsSection } from "@/components/product-detail/StepsSection";
 import { CutpilotPackageImage } from "@/components/sections/product/CutpilotPackageImage";
-import type { CmsImage, CmsMediaItem } from "@/types/cms";
+import type { CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
 import type { Product } from "@/types/shopify";
 
 const PRODUCT_ASSET = "/images/product-detail";
@@ -23,53 +24,20 @@ const HAIR_TYPES = [
   ["Thick / Coarse", "Clean, slightly damp, well-combed"],
 ];
 
-const FEATURES = [
-  "compatible with most hair types",
-  "full control with easy-to-hold grips",
-  "6 adjustable length options",
-];
 
-function ResponsiveImage({
-  src,
-  alt,
-  className,
-  sizes = "100vw",
-}: {
-  src: string;
-  alt: string;
-  className: string;
-  sizes?: string;
-}) {
-  return <Image src={src} alt={alt} fill sizes={sizes} className={className} />;
-}
 
-function ResponsiveVideo({ src, className }: { src: string; className: string }) {
+function ProductRevealSections({ sections, mobile = false }: { sections: CmsRevealSection[]; mobile?: boolean }) {
   return (
-    <video
-      src={src}
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="metadata"
-      className={`absolute inset-0 h-full w-full ${className}`}
-    />
-  );
-}
-
-function ProductRevealImage({ image, index, mobile = false }: { image: CmsImage; index: number; mobile?: boolean }) {
-  return (
-    <div
-      className={`flex overflow-hidden ${index % 2 === 0 ? "border-r-[3px] border-[#e04d26]" : ""} ${index >= 2 ? "border-t-[3px] border-[#e04d26]" : ""}`}
-    >
-      <Image
-        src={image.src}
-        alt={image.alt}
-        width={1920}
-        height={1080}
-        sizes="50vw"
-        className={mobile ? "h-auto w-full object-cover" : "h-full w-full object-cover"}
-      />
+    <div className={mobile ? "md:hidden" : "hidden md:block"}>
+      {sections.map((section, index) => (
+        <section key={index} data-product-reveal data-scroll-snap-ignore className={`grid border-b-[3px] border-[#e04d26] ${index === 0 ? "border-t-[3px]" : ""} ${section.layout === "grid" ? "grid-cols-2" : "grid-cols-1"}`}>
+          {section.images.map((image, imageIndex) => (
+            <div key={`${image.src}-${imageIndex}`} className={`overflow-hidden ${imageIndex >= (section.layout === "grid" ? 2 : 1) ? "border-t-[3px] border-[#e04d26]" : ""} ${section.layout === "grid" && imageIndex % 2 === 0 ? "border-r-[3px] border-[#e04d26]" : ""}`}>
+              <Image src={image.src} alt={image.alt} width={2880} height={1620} sizes={section.layout === "grid" ? "50vw" : "100vw"} className={`block w-full object-cover ${section.layout === "grid" ? "h-full" : "h-auto"}`} />
+            </div>
+          ))}
+        </section>
+      ))}
     </div>
   );
 }
@@ -77,15 +45,21 @@ function ProductRevealImage({ image, index, mobile = false }: { image: CmsImage;
 export function CutpilotProductPage({
   mediaStrip,
   packageImage,
-  productReveal,
-  productRevealMobile,
+  featureBackground,
+  featureBackgroundMobile,
+  featureTexts,
+  revealSections,
+  revealSectionsMobile,
   product,
   sliderImages,
 }: {
   mediaStrip: CmsMediaItem[];
   packageImage: CmsImage;
-  productReveal: CmsImage[];
-  productRevealMobile: CmsImage[];
+  featureBackground: CmsImage;
+  featureBackgroundMobile?: CmsImage;
+  featureTexts: string[];
+  revealSections: CmsRevealSection[];
+  revealSectionsMobile: CmsRevealSection[];
   product: Product;
   sliderImages: CmsImage[];
 }) {
@@ -167,29 +141,8 @@ export function CutpilotProductPage({
         </div>
       </section>
 
-      <section data-product-reveal data-scroll-snap-ignore className="border-y-[3px] border-[#e04d26]">
-        <div className="hidden grid-cols-2 md:grid">
-          {productReveal.map((image, index) => (
-            <ProductRevealImage key={`${image.src}-${index}`} image={image} index={index} />
-          ))}
-        </div>
-        <div className="grid grid-cols-2 md:hidden">
-          {productRevealMobile.map((image, index) => (
-            <ProductRevealImage key={`${image.src}-${index}`} image={image} index={index} mobile />
-          ))}
-        </div>
-      </section>
-
-      <section data-product-reveal data-scroll-snap-ignore className="border-b-[3px] border-[#e04d26]">
-        <Image
-          src={`${PRODUCT_ASSET}/cutpilot-combs-grid.jpg`}
-          alt="Cutpilot combs and attachments"
-          width={2880}
-          height={1620}
-          sizes="100vw"
-          className="h-auto w-full"
-        />
-      </section>
+      <ProductRevealSections sections={revealSections} />
+      <ProductRevealSections sections={revealSectionsMobile} mobile />
 
       <section data-comb-callout-section data-scroll-snap-ignore className="bg-[#d9d9d9] px-[min(44px,7.9vw)] py-[min(46px,8.24vw)] md:px-[50px] md:py-[50px]">
         <div className="relative mx-auto min-h-[min(736px,132vw)] max-w-[1339px] overflow-hidden border-[3px] border-[#e04d26] md:min-h-[710px]">
@@ -227,13 +180,16 @@ export function CutpilotProductPage({
 
       <section data-feature-overlay-section data-scroll-snap-ignore className="relative h-[2000px] overflow-visible bg-[#e04d26] text-white">
         <div className="sticky top-0 h-[100svh] overflow-hidden md:h-[100vh]">
-          {/* eslint-disable-next-line @next/next/no-img-element -- plain img avoids Next's image optimizer, which deadlocks under this sticky section on high-DPR mobile */}
-          <img src={`${PRODUCT_ASSET}/in-use.jpg`} alt="Cutpilot in use" className="absolute inset-0 h-full w-full object-cover" />
+          <picture>
+            {featureBackgroundMobile && <source media="(max-width: 767px)" srcSet={featureBackgroundMobile.src} />}
+            {/* eslint-disable-next-line @next/next/no-img-element -- Keep the responsive sticky background outside the image optimizer. */}
+            <img src={featureBackground.src} alt={featureBackground.alt} className="absolute inset-0 h-full w-full object-cover" />
+          </picture>
           <div className="absolute inset-0 bg-[#e04d26]/10" />
           <div data-feature-overlay-panel className="pointer-events-none absolute left-0 top-1/2 z-10 h-75 w-full -translate-y-1/2 overflow-hidden text-center font-semibold md:h-[360px]">
             <div data-feature-overlay-track className="absolute left-0 top-0 flex w-full flex-col items-center gap-[90px]">
-              {FEATURES.map((feature) => (
-                <p data-feature-overlay-item key={feature} className="flex shrink-0 items-center justify-center px-6 text-[28px] opacity-0">
+              {featureTexts.map((feature, index) => (
+                <p data-feature-overlay-item key={index} className="flex shrink-0 items-center justify-center px-6 text-[28px] opacity-0">
                   {feature}
                 </p>
               ))}
@@ -248,16 +204,7 @@ export function CutpilotProductPage({
 
       <ProductMediaStrip>
         {mediaStrip.map((item, index) => (
-          <div
-            key={`${item.type}-${item.src}-${index}`}
-            className="relative w-[165px] shrink-0 snap-start overflow-hidden border-r-[3px] border-[#e04d26] last:border-r-0 md:w-auto md:shrink md:snap-align-none"
-          >
-            {item.type === "image" ? (
-              <ResponsiveImage src={item.src} alt={item.alt} sizes="(max-width: 767px) 165px, 25vw" className="object-cover" />
-            ) : (
-              <ResponsiveVideo src={item.src} className="object-cover" />
-            )}
-          </div>
+          <ProductMediaCard key={`${item.type}-${item.src}-${index}`} item={item} />
         ))}
       </ProductMediaStrip>
 

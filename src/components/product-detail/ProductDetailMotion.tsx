@@ -35,7 +35,7 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
       const featureOverlayTrack = root.querySelector<HTMLElement>("[data-feature-overlay-track]");
       const featureOverlayItems = gsap.utils.toArray<HTMLElement>("[data-feature-overlay-item]", root);
       const scrollSnapIgnoreSections = gsap.utils.toArray<HTMLElement>(
-        "[data-scroll-snap-ignore]:not([data-product-reveal])",
+        "[data-scroll-snap-ignore]:not([data-product-reveal]):not([data-comb-callout-section]):not([data-feature-overlay-section])",
         root,
       );
       const footer = root.querySelector<HTMLElement>("[data-site-footer]");
@@ -218,8 +218,8 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
 
         const combScrollTrigger = ScrollTrigger.create({
           trigger: combStage,
-          start: "top bottom",
-          end: "center center",
+          start: "top 95%",
+          end: "top 30%",
           scrub: true,
           animation: combTimeline,
           invalidateOnRefresh: true,
@@ -302,7 +302,18 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         };
       }
 
+      // Lazy-loaded media can move later sections after ScrollTrigger measures them.
+      // Keep scroll ranges aligned with the actual layout, including on reverse scroll.
+      let layoutRefreshFrame = 0;
+      const layoutObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(layoutRefreshFrame);
+        layoutRefreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
+      layoutObserver.observe(root);
+
       return () => {
+        layoutObserver.disconnect();
+        cancelAnimationFrame(layoutRefreshFrame);
         combCleanup?.();
         featureOverlayCleanup?.();
         scrollSnapRevealTriggers.forEach((trigger) => trigger.kill());

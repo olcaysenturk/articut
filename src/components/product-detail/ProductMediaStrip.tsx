@@ -19,7 +19,9 @@ export function ProductMediaStrip({ children }: { children: ReactNode }) {
     <section
       ref={stripRef}
       data-scroll-snap-ignore
-      className="flex h-[250px] snap-x snap-mandatory overflow-x-auto border-y-[3px] border-[#e04d26] md:grid md:h-[640px] md:grid-cols-4 md:snap-none md:overflow-hidden"
+      aria-label="Product media gallery"
+      tabIndex={0}
+      className="media-scrollbar flex h-[250px] snap-x snap-mandatory overflow-x-auto border-y-[3px] border-[#e04d26] md:grid md:h-[640px] md:auto-cols-[minmax(25%,1fr)] md:grid-flow-col md:grid-rows-1"
     >
       {children}
     </section>

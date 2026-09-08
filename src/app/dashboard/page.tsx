@@ -21,6 +21,7 @@ function parsePanel(panel: string | undefined): ActivePanel {
     panel === "home-product" ||
     panel === "home-pack-showcase" ||
     panel === "home-showcase" ||
+    panel === "product-features" ||
     panel === "product-package" ||
     panel === "product-media-strip" ||
     panel === "product-reveal" ||
@@ -33,7 +34,7 @@ function parsePanel(panel: string | undefined): ActivePanel {
     return panel;
   }
 
-  if (panel === "product-reveal-desktop" || panel === "product-reveal-mobile") {
+  if (panel === "product-combs" || panel === "product-reveal-desktop" || panel === "product-reveal-mobile") {
     return "product-reveal";
   }
 

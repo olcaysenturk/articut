@@ -11,7 +11,7 @@ import { useCartStore } from "@/features/cart/cart-store";
 
 const MENU_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/cutpilot", label: "Cutpilot™" },
+  { href: "/cutpilot", label: "Cutpilot" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQs" },
 ];
@@ -203,7 +203,7 @@ export function MobileScissorMenuButton({
                 animate={isOpen ? "visible" : "hidden"}
                 className="absolute left-0 right-0 top-[60px] px-[32px]"
               >
-                <ul className="flex -translate-y-[20px] flex-col items-center gap-[30px]">
+                <ul className="flex -translate-y-[20px] flex-col items-center gap-[25px]">
                   {MENU_LINKS.map((link) => (
                     <motion.li
                       key={link.href}
@@ -241,7 +241,7 @@ export function MobileScissorMenuButton({
                 transition={{ delay: 0.3, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 className="pointer-events-none absolute inset-0"
               >
-                <BrandAMark className="absolute bottom-[75px] left-1/2 h-[298px] w-[327px] -translate-x-1/2" />
+                <BrandAMark className="absolute bottom-[75px] left-1/2 h-[253px] w-[278px] -translate-x-1/2" />
               </motion.div>
 
               <motion.div

@@ -3,8 +3,12 @@ import { readCmsMedia } from "@/lib/netlify-blobs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function GET(request: Request) {
-  const key = new URL(request.url).searchParams.get("key");
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ key: string[] }> },
+) {
+  const { key: keyParts } = await params;
+  const key = keyParts.join("/");
 
   if (!key) return new Response("Missing media key", { status: 400 });
 

@@ -36,7 +36,7 @@ function cmsStore() {
 }
 
 export function cmsMediaUrl(key: string) {
-  return `/api/cms-media?key=${encodeURIComponent(key)}`;
+  return `/api/cms-media/${key.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 function contentHash(data: ArrayBuffer) {

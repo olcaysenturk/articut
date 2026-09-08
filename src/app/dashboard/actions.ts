@@ -119,6 +119,18 @@ function dashboardRedirect(panel: string) {
   redirect(`/dashboard?panel=${allowedPanel}&saved=1`);
 }
 
+async function imageListFromForm(formData: FormData, prefix: string, indexes: number[]) {
+  const images: CmsImage[] = [];
+
+  // Upload one file at a time so multiple Blob writes cannot race each other.
+  for (const index of indexes) {
+    const image = await imageFromForm(formData, `${prefix}-${index}`);
+    if (image) images.push(image);
+  }
+
+  return images;
+}
+
 export async function saveHomeContentAction(formData: FormData) {
   const content = await getCmsContent();
   const heroPoster = await imageFromForm(formData, "home-hero-poster", content.home.heroPoster.src);
@@ -177,31 +189,23 @@ export async function saveProductDetailContentAction(formData: FormData) {
     .filter((index): index is string => Boolean(index))
     .map(Number)
     .sort((a, b) => a - b);
-  const slider = (
-    await Promise.all(
-      sliderIndexes.map((index) => imageFromForm(formData, `slider-${index}`)),
-    )
-  ).filter((image): image is CmsImage => Boolean(image));
+  const slider = await imageListFromForm(formData, "slider", sliderIndexes);
   const productRevealIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^product-reveal-(\d+)-src$/)?.[1])
     .filter((index): index is string => Boolean(index))
     .map(Number)
     .sort((a, b) => a - b);
-  const productReveal = (
-    await Promise.all(
-      productRevealIndexes.map((index) => imageFromForm(formData, `product-reveal-${index}`)),
-    )
-  ).filter((image): image is CmsImage => Boolean(image));
+  const productReveal = await imageListFromForm(formData, "product-reveal", productRevealIndexes);
   const productRevealMobileIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^product-reveal-mobile-(\d+)-src$/)?.[1])
     .filter((index): index is string => Boolean(index))
     .map(Number)
     .sort((a, b) => a - b);
-  const productRevealMobile = (
-    await Promise.all(
-      productRevealMobileIndexes.map((index) => imageFromForm(formData, `product-reveal-mobile-${index}`)),
-    )
-  ).filter((image): image is CmsImage => Boolean(image));
+  const productRevealMobile = await imageListFromForm(
+    formData,
+    "product-reveal-mobile",
+    productRevealMobileIndexes,
+  );
   const mediaStripIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^media-strip-(\d+)-type$/)?.[1])
     .filter((index): index is string => Boolean(index))

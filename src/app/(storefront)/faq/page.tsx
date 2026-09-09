@@ -15,7 +15,7 @@ export default async function FaqPage() {
       <main className="relative bg-[#e94b24] md:min-h-[3527px]">
         <div className="faq-pattern" aria-hidden />
         <div className="relative z-10">
-          <EditorialHeader dark />
+          <EditorialHeader />
           <FaqPageClient sections={sections} />
         </div>
       </main>

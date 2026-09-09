@@ -8,6 +8,12 @@ export type CmsRevealSection = {
   images: CmsImage[];
 };
 
+export type CmsStep = {
+  title: string;
+  image: CmsImage;
+  description: string;
+};
+
 export type CmsMediaItem =
   | {
       type: "image";
@@ -69,6 +75,7 @@ export type CmsContent = {
     productRevealMobile: CmsImage[];
     revealSections?: CmsRevealSection[];
     revealSectionsMobile?: CmsRevealSection[];
+    steps: CmsStep[];
   };
   faq: {
     sections: FaqSection[];

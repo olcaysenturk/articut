@@ -49,6 +49,7 @@ export default async function CutpilotPage() {
       revealSectionsMobile={getRevealSections(cmsContent.productDetail, "mobile")}
       product={product}
         sliderImages={cmsContent.productDetail.slider}
+        steps={cmsContent.productDetail.steps}
       />
     </VideoLoadingGate>
   );

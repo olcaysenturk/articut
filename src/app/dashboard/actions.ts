@@ -4,7 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { getCmsContent, saveCmsContent } from "@/lib/cms-content";
 import { cmsMediaUrl, uploadCmsMedia } from "@/lib/netlify-blobs";
-import type { CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
+import type { CmsImage, CmsMediaItem, CmsRevealSection, CmsStep } from "@/types/cms";
 
 function field(formData: FormData, name: string) {
   return String(formData.get(name) ?? "").trim();
@@ -108,6 +108,30 @@ async function imageListFromForm(formData: FormData, prefix: string, indexes: nu
   }
 
   return images;
+}
+
+async function stepsFromForm(
+  formData: FormData,
+  prefix: string,
+  existingSteps: CmsStep[],
+): Promise<CmsStep[]> {
+  const indexes = Array.from(formData.keys())
+    .map((key) => key.match(new RegExp(`^${prefix}-(\\d+)-title$`))?.[1])
+    .filter((index): index is string => Boolean(index))
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const steps: CmsStep[] = [];
+  for (const index of indexes) {
+    const title = field(formData, `${prefix}-${index}-title`);
+    const description = field(formData, `${prefix}-${index}-description`);
+    const image = await imageFromForm(formData, `${prefix}-${index}-image`, existingSteps[index]?.image.src);
+    if (title && description && image) {
+      steps.push({ title, description, image });
+    }
+  }
+
+  return steps;
 }
 
 export async function saveHomeContentAction(formData: FormData) {
@@ -214,6 +238,7 @@ export async function saveProductDetailContentAction(formData: FormData) {
       mediaStripIndexes.map((index) => mediaItemFromForm(formData, `media-strip-${index}`)),
     )
   ).filter((item): item is CmsMediaItem => Boolean(item));
+  const steps = await stepsFromForm(formData, "product-step", content.productDetail.steps);
 
   await saveCmsContent({
     ...content,
@@ -227,6 +252,7 @@ export async function saveProductDetailContentAction(formData: FormData) {
       packageImage: packageImage ?? content.productDetail.packageImage,
       mediaStrip: mediaStrip.length > 0 ? mediaStrip : content.productDetail.mediaStrip,
       slider: slider.length > 0 ? slider : content.productDetail.slider,
+      steps: steps.length > 0 ? steps : content.productDetail.steps,
     },
   });
 

@@ -5,44 +5,18 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsapPlugins } from "@/lib/animation/gsap";
 import { useSettleZoom } from "@/lib/animation/useSettleZoom";
+import type { CmsStep } from "@/types/cms";
 
-const PRODUCT_ASSET = "/images/product-detail";
-
-const STEPS = [
-  {
-    title: "Set",
-    image: `${PRODUCT_ASSET}/step-set.png`,
-    description: "Set the numbered dial in the center of Cutpilot to set your desired cutting length.",
-  },
-  {
-    title: "Place",
-    image: `${PRODUCT_ASSET}/step-place.jpg`,
-    description: "Place Cutpilot on your hair to position the cutting angle.",
-  },
-  {
-    title: "Split",
-    image: `${PRODUCT_ASSET}/step-split.jpg`,
-    description: "Split Cutpilot with both fingers as much as you can.",
-  },
-  {
-    title: "Cut",
-    image: `${PRODUCT_ASSET}/step-cut.jpg`,
-    description: "Cut any hair that remains outside Cutpilot using scissors or a hair clipper.",
-  },
-];
-
-const RIBBON_WORDS = STEPS.map((step) => step.title.toLowerCase());
-
-function WordRibbon({ activeIndex }: { activeIndex: number | null }) {
+function WordRibbon({ words, activeIndex }: { words: string[]; activeIndex: number | null }) {
   return (
     <div className="flex h-[127px] items-center overflow-hidden bg-[#e04d26] text-[#fab446]">
       <div className="grid h-[80px] w-full grid-cols-4 items-center gap-x-5 border-y-[3px] border-[#fab446] px-4 font-[family-name:var(--font-editorial)] text-[18px] italic lowercase md:h-full md:gap-x-6 md:px-[50px] md:text-[52px]">
-        {RIBBON_WORDS.map((word, wordIndex) => (
+        {words.map((word, wordIndex) => (
           <span
             key={word}
             data-step-ribbon-word
             className={`relative flex h-full items-center justify-center transition-[font-weight] duration-200 ${
-              wordIndex < RIBBON_WORDS.length - 1
+              wordIndex < words.length - 1
                 ? "after:absolute after:left-full after:top-1/2 after:block after:h-[7px] after:w-[14px] after:-translate-y-1/2 after:rounded-b-full after:bg-current after:content-[''] md:after:mt-[7px] md:after:h-[22px] md:after:w-[44px]"
                 : "md:after:absolute md:after:left-full md:after:top-1/2 md:after:mt-[7px] md:after:block md:after:h-[22px] md:after:w-[44px] md:after:-translate-y-1/2 md:after:rounded-b-full md:after:bg-current md:after:content-['']"
             } ${
@@ -68,7 +42,7 @@ function StepCircle({
   onPointerDown,
   isActive,
 }: {
-  step: (typeof STEPS)[number];
+  step: CmsStep;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onPointerDown?: () => void;
@@ -87,8 +61,8 @@ function StepCircle({
       className={`settle-zoom group relative mx-auto aspect-square w-full max-w-[272px] origin-center overflow-hidden rounded-full border-[3px] border-[#e04d26] bg-[#fab446] transition-transform duration-300 ease-out will-change-transform hover:scale-110 ${isActive ? "scale-110" : ""}`}
     >
       <Image
-        src={step.image}
-        alt={`${step.title} Cutpilot`}
+        src={step.image.src}
+        alt={step.image.alt}
         fill
         sizes="(max-width: 767px) 150px, 272px"
         className={`object-cover transition-transform duration-300 ease-out group-hover:scale-[1.15] ${isActive ? "scale-[1.15]" : ""}`}
@@ -97,9 +71,10 @@ function StepCircle({
   );
 }
 
-export function StepsSection() {
+export function StepsSection({ steps }: { steps: CmsStep[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const ribbonWords = steps.map((step) => step.title.toLowerCase());
 
   useGSAP(
     () => {
@@ -127,10 +102,10 @@ export function StepsSection() {
   return (
     <section ref={sectionRef} className="relative bg-[#d9d9d9]">
       <div className="overflow-hidden md:flex md:h-[112svh] md:min-h-[780px] md:flex-col">
-        <WordRibbon activeIndex={hoveredIndex} />
+        <WordRibbon words={ribbonWords} activeIndex={hoveredIndex} />
         <div className="bg-[#d9d9d9] px-8 py-12 md:flex md:flex-1 md:items-center md:px-[50px] md:py-[72px]">
           <div className="mx-auto grid w-full max-w-[1340px] grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-6 md:gap-y-0">
-            {STEPS.map((step, index) => (
+            {steps.map((step, index) => (
               <article
                 key={step.title}
                 data-step-card
@@ -151,13 +126,13 @@ export function StepsSection() {
                   style={{ WebkitTextStroke: hoveredIndex === index ? "0.5px currentColor" : "0px currentColor" }}
                 >
                   <span style={{ WebkitTextStroke: "0.5px currentColor" }}>{step.title}</span>{" "}
-                  {step.description.slice(step.title.length)}
+                  {step.description}
                 </p>
               </article>
             ))}
           </div>
         </div>
-        <WordRibbon activeIndex={hoveredIndex} />
+        <WordRibbon words={ribbonWords} activeIndex={hoveredIndex} />
       </div>
     </section>
   );

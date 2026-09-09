@@ -6,7 +6,7 @@ import { CartButton } from "@/components/commerce/CartButton";
 import { MobileScissorMenuButton } from "@/components/layout/MobileScissorMenuButton";
 import { useAutoHideHeader } from "@/lib/hooks/useAutoHideHeader";
 
-export function EditorialHeader({ dark = false }: { dark?: boolean }) {
+export function EditorialHeader() {
   const isVisible = useAutoHideHeader();
 
   return (
@@ -31,7 +31,7 @@ export function EditorialHeader({ dark = false }: { dark?: boolean }) {
             fill
             priority
             sizes="215px"
-            className={dark ? "brightness-0" : undefined}
+            className="brightness-0"
           />
         </Link>
         <CartButton className="absolute right-[50px] top-[42px] text-[14px] leading-none" />
@@ -44,10 +44,10 @@ export function EditorialHeader({ dark = false }: { dark?: boolean }) {
           fill
           priority
           sizes="129px"
-          className={dark ? "brightness-0" : undefined}
+          className="brightness-0"
         />
       </Link>
-      <MobileScissorMenuButton tone={dark ? "black" : "accent"} />
+      <MobileScissorMenuButton tone="black" />
       </header>
     </>
   );

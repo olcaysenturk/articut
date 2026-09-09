@@ -39,7 +39,7 @@ export default async function AboutPage() {
     <VideoLoadingGate>
     <div className="bg-[#d9d9d9] text-black">
       <section data-video-frame className="relative h-[420px] overflow-hidden bg-black md:h-dvh">
-        <StoreHeader tone="black" />
+        <StoreHeader />
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay

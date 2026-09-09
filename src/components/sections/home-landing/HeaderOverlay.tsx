@@ -6,13 +6,9 @@ import Link from "next/link";
 import { CartButton } from "@/components/commerce/CartButton";
 import { ViewportPinnedHeader } from "@/components/layout/ViewportPinnedHeader";
 import { useAutoHideHeader } from "@/lib/hooks/useAutoHideHeader";
-import { useIsOverVideoHero } from "@/lib/hooks/useIsOverVideoHero";
-import { cn } from "@/lib/utils";
 
 export function HeaderOverlay() {
   const isVisible = useAutoHideHeader();
-  const isOverVideoHero = useIsOverVideoHero();
-  const blend = !isOverVideoHero && "mix-blend-difference text-[#1fb2d9] [&_img]:invert";
 
   return (
     <ViewportPinnedHeader className="hidden md:contents">
@@ -21,26 +17,26 @@ export function HeaderOverlay() {
         style={{ "--header-offset": isVisible ? "0px" : "-100px" } as CSSProperties}
       >
         <div className="contents">
-          <Link href="/about" tabIndex={1} className={cn("fixed left-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none", blend)}>
+          <Link href="/about" tabIndex={1} className="fixed left-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none">
             About
           </Link>
-          <Link href="/cutpilot" tabIndex={2} className={cn("fixed left-[163px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none", blend)}>
+          <Link href="/cutpilot" tabIndex={2} className="fixed left-[163px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none">
             Cutpilot™
           </Link>
           <Link
             href="/"
             aria-label="Articut home"
             tabIndex={3}
-            className={cn("fixed left-1/2 top-[calc(30px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 h-[41px] w-[215px] -translate-x-1/2", blend)}
+            className="fixed left-1/2 top-[calc(30px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 h-[41px] w-[215px] -translate-x-1/2"
           >
             <Image src="/figma/articut-logo.svg" alt="Articut" fill priority className="object-contain" />
           </Link>
-          <CartButton tabIndex={4} className={cn("fixed right-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 text-[14px] leading-none", blend)} />
+          <CartButton tabIndex={4} className="fixed right-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 text-[14px] leading-none" />
           <button
             type="button"
             aria-label="Menu"
             tabIndex={5}
-            className={cn("fixed right-[50px] top-[calc(70px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 flex h-[26px] w-[30px] flex-col justify-center gap-[6px] md:hidden", blend)}
+            className="fixed right-[50px] top-[calc(70px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 flex h-[26px] w-[30px] flex-col justify-center gap-[6px] md:hidden"
           >
             <span className="h-[3px] w-full bg-current" />
             <span className="h-[3px] w-full bg-current" />

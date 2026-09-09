@@ -79,6 +79,28 @@
         "src": "/images/product-detail/cutpilot-slider-3.jpg",
         "alt": "Cutpilot package on a yellow table"
       }
+    ],
+    "steps": [
+      {
+        "title": "Set",
+        "image": { "src": "/images/product-detail/step-set.png", "alt": "Set Cutpilot" },
+        "description": "the numbered dial in the center of Cutpilot to set your desired cutting length."
+      },
+      {
+        "title": "Place",
+        "image": { "src": "/images/product-detail/step-place.jpg", "alt": "Place Cutpilot" },
+        "description": "Cutpilot on your hair to position the cutting angle."
+      },
+      {
+        "title": "Split",
+        "image": { "src": "/images/product-detail/step-split.jpg", "alt": "Split Cutpilot" },
+        "description": "Cutpilot with both fingers as much as you can."
+      },
+      {
+        "title": "Cut",
+        "image": { "src": "/images/product-detail/step-cut.jpg", "alt": "Cut Cutpilot" },
+        "description": "any hair that remains outside Cutpilot using scissors or a hair clipper."
+      }
     ]
   },
   "faq": {

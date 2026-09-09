@@ -3,7 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { readCmsContentBlob, writeCmsContentBlob } from "@/lib/netlify-blobs";
-import type { CmsContent, LegalSectionContent } from "@/types/cms";
+import type { CmsContent, CmsStep, LegalSectionContent } from "@/types/cms";
 
 const DEFAULT_TERMS_SECTIONS: LegalSectionContent[] = [
   {
@@ -164,9 +164,38 @@ const DEFAULT_PRIVACY_SECTIONS: LegalSectionContent[] = [
   },
 ];
 
+const DEFAULT_STEPS: CmsStep[] = [
+  {
+    title: "Set",
+    image: { src: "/images/product-detail/step-set.png", alt: "Set Cutpilot" },
+    description: "the numbered dial in the center of Cutpilot to set your desired cutting length.",
+  },
+  {
+    title: "Place",
+    image: { src: "/images/product-detail/step-place.jpg", alt: "Place Cutpilot" },
+    description: "Cutpilot on your hair to position the cutting angle.",
+  },
+  {
+    title: "Split",
+    image: { src: "/images/product-detail/step-split.jpg", alt: "Split Cutpilot" },
+    description: "Cutpilot with both fingers as much as you can.",
+  },
+  {
+    title: "Cut",
+    image: { src: "/images/product-detail/step-cut.jpg", alt: "Cut Cutpilot" },
+    description: "any hair that remains outside Cutpilot using scissors or a hair clipper.",
+  },
+];
+
 const imageSchema = z.object({
   src: z.string().trim().min(1),
   alt: z.string().trim(),
+});
+
+const stepSchema = z.object({
+  title: z.string().trim().min(1),
+  image: imageSchema,
+  description: z.string().trim().min(1),
 });
 
 const revealSectionSchema = z.discriminatedUnion("layout", [
@@ -246,6 +275,7 @@ const cmsContentSchema = z.object({
     productRevealMobile: z.array(imageSchema).min(1),
     revealSections: z.array(revealSectionSchema).optional(),
     revealSectionsMobile: z.array(revealSectionSchema).optional(),
+    steps: z.array(stepSchema).min(1).default(DEFAULT_STEPS),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema).min(1),
@@ -296,6 +326,7 @@ const legacyCmsContentSchema = z.object({
     productRevealMobile: z.array(imageSchema).optional(),
     revealSections: z.array(revealSectionSchema).optional(),
     revealSectionsMobile: z.array(revealSectionSchema).optional(),
+    steps: z.array(stepSchema).optional(),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema),
@@ -370,6 +401,7 @@ export async function getCmsContent(): Promise<CmsContent> {
       featureTexts: legacy.productDetail.featureTexts ?? ["compatible with most hair types", "full control with easy-to-hold grips", "6 adjustable length options"],
       revealSections: legacy.productDetail.revealSections,
       revealSectionsMobile: legacy.productDetail.revealSectionsMobile,
+      steps: legacy.productDetail.steps ?? DEFAULT_STEPS,
       combsImage: legacy.productDetail.combsImage ?? {
         src: "/images/product-detail/cutpilot-combs-grid.jpg",
         alt: "Cutpilot combs and attachments",

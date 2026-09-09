@@ -11,7 +11,7 @@ import { ProductPurchaseCta } from "@/components/product-detail/ProductPurchaseC
 import { StepsSection } from "@/components/product-detail/StepsSection";
 import { StoreHeader } from "@/components/layout/StoreHeader";
 import { CutpilotPackageImage } from "@/components/sections/product/CutpilotPackageImage";
-import type { CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
+import type { CmsImage, CmsMediaItem, CmsRevealSection, CmsStep } from "@/types/cms";
 import type { Product } from "@/types/shopify";
 
 const PRODUCT_ASSET = "/images/product-detail";
@@ -52,6 +52,7 @@ export function CutpilotProductPage({
   revealSectionsMobile,
   product,
   sliderImages,
+  steps,
 }: {
   mediaStrip: CmsMediaItem[];
   packageImage: CmsImage;
@@ -62,6 +63,7 @@ export function CutpilotProductPage({
   revealSectionsMobile: CmsRevealSection[];
   product: Product;
   sliderImages: CmsImage[];
+  steps: CmsStep[];
 }) {
   return (
     <ProductDetailMotion>
@@ -132,7 +134,7 @@ export function CutpilotProductPage({
         <ProductCarousel slides={sliderImages} />
       </div>
 
-      <StepsSection />
+      <StepsSection steps={steps} />
 
       <section className="relative h-[550px] overflow-hidden md:h-screen">
         <CutpilotPackageImage src={packageImage.src} alt={packageImage.alt} sizes="100vw" />

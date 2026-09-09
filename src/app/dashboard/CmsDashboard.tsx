@@ -13,7 +13,7 @@ import type {
   savePrivacyContentAction,
 } from "@/app/dashboard/actions";
 import type { logoutAction } from "@/app/dashboard/login/actions";
-import type { CmsContent, CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
+import type { CmsContent, CmsImage, CmsMediaItem, CmsRevealSection, CmsStep } from "@/types/cms";
 import { getRevealSections } from "@/lib/product-reveal";
 import { FaqForm } from "./faq/FaqForm";
 import { TermsForm } from "./terms/TermsForm";
@@ -33,6 +33,7 @@ export type ActivePanel =
   | "product-media-strip"
   | "product-reveal"
   | "product-detail"
+  | "product-steps"
   | "faq"
   | "terms"
   | "privacy"
@@ -48,6 +49,13 @@ type ManagedMediaItem = CmsMediaItem & {
   file?: File;
   id: string;
   previewSrc?: string;
+};
+
+type ManagedStep = {
+  id: string;
+  title: string;
+  description: string;
+  image: ManagedImage;
 };
 
 type MediaDimensionSpec = {
@@ -72,6 +80,7 @@ const MEDIA_SPECS = {
   slider: { width: 1920, height: 1080, ratioLabel: "16:9" },
   mediaStrip: { width: 1080, height: 1920, ratioLabel: "9:16, vertical" },
   productReveal: { width: 1920, height: 1080, ratioLabel: "16:9" },
+  stepImage: { width: 1200, height: 1200, ratioLabel: "1:1, square" },
 } as const satisfies Record<string, MediaDimensionSpec>;
 
 const homePanels = [
@@ -92,6 +101,7 @@ const panels = [
       { key: "product-detail" as const, label: "Slider images" },
       { key: "product-media-strip" as const, label: "Media strip" },
       { key: "product-reveal" as const, label: "Product reveal" },
+      { key: "product-steps" as const, label: "How-to-use steps" },
       { key: "product-features" as const, label: "Feature overlay" },
     ],
   },
@@ -119,6 +129,15 @@ function toManagedImage(image: CmsImage, prefix: string, index: number): Managed
   return {
     ...image,
     id: `${prefix}-${index}-${image.src}`,
+  };
+}
+
+function toManagedStep(step: CmsStep, prefix: string, index: number): ManagedStep {
+  return {
+    id: `${prefix}-${index}`,
+    title: step.title,
+    description: step.description,
+    image: toManagedImage(step.image, `${prefix}-${index}-image`, index),
   };
 }
 
@@ -184,6 +203,7 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "product-package") return "Package image";
   if (panel === "product-media-strip") return "Media strip";
   if (panel === "product-reveal") return "Product reveal";
+  if (panel === "product-steps") return "How-to-use steps";
   if (panel === "home-hero") return "Hero video";
   if (panel === "home-product") return "Product image";
   if (panel === "product-detail") return "Slider images";
@@ -1183,6 +1203,82 @@ function ImageListEditor({
   );
 }
 
+function StepsEditor({
+  fieldPrefix,
+  steps,
+  setSteps,
+  spec,
+}: {
+  fieldPrefix: string;
+  steps: ManagedStep[];
+  setSteps: (updater: (items: ManagedStep[]) => ManagedStep[]) => void;
+  spec: MediaDimensionSpec;
+}) {
+  return (
+    <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
+      <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">How-to-use steps</div>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {steps.map((step, index) => (
+          <div key={step.id} className="rounded-lg border border-[#d0d0d0] bg-white p-3 shadow-sm">
+            <input name={`${fieldPrefix}-${index}-image-src`} type="hidden" value={step.image.src} />
+            <p className="mb-3 text-sm font-semibold text-[#1f1f1f]">Step {index + 1}</p>
+            <ImagePreview image={step.image} label={`Step ${index + 1}`} recommendedNote={specNote(spec)} />
+            <div className="mt-3 space-y-3">
+              <FileInput
+                label={step.image.src ? "Replace image" : "Upload image"}
+                name={`${fieldPrefix}-${index}-image-file`}
+                onPreview={(previewSrc, file) =>
+                  setSteps((items) =>
+                    items.map((item, itemIndex) =>
+                      itemIndex === index ? { ...item, image: { ...item.image, file, previewSrc } } : item,
+                    ),
+                  )
+                }
+                spec={spec}
+              />
+              <TextInput
+                name={`${fieldPrefix}-${index}-title`}
+                label="Title"
+                value={step.title}
+                onChange={(title) =>
+                  setSteps((items) => items.map((item, itemIndex) => (itemIndex === index ? { ...item, title } : item)))
+                }
+              />
+              <TextInput
+                name={`${fieldPrefix}-${index}-image-alt`}
+                label="Alt text"
+                value={step.image.alt}
+                onChange={(alt) =>
+                  setSteps((items) =>
+                    items.map((item, itemIndex) =>
+                      itemIndex === index ? { ...item, image: { ...item.image, alt } } : item,
+                    ),
+                  )
+                }
+              />
+              <label className="block text-sm">
+                <span className="font-medium text-[#1f1f1f]">Description (shown after the title)</span>
+                <textarea
+                  name={`${fieldPrefix}-${index}-description`}
+                  rows={3}
+                  value={step.description}
+                  onChange={(event) => {
+                    const description = event.target.value;
+                    setSteps((items) =>
+                      items.map((item, itemIndex) => (itemIndex === index ? { ...item, description } : item)),
+                    );
+                  }}
+                  className="mt-1 block w-full rounded-lg border border-[#b8b8b8] bg-[#f4f4f4] p-3 text-sm text-[#1f1f1f] focus:border-[#e04d26] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#fab446]/45"
+                />
+              </label>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function MediaPreview({
   item,
   label,
@@ -1644,6 +1740,9 @@ export function CmsDashboard({
   const [revealSections, setRevealSections] = useState(() => toManagedSections(getRevealSections(content.productDetail, "desktop"), "desktop"));
   const [revealSectionsMobile, setRevealSectionsMobile] = useState(() => toManagedSections(getRevealSections(content.productDetail, "mobile"), "mobile"));
   const [productRevealViewport, setProductRevealViewport] = useState<"desktop" | "mobile">("desktop");
+  const [steps, setSteps] = useState<ManagedStep[]>(
+    content.productDetail.steps.map((step, index) => toManagedStep(step, "product-step", index)),
+  );
   const [mediaStripItems, setMediaStripItems] = useState<ManagedMediaItem[]>(
     content.productDetail.mediaStrip.map((item, index) => toManagedMediaItem(item, "media-strip", index)),
   );
@@ -1703,6 +1802,11 @@ export function CmsDashboard({
     appendRevealSections(formData, "reveal-sections", revealSections);
     appendRevealSections(formData, "reveal-sections-mobile", revealSectionsMobile);
     appendManagedMediaFiles(formData, "media-strip", mediaStripItems);
+    steps.forEach((step, index) => {
+      if (step.image.file) {
+        formData.set(`product-step-${index}-image-file`, step.image.file);
+      }
+    });
     await saveProductDetailAction(formData);
     await completeSave();
   }
@@ -2084,6 +2188,15 @@ export function CmsDashboard({
             key={productRevealViewport}
             sections={productRevealViewport === "desktop" ? revealSections : revealSectionsMobile}
             setSections={productRevealViewport === "desktop" ? setRevealSections : setRevealSectionsMobile}
+          />
+        </div>
+
+        <div className={activePanel === "product-steps" ? "block" : "hidden"}>
+          <StepsEditor
+            fieldPrefix="product-step"
+            steps={steps}
+            setSteps={setSteps}
+            spec={MEDIA_SPECS.stepImage}
           />
         </div>
       </form>

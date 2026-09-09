@@ -6,6 +6,7 @@ import {
   checkoutSchema,
   type CheckoutActionState,
 } from "@/features/checkout/checkout-schema";
+import { checkoutReadinessError } from "@/features/checkout/checkout-readiness";
 import { getCartId } from "@/lib/shopify/cart-cookie";
 import { ShopifyApiError } from "@/lib/shopify/client";
 import { cartLinesUpdate } from "@/lib/shopify/mutations/cart-update";
@@ -132,6 +133,12 @@ export async function submitCheckout(
 
     if (addressResult.cart.lines.nodes.length === 0) {
       return { message: "Your cart is empty.", kind: "warning", fieldErrors: {} };
+    }
+
+    const readinessError = checkoutReadinessError(addressResult.cart, currentCart);
+    if (readinessError) {
+      revalidatePath("/checkout");
+      return { message: readinessError, kind: "warning", fieldErrors: {} };
     }
 
     checkoutUrl = addressResult.cart.checkoutUrl;

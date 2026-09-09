@@ -3,8 +3,41 @@
   outline-offset: 2px;
 }
 
-html {
-  scroll-behavior: smooth;
+/*
+ * Pins an element to the viewport's top edge purely via the CSS scroll-
+ * driven animations spec (animation-timeline: scroll()), not JS.
+ *
+ * Headers using mix-blend-difference can't use position:fixed/sticky (it
+ * breaks mix-blend-mode against real page content in Chromium — see
+ * useScrollSyncedTop's comment), so they track scroll by animating `top`
+ * instead. Driving that from a per-frame JS rAF loop works, but only as
+ * well as the main thread keeps up every single frame — any main-thread
+ * work that frame (React re-render, GSAP, video decode) can make the
+ * header skip a frame relative to the compositor-scrolled page under it,
+ * which reads as a stutter/jitter. animation-timeline: scroll() is
+ * evaluated by the browser's style/animation engine tied to the actual
+ * scroll offset, independent of main-thread frame budget, so it can't
+ * fall behind that way.
+ *
+ * --scroll-pin-max must be set (in px) to the page's max scroll distance
+ * (scrollHeight - clientHeight) for `top` to equal scrollY exactly; see
+ * useScrollSyncedTop, which keeps it updated on resize/content-height
+ * changes (infrequent, not per-frame).
+ */
+.scroll-pinned {
+  animation-name: scroll-pin-top;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-timeline: scroll(root);
+}
+
+@keyframes scroll-pin-top {
+  from {
+    top: 0px;
+  }
+  to {
+    top: var(--scroll-pin-max, 0px);
+  }
 }
 
 [data-product-image-reveal] {

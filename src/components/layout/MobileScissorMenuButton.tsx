@@ -48,9 +48,11 @@ function MenuArrow() {
 export function MobileScissorMenuButton({
   tone = "accent",
   blend = false,
+  tabIndex,
 }: {
   tone?: "accent" | "black";
   blend?: boolean;
+  tabIndex?: number;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const topBladeControls = useAnimationControls();
@@ -128,8 +130,9 @@ export function MobileScissorMenuButton({
         aria-expanded={isOpen}
         aria-controls="mobile-navigation"
         onClick={toggleMenu}
-        className={`${isOpen ? "fixed" : "absolute"} right-[32px] top-[19px] z-[70] h-[24px] w-[24px] md:hidden ${
-          blend ? "mix-blend-difference" : ""
+        tabIndex={tabIndex}
+        className={`fixed right-[32px] top-[19px] z-[70] h-[24px] w-[24px] md:hidden ${
+          blend ? (tone === "black" ? "mix-blend-difference text-white [&_img]:brightness-0 [&_img]:invert" : "mix-blend-difference text-[#1fb2d9] [&_img]:invert") : ""
         }`}
       >
         <motion.span

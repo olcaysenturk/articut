@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   type ChangeEvent,
   type FocusEvent,
+  startTransition,
   useActionState,
   useCallback,
   useEffect,
@@ -77,6 +78,11 @@ function FieldErrorMessage({
 
 export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | null }) {
   const [state, formAction, isPending] = useActionState(submitCheckout, initialCheckoutState);
+  // Controlled fields survive React's automatic form reset after an action returns.
+  const [values, setValues] = useState<Record<CheckoutField, string>>({
+    email: "", countryCode: "US", firstName: "", lastName: "",
+    address1: "", address2: "", city: "", provinceCode: "", zip: "", phone: "",
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const [clientErrors, setClientErrors] = useState<FieldErrors>({});
   const [touchedFields, setTouchedFields] = useState<Set<CheckoutField>>(new Set());
@@ -108,6 +114,7 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
   function handleChange(event: ChangeEvent<FormControl>) {
     const field = event.currentTarget.name as CheckoutField;
     const value = event.currentTarget.value;
+    setValues((previous) => ({ ...previous, [field]: value }));
     setHiddenServerErrors((fields) => new Set(fields).add(field));
     setFilledFields((fields) => {
       const next = new Set(fields);
@@ -163,10 +170,17 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
     <>
       <form
         ref={formRef}
-        action={formAction}
         className="w-full"
         noValidate
-        onSubmit={() => setDismissedToastKey(null)}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (isPending || blockedMessage) return;
+          const formData = new FormData(event.currentTarget);
+          setDismissedToastKey(null);
+          setHiddenServerErrors(new Set());
+          setClientErrors({});
+          startTransition(() => formAction(formData));
+        }}
       >
         <section aria-labelledby="contact-heading">
           <SectionHeading id="contact-heading">Contact</SectionHeading>
@@ -176,7 +190,7 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
             </label>
             <input
               id="email"
-              name="email"
+              name="email" value={values.email}
               type="email"
               autoComplete="email"
               placeholder="you@example.com"
@@ -199,8 +213,7 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
               </label>
               <select
                 id="countryCode"
-                name="countryCode"
-                defaultValue="US"
+                name="countryCode" value={values.countryCode}
                 required
                 disabled={isPending}
                 {...fieldHandlers}
@@ -221,14 +234,14 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
                 <label htmlFor="firstName" className="mb-2 block text-[12px] font-medium text-black/70">
                   First name <span aria-hidden>*</span>
                 </label>
-                <input id="firstName" name="firstName" autoComplete="given-name" placeholder="Ada" required disabled={isPending} {...fieldHandlers} {...errorProps("firstName")} className={controlClass("firstName")} />
+                <input id="firstName" name="firstName" value={values.firstName} autoComplete="given-name" placeholder="Ada" required disabled={isPending} {...fieldHandlers} {...errorProps("firstName")} className={controlClass("firstName")} />
                 <FieldErrorMessage field="firstName" message={fieldError("firstName")} />
               </div>
               <div>
                 <label htmlFor="lastName" className="mb-2 block text-[12px] font-medium text-black/70">
                   Last name <span aria-hidden>*</span>
                 </label>
-                <input id="lastName" name="lastName" autoComplete="family-name" placeholder="Lovelace" required disabled={isPending} {...fieldHandlers} {...errorProps("lastName")} className={controlClass("lastName")} />
+                <input id="lastName" name="lastName" value={values.lastName} autoComplete="family-name" placeholder="Lovelace" required disabled={isPending} {...fieldHandlers} {...errorProps("lastName")} className={controlClass("lastName")} />
                 <FieldErrorMessage field="lastName" message={fieldError("lastName")} />
               </div>
             </div>
@@ -237,7 +250,7 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
               <label htmlFor="address1" className="mb-2 block text-[12px] font-medium text-black/70">
                 Address <span aria-hidden>*</span>
               </label>
-              <input id="address1" name="address1" autoComplete="address-line1" placeholder="131 Greene Street" required disabled={isPending} {...fieldHandlers} {...errorProps("address1")} className={controlClass("address1")} />
+              <input id="address1" name="address1" value={values.address1} autoComplete="address-line1" placeholder="131 Greene Street" required disabled={isPending} {...fieldHandlers} {...errorProps("address1")} className={controlClass("address1")} />
               <FieldErrorMessage field="address1" message={fieldError("address1")} />
             </div>
 
@@ -245,7 +258,7 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
               <label htmlFor="address2" className="mb-2 block text-[12px] font-medium text-black/70">
                 Apartment, suite, etc. <span className="font-normal text-black/40">Optional</span>
               </label>
-              <input id="address2" name="address2" autoComplete="address-line2" placeholder="Apartment 4B" disabled={isPending} {...fieldHandlers} {...errorProps("address2")} className={controlClass("address2")} />
+              <input id="address2" name="address2" value={values.address2} autoComplete="address-line2" placeholder="Apartment 4B" disabled={isPending} {...fieldHandlers} {...errorProps("address2")} className={controlClass("address2")} />
               <FieldErrorMessage field="address2" message={fieldError("address2")} />
             </div>
 
@@ -254,21 +267,21 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
                 <label htmlFor="city" className="mb-2 block text-[12px] font-medium text-black/70">
                   City <span aria-hidden>*</span>
                 </label>
-                <input id="city" name="city" autoComplete="address-level2" placeholder="New York" required disabled={isPending} {...fieldHandlers} {...errorProps("city")} className={controlClass("city")} />
+                <input id="city" name="city" value={values.city} autoComplete="address-level2" placeholder="New York" required disabled={isPending} {...fieldHandlers} {...errorProps("city")} className={controlClass("city")} />
                 <FieldErrorMessage field="city" message={fieldError("city")} />
               </div>
               <div>
                 <label htmlFor="provinceCode" className="mb-2 block text-[12px] font-medium text-black/70">
                   State or region <span aria-hidden>*</span>
                 </label>
-                <input id="provinceCode" name="provinceCode" autoComplete="address-level1" placeholder="NY" required disabled={isPending} {...fieldHandlers} {...errorProps("provinceCode")} className={controlClass("provinceCode")} />
+                <input id="provinceCode" name="provinceCode" value={values.provinceCode} autoComplete="address-level1" placeholder="NY" required disabled={isPending} {...fieldHandlers} {...errorProps("provinceCode")} className={controlClass("provinceCode")} />
                 <FieldErrorMessage field="provinceCode" message={fieldError("provinceCode")} />
               </div>
               <div>
                 <label htmlFor="zip" className="mb-2 block text-[12px] font-medium text-black/70">
                   ZIP or postal code <span aria-hidden>*</span>
                 </label>
-                <input id="zip" name="zip" autoComplete="postal-code" placeholder="10012" required disabled={isPending} {...fieldHandlers} {...errorProps("zip")} className={controlClass("zip")} />
+                <input id="zip" name="zip" value={values.zip} autoComplete="postal-code" placeholder="10012" required disabled={isPending} {...fieldHandlers} {...errorProps("zip")} className={controlClass("zip")} />
                 <FieldErrorMessage field="zip" message={fieldError("zip")} />
               </div>
             </div>
@@ -277,7 +290,7 @@ export function CheckoutForm({ blockedMessage }: { blockedMessage?: string | nul
               <label htmlFor="phone" className="mb-2 block text-[12px] font-medium text-black/70">
                 Phone <span className="font-normal text-black/40">Optional</span>
               </label>
-              <input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+12125551212" disabled={isPending} {...fieldHandlers} {...errorProps("phone")} className={controlClass("phone")} />
+              <input id="phone" name="phone" value={values.phone} type="tel" autoComplete="tel" placeholder="+12125551212" disabled={isPending} {...fieldHandlers} {...errorProps("phone")} className={controlClass("phone")} />
               <FieldErrorMessage field="phone" message={fieldError("phone")} />
             </div>
           </div>

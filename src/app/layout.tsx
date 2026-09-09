@@ -46,7 +46,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${gamayEditorial.variable} ${gamayNarrow.variable} ${gamayWide.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <div id="header-portal-root" className="contents" />
+      </body>
     </html>
   );
 }

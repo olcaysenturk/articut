@@ -133,7 +133,7 @@ export async function buyNow(variantId: string, quantity: number): Promise<BuyNo
       return { success: false, error: firstUserError(userErrors) ?? GENERIC_CART_ERROR };
     }
 
-    return { success: true, checkoutUrl: cart.checkoutUrl };
+    return { success: true, checkoutUrl: "/checkout" };
   } catch (error) {
     console.error("buyNow failed", error);
     return { success: false, error: GENERIC_CART_ERROR };

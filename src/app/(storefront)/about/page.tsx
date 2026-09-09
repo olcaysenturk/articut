@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import React from "react";
 import Image from "next/image";
 import { EditorialFooter } from "@/components/editorial/EditorialFooter";
-import { EditorialHeader } from "@/components/editorial/EditorialHeader";
+import { StoreHeader } from "@/components/layout/StoreHeader";
 import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { VideoMuteButton } from "@/components/media/VideoMuteButton";
 import { VideoPlaybackButton } from "@/components/media/VideoPlaybackButton";
@@ -39,7 +39,7 @@ export default async function AboutPage() {
     <VideoLoadingGate>
     <div className="bg-[#d9d9d9] text-black">
       <section data-video-frame className="relative h-[420px] overflow-hidden bg-black md:h-dvh">
-        <EditorialHeader dark />
+        <StoreHeader tone="black" />
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay

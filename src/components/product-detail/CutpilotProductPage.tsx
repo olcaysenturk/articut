@@ -5,11 +5,11 @@ import { ProductAddBadge } from "@/components/product-detail/ProductAddBadge";
 import { ProductCarousel } from "@/components/product-detail/ProductCarousel";
 import { ProductDetailMotion } from "@/components/product-detail/ProductDetailMotion";
 import { ProductFaq } from "@/components/product-detail/ProductFaq";
-import { ProductHeader } from "@/components/product-detail/ProductHeader";
 import { ProductMediaCard } from "@/components/product-detail/ProductMediaCard";
 import { ProductMediaStrip } from "@/components/product-detail/ProductMediaStrip";
 import { ProductPurchaseCta } from "@/components/product-detail/ProductPurchaseCta";
 import { StepsSection } from "@/components/product-detail/StepsSection";
+import { StoreHeader } from "@/components/layout/StoreHeader";
 import { CutpilotPackageImage } from "@/components/sections/product/CutpilotPackageImage";
 import type { CmsImage, CmsMediaItem, CmsRevealSection } from "@/types/cms";
 import type { Product } from "@/types/shopify";
@@ -68,7 +68,7 @@ export function CutpilotProductPage({
     <main className="overflow-x-clip bg-[#d9d9d9] text-[#e04d26]">
       <ProductAddBadge product={product} />
       <section data-product-hero className="relative h-[533px] overflow-hidden bg-[#a5a5a5] md:h-dvh md:min-h-[620px]">
-        <ProductHeader />
+        <StoreHeader />
         <div className="absolute inset-x-0 top-[30%] z-0 flex justify-center">
           <h1 className="sr-only">Cutpilot</h1>
           <Image

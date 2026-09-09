@@ -5,9 +5,10 @@ import { cn } from "@/lib/utils";
 
 type CartButtonProps = {
   className?: string;
+  tabIndex?: number;
 };
 
-export function CartButton({ className }: CartButtonProps) {
+export function CartButton({ className, tabIndex }: CartButtonProps) {
   const openDrawer = useCartStore((state) => state.openDrawer);
 
   return (
@@ -15,6 +16,7 @@ export function CartButton({ className }: CartButtonProps) {
       type="button"
       onClick={openDrawer}
       aria-label="Open cart"
+      tabIndex={tabIndex}
       className={cn(
         "cursor-pointer text-sm font-semibold transition-opacity duration-200 hover:opacity-65",
         className,

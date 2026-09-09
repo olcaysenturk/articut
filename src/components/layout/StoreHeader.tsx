@@ -4,23 +4,29 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CartButton } from "@/components/commerce/CartButton";
+import { MobileStickyHeader } from "@/components/layout/MobileStickyHeader";
 import { ViewportPinnedHeader } from "@/components/layout/ViewportPinnedHeader";
 import { useAutoHideHeader } from "@/lib/hooks/useAutoHideHeader";
 import { useIsOverVideoHero } from "@/lib/hooks/useIsOverVideoHero";
 import { cn } from "@/lib/utils";
 
-export function HeaderOverlay() {
+export function StoreHeader({ tone = "accent" }: { tone?: "accent" | "black" }) {
   const isVisible = useAutoHideHeader();
   const isOverVideoHero = useIsOverVideoHero();
-  const blend = !isOverVideoHero && "mix-blend-difference text-[#1fb2d9] [&_img]:invert";
+  const blend = tone === "black"
+    ? isOverVideoHero
+      ? "mix-blend-difference text-white [&_img]:brightness-0 [&_img]:invert"
+      : "text-black [&_img]:brightness-0"
+    : !isOverVideoHero && "mix-blend-difference text-[#1fb2d9] [&_img]:invert";
 
   return (
-    <ViewportPinnedHeader className="hidden md:contents">
-      <header
-        className="contents text-[14px] font-bold text-[#e04d26]"
-        style={{ "--header-offset": isVisible ? "0px" : "-100px" } as CSSProperties}
-      >
-        <div className="contents">
+    <>
+      <MobileStickyHeader tone={tone} />
+      <ViewportPinnedHeader className="hidden md:contents">
+        <header
+          className={cn("contents text-[14px] font-bold", tone === "black" ? "text-black" : "text-[#e04d26]")}
+          style={{ "--header-offset": isVisible ? "0px" : "-100px" } as CSSProperties}
+        >
           <Link href="/about" tabIndex={1} className={cn("fixed left-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none", blend)}>
             About
           </Link>
@@ -36,17 +42,8 @@ export function HeaderOverlay() {
             <Image src="/figma/articut-logo.svg" alt="Articut" fill priority className="object-contain" />
           </Link>
           <CartButton tabIndex={4} className={cn("fixed right-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 text-[14px] leading-none", blend)} />
-          <button
-            type="button"
-            aria-label="Menu"
-            tabIndex={5}
-            className={cn("fixed right-[50px] top-[calc(70px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 flex h-[26px] w-[30px] flex-col justify-center gap-[6px] md:hidden", blend)}
-          >
-            <span className="h-[3px] w-full bg-current" />
-            <span className="h-[3px] w-full bg-current" />
-          </button>
-        </div>
-      </header>
-    </ViewportPinnedHeader>
+        </header>
+      </ViewportPinnedHeader>
+    </>
   );
 }

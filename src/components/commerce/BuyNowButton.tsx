@@ -16,7 +16,7 @@ export function BuyNowButton({ variantId, quantity, disabled }: BuyNowButtonProp
   const setError = useCartStore((state) => state.setError);
 
   function handleClick() {
-    if (!variantId) {
+    if (!variantId || disabled || isPending) {
       return;
     }
 
@@ -39,7 +39,7 @@ export function BuyNowButton({ variantId, quantity, disabled }: BuyNowButtonProp
       disabled={disabled || !variantId || isPending}
       aria-busy={isPending}
     >
-      {isPending ? "Yönlendiriliyor..." : "Hemen Satın Al"}
+      {disabled ? "Stokta yok" : isPending ? "Yönlendiriliyor..." : "Hemen Satın Al"}
     </Button>
   );
 }

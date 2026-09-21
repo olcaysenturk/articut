@@ -14,7 +14,7 @@ function ProductCta({ product }: { product: Product }) {
       <AddToCartButton
         variantId={variant?.id ?? null}
         quantity={1}
-        disabled={!variant || !product.available}
+        disabled={!variant?.available || !product.available}
         label={`Add to Cart    →    ${formatCompactMoney(variant?.price ?? product.price)}`}
         className="yellow-center-hover h-[61px] w-[304px] whitespace-pre bg-[#e0e0e0] px-8 text-[20px] font-normal text-[#e04d26]"
       >

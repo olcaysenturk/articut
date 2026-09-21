@@ -30,7 +30,7 @@ export function PurchaseSection({ product }: PurchaseSectionProps) {
   }, [product.variants, selectedVariantId, setSelectedVariantId]);
 
   const selectedVariant = product.variants.find((variant) => variant.id === selectedVariantId);
-  const isAvailable = selectedVariant?.available ?? product.available;
+  const isAvailable = Boolean(selectedVariant?.available && product.available);
 
   return (
     <section className="py-(--space-section)">

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { getOrCreateCart } from "@/app/actions/cart-actions";
@@ -22,6 +23,7 @@ const PAYMENT_MARKS = [
 const cartTransition = { duration: 0.52, ease: [0.22, 1, 0.36, 1] as const };
 
 export function CartDrawer() {
+  const router = useRouter();
   const isDrawerOpen = useCartStore((state) => state.isDrawerOpen);
   const cart = useCartStore((state) => state.cart);
   const setCart = useCartStore((state) => state.setCart);
@@ -30,6 +32,7 @@ export function CartDrawer() {
   const errorMessage = useCartStore((state) => state.errorMessage);
   const setError = useCartStore((state) => state.setError);
   const [isPending, startTransition] = useTransition();
+  const checkoutBlocked = isPending || isCartLoading || Boolean(errorMessage) || !cart?.lines.length || cart.lines.some((line) => !line.available);
   const containerRef = useOverlayBehavior(isDrawerOpen, closeDrawer);
   useScrollLock(isDrawerOpen);
 
@@ -143,13 +146,14 @@ export function CartDrawer() {
                   <span>Subtotal</span>
                   <span>{formatCompactMoney(cart.subtotal)}</span>
                 </div>
-                <a
-                  href="/checkout"
-                  onClick={closeDrawer}
-                  className="mt-[22px] flex h-[61px] w-full cursor-pointer items-center justify-center rounded-full bg-[#e94b24] text-[20px] text-white transition-[background-color,transform] duration-200 hover:scale-[1.015] hover:bg-[#d9401d] active:scale-[0.985]"
+                <button
+                  type="button"
+                  disabled={checkoutBlocked}
+                  onClick={() => { closeDrawer(); router.push("/checkout"); }}
+                  className="mt-[22px] flex h-[61px] w-full cursor-pointer items-center justify-center rounded-full bg-[#e94b24] text-[20px] text-white transition-[background-color,transform] duration-200 hover:scale-[1.015] hover:bg-[#d9401d] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Check Out
-                </a>
+                  {cart.lines.some((line) => !line.available) ? "Out of stock" : "Check Out"}
+                </button>
                 <div className="mt-[25px] flex items-center justify-between px-[12px]">
                   {PAYMENT_MARKS.map((mark) => (
                     <Image

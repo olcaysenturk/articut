@@ -17,7 +17,7 @@ export function MobileProductSection({ product, image }: { product: Product; ima
           <AddToCartButton
             variantId={variant?.id ?? null}
             quantity={1}
-            disabled={!variant || !product.available}
+            disabled={!variant?.available || !product.available}
             label={`Add to Cart    →    ${formatCompactMoney(variant?.price ?? product.price)}`}
             className="yellow-center-hover h-[46px] w-[241px] whitespace-pre bg-[#e0e0e0] px-4 text-[12px] font-normal text-[#e04d26]"
           >

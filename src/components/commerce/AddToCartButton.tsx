@@ -29,7 +29,7 @@ export function AddToCartButton({
   const setLoading = useCartStore((state) => state.setLoading);
 
   function handleClick() {
-    if (!variantId) {
+    if (!variantId || disabled || isPending) {
       return;
     }
 
@@ -57,10 +57,10 @@ export function AddToCartButton({
       onClick={handleClick}
       disabled={disabled || !variantId || isPending}
       aria-busy={isPending}
-      aria-label={children ? label : undefined}
+      aria-label={disabled ? "Out of stock" : children ? label : undefined}
       className={className}
     >
-      {children ?? label}
+      {disabled ? "Out of stock" : children ?? label}
     </Button>
   );
 }

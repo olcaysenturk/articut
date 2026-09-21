@@ -1,11 +1,11 @@
 {
   "about": {
     "heroTitle": "We are Articut™.\r\nAn innovative company designing tools\r\nthat make professional-quality haircuts possible at home.",
-    "heroVideoUrl": "/cms-import/ad8a6b4314202c888495.mp4",
-    "heroMobileVideoUrl": "/cms-import/6a8e31f7e7a0a2b5ff8a.mp4",
-    "heroPosterUrl": "/cms-import/f0e2bc9224265471ef3d.png",
+    "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
+    "heroMobileVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218880253/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=ee867fcc4b86d4754674feafe98a27224bc83f41791b75d3aba032e94a6eccf6",
+    "heroPosterUrl": "/images/about-hero-poster.png",
     "storyContent": "Articut™ carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut™, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\r\n\r\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut™.\r\n\r\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
-    "storyImageUrl": "/cms-import/36f9bf184ce7045e78bd.png",
+    "storyImageUrl": "/images/editorial/about-barber.png",
     "contactTitle": "Contact Us",
     "contactItems": [
       {
@@ -19,27 +19,27 @@
     ]
   },
   "home": {
-    "heroVideoUrl": "/cms-import/bfb9aebc2a3067dd5c08.mp4",
-    "mobileHeroVideoUrl": "/cms-import/bfb9aebc2a3067dd5c08.mp4",
+    "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218870695/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=9e163b09729e2009c057f3d2936e8e6bac42563673c8f3aca3eebbf31d1f5e48",
+    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218870695/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=9e163b09729e2009c057f3d2936e8e6bac42563673c8f3aca3eebbf31d1f5e48",
     "heroPoster": {
-      "src": "/cms-import/495a5da0d225b2da11c2.png",
+      "src": "/images/hero-poster.png",
       "alt": "Homepage hero poster"
     },
     "productImage": {
-      "src": "/cms-import/eb6846e2af63b427408a.png",
+      "src": "/figma/cutpilot-tile.png",
       "alt": "Cutpilot package"
     },
     "packShowcaseImage": {
-      "src": "/cms-import/b6d169c796b2a80e76be.png",
+      "src": "/figma/cutpilot-pack.png",
       "alt": "Cutpilot tool"
     },
     "mobileHeroPoster": {
-      "src": "/cms-import/495a5da0d225b2da11c2.png",
+      "src": "/images/hero-poster.png",
       "alt": "Mobile homepage hero poster"
     },
     "imageShowcase": [
       {
-        "src": "/cms-import/7ad4ae4afd0ae5bc00f9.jpg",
+        "src": "/images/product-detail/cutpilot-slider-3.jpg",
         "alt": "Cutpilot in use",
         "type": "image"
       }
@@ -48,39 +48,39 @@
   "productDetail": {
     "mediaStrip": [
       {
-        "src": "/cms-import/ecefabce02288f4fca5d.jpg",
+        "src": "/images/product-detail/gallery-left.jpg",
         "alt": "Cutpilot lifestyle 1",
         "type": "image"
       },
       {
         "type": "video",
-        "src": "/cms-import/0185a4cd0f066848a5ab.mp4"
+        "src": "/videos/gallery-video-1.mp4"
       },
       {
-        "src": "/cms-import/1561627c26c21090c5e2.jpg",
+        "src": "/images/product-detail/package-room.jpg",
         "alt": "Cutpilot lifestyle 3",
         "type": "image"
       },
       {
         "type": "video",
-        "src": "/cms-import/ad6928adae88005ce23e.mp4"
+        "src": "/videos/gallery-video-2.mp4"
       },
       {
-        "src": "/cms-import/ab63ae761da4baac1920.png",
+        "src": "/api/cms-media/cms-media/1788889389745-aaa85f265f8ac20f-artboard-1-04-1.png",
         "alt": "",
         "type": "image"
       }
     ],
     "packageImage": {
-      "src": "/cms-import/138455bd7e37757105db.jpg",
+      "src": "/api/cms-media/cms-media/1788967760196-347a927fc5c58291-cutpilot-add-to-cart.jpg",
       "alt": "Cutpilot product packaging"
     },
     "featureBackgroundMobile": {
-      "src": "/cms-import/6f99e38117ad51ff4687.jpg",
+      "src": "/images/product-detail/in-use.jpg",
       "alt": "Cutpilot in use"
     },
     "featureBackground": {
-      "src": "/cms-import/6f99e38117ad51ff4687.jpg",
+      "src": "/images/product-detail/in-use.jpg",
       "alt": "Cutpilot in use"
     },
     "featureTexts": [
@@ -89,40 +89,40 @@
       "6 adjustable length options"
     ],
     "combsImage": {
-      "src": "/cms-import/d80248c8199828e16c4c.jpg",
+      "src": "/images/product-detail/cutpilot-combs-grid.jpg",
       "alt": "Cutpilot combs and attachments"
     },
     "slider": [
       {
-        "src": "/cms-import/67fc693d9ec3e6b74cc3.jpg",
+        "src": "/images/product-detail/cutpilot-slider-2.jpg",
         "alt": "Cutpilot tool below a bathroom mirror"
       },
       {
-        "src": "/cms-import/9f60a67455b7097ce9b6.jpg",
+        "src": "/images/product-detail/cutpilot-slider-1.jpg",
         "alt": "Open Cutpilot package and tool on a sofa"
       },
       {
-        "src": "/cms-import/7ad4ae4afd0ae5bc00f9.jpg",
+        "src": "/images/product-detail/cutpilot-slider-3.jpg",
         "alt": "Cutpilot package on a yellow table"
       }
     ],
     "productReveal": [
       {
-        "src": "/cms-import/a47c2b2cc1e5d40e6686.png",
+        "src": "/api/cms-media?key=cms-media%2F1788856184196-6cd765b45f1d6942-artboard-1-04-1-2.png",
         "alt": ""
       },
       {
-        "src": "/cms-import/b1f62f8444989f6fc2e1.png",
+        "src": "/api/cms-media/cms-media/1788860214635-312ee90cf7c84f32-aaaa.png",
         "alt": ""
       }
     ],
     "productRevealMobile": [
       {
-        "src": "/cms-import/320129841d2bae767112.png",
+        "src": "/api/cms-media/cms-media/1788860328265-aaa85f265f8ac20f-artboard-1-04-1.png",
         "alt": "Cutpilot package held above a model"
       },
       {
-        "src": "/cms-import/a652644dfe755d9c3562.png",
+        "src": "/api/cms-media/cms-media/1788860328640-2e67e07c817cad6c-artboard-1-08-1.png",
         "alt": "Open Cutpilot package on a chair"
       }
     ],
@@ -131,11 +131,11 @@
         "layout": "grid",
         "images": [
           {
-            "src": "/cms-import/7f099880dbb83a4e0811.jpg",
+            "src": "/api/cms-media/cms-media/1788967760388-ba1cb331b8d16afc-cutpilot-box1.jpg",
             "alt": ""
           },
           {
-            "src": "/cms-import/412e25a9a7c638640dbb.jpg",
+            "src": "/api/cms-media/cms-media/1788967760396-ffeba85ab8f14d1c-cutpilot-box2.jpg",
             "alt": ""
           }
         ]
@@ -144,7 +144,7 @@
         "layout": "single",
         "images": [
           {
-            "src": "/cms-import/d80248c8199828e16c4c.jpg",
+            "src": "/images/product-detail/cutpilot-combs-grid.jpg",
             "alt": "Cutpilot combs and attachments"
           }
         ]
@@ -155,11 +155,11 @@
         "layout": "grid",
         "images": [
           {
-            "src": "/cms-import/320129841d2bae767112.png",
+            "src": "/api/cms-media/cms-media/1788860328265-aaa85f265f8ac20f-artboard-1-04-1.png",
             "alt": "Cutpilot package held above a model"
           },
           {
-            "src": "/cms-import/a652644dfe755d9c3562.png",
+            "src": "/api/cms-media/cms-media/1788860328640-2e67e07c817cad6c-artboard-1-08-1.png",
             "alt": "Open Cutpilot package on a chair"
           }
         ]
@@ -168,7 +168,7 @@
         "layout": "single",
         "images": [
           {
-            "src": "/cms-import/d80248c8199828e16c4c.jpg",
+            "src": "/images/product-detail/cutpilot-combs-grid.jpg",
             "alt": "Cutpilot combs and attachments"
           }
         ]
@@ -178,7 +178,7 @@
       {
         "title": "Set",
         "image": {
-          "src": "/cms-import/7e6a6a4c6a038c7ab3c0.png",
+          "src": "/api/cms-media/cms-media/1789395031118-3b8ba45249807d3b-step-set.png",
           "alt": "Set Cutpilot"
         },
         "description": "the numbered dial in the center of Cutpilot to set your desired cutting length."
@@ -186,7 +186,7 @@
       {
         "title": "Place",
         "image": {
-          "src": "/cms-import/89dbb8fe2c92e345a202.jpg",
+          "src": "/images/product-detail/step-place.jpg",
           "alt": "Place Cutpilot"
         },
         "description": "Cutpilot on the hair to position the cutting angle."
@@ -194,7 +194,7 @@
       {
         "title": "Split",
         "image": {
-          "src": "/cms-import/6a509b48a019c7a9b239.jpg",
+          "src": "/images/product-detail/step-split.jpg",
           "alt": "Split Cutpilot"
         },
         "description": "Cutpilot with both fingers as much as you can."
@@ -202,7 +202,7 @@
       {
         "title": "Cut",
         "image": {
-          "src": "/cms-import/1fb6bd7c5928e2babe84.jpg",
+          "src": "/images/product-detail/step-cut.jpg",
           "alt": "Cut Cutpilot"
         },
         "description": "any hair that remains outside Cutpilot using scissors or a hair clipper."

@@ -58,6 +58,7 @@ export function CartItem({ line, onChange }: CartItemProps) {
         <div className="flex items-start justify-between gap-4 text-[22px] leading-none">
           <div className="min-w-0">
             <p className="truncate">{line.productTitle}</p>
+            {!line.available && <p className="mt-2 text-[12px] text-[#e94b24]">Out of stock</p>}
             {line.variantTitle && line.variantTitle !== "Default Title" ? (
               <p className="mt-2 truncate text-[11px] opacity-60">{line.variantTitle}</p>
             ) : null}
@@ -71,7 +72,7 @@ export function CartItem({ line, onChange }: CartItemProps) {
               type="button"
               aria-label="Increase quantity"
               onClick={() => handleQuantityChange(Math.min(99, line.quantity + 1))}
-              disabled={isPending || line.quantity >= 99}
+              disabled={isPending || !line.available || line.quantity >= 99}
               className="h-6 w-6 cursor-pointer text-[20px] transition-[color,transform,opacity] duration-200 hover:scale-110 hover:text-[#e94b24] active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100 disabled:hover:text-inherit"
             >
               +

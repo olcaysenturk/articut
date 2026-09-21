@@ -342,8 +342,13 @@ const legacyCmsContentSchema = z.object({
 
 const CMS_CONTENT_PATH = path.join(process.cwd(), "data", "cms-content.json");
 
+function useLocalCmsContent() {
+  return process.env.NODE_ENV === "development" && process.env.CMS_CONTENT_SOURCE === "local";
+}
+
 export async function getCmsContent(): Promise<CmsContent> {
-  const raw = (await readCmsContentBlob()) ?? await readFile(CMS_CONTENT_PATH, "utf8");
+  const remote = useLocalCmsContent() ? null : await readCmsContentBlob();
+  const raw = remote ?? await readFile(CMS_CONTENT_PATH, "utf8");
   const json = JSON.parse(raw);
   const parsed = cmsContentSchema.safeParse(json);
 
@@ -526,7 +531,7 @@ export async function getCmsContent(): Promise<CmsContent> {
 
 export async function saveCmsContent(content: CmsContent): Promise<void> {
   const parsed = cmsContentSchema.parse(content);
-  if (await writeCmsContentBlob(parsed)) return;
+  if (!useLocalCmsContent() && await writeCmsContentBlob(parsed)) return;
 
   if (process.env.NETLIFY === "true" || process.env.NODE_ENV === "production") {
     throw new Error(

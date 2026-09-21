@@ -44,7 +44,7 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
           <AddToCartButton
             variantId={variant?.id ?? null}
             quantity={1}
-            disabled={!variant || !product.available}
+            disabled={!variant?.available || !product.available}
             label={`Add to Cart, ${price}`}
             className="h-full w-full cursor-pointer whitespace-pre bg-transparent px-4 text-[14px] font-normal text-[#e0e0e0] md:px-8 md:text-[20px]"
           >

@@ -29,7 +29,7 @@ export function ProductAddBadge({ product }: { product: Product }) {
         <AddToCartButton
           variantId={variant?.id ?? null}
           quantity={1}
-          disabled={!variant || !product.available}
+          disabled={!variant?.available || !product.available}
           label="Add to Cart"
           className="relative h-[241px] w-[243px] cursor-pointer bg-transparent p-0 transition-transform hover:scale-105 hover:opacity-100"
         >

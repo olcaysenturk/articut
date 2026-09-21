@@ -6,11 +6,14 @@ import { cartCreate } from "@/lib/shopify/mutations/cart-create";
 import { cartLinesAdd } from "@/lib/shopify/mutations/cart-add";
 import { cartLinesRemove } from "@/lib/shopify/mutations/cart-remove";
 import { cartLinesUpdate } from "@/lib/shopify/mutations/cart-update";
+import { isVariantAvailable } from "@/lib/shopify/queries/variant";
 import { getCart } from "@/lib/shopify/queries/cart";
 import { toCart } from "@/lib/shopify/mappers";
 import type { BuyNowResult, CartActionResult } from "@/features/cart/cart-types";
 import { normalizeCartQuantity } from "@/features/cart/cart-pricing";
 import type { ShopifyCart, ShopifyUserError } from "@/lib/shopify/types";
+
+const OUT_OF_STOCK_ERROR = "This product is out of stock.";
 
 const GENERIC_CART_ERROR = "Sepet güncellenemedi. Lütfen tekrar deneyin.";
 
@@ -75,6 +78,9 @@ export async function getOrCreateCart(): Promise<CartActionResult> {
 
 export async function addToCart(variantId: string, quantity: number): Promise<CartActionResult> {
   try {
+    if (!(await isVariantAvailable(variantId))) {
+      return { success: false, error: OUT_OF_STOCK_ERROR };
+    }
     const cartId = await ensureCart();
     const { cart, userErrors } = await cartLinesAdd(cartId, [
       { merchandiseId: variantId, quantity: normalizeCartQuantity(quantity) },
@@ -94,6 +100,13 @@ export async function updateCartLineQuantity(
     const cartId = await getCartId();
     if (!cartId) {
       return { success: false, error: GENERIC_CART_ERROR };
+    }
+
+    const currentCart = await getCart(cartId);
+    const line = currentCart?.lines.nodes.find((item) => item.id === lineId);
+    if (!line) return { success: false, error: GENERIC_CART_ERROR };
+    if (!line.merchandise.availableForSale) {
+      return { success: false, error: OUT_OF_STOCK_ERROR };
     }
 
     const { cart, userErrors } = await cartLinesUpdate(cartId, [
@@ -123,6 +136,9 @@ export async function removeCartLine(lineId: string): Promise<CartActionResult> 
 
 export async function buyNow(variantId: string, quantity: number): Promise<BuyNowResult> {
   try {
+    if (!(await isVariantAvailable(variantId))) {
+      return { success: false, error: OUT_OF_STOCK_ERROR };
+    }
     const cartId = await ensureCart();
     const { cart, userErrors } = await cartLinesAdd(cartId, [
       { merchandiseId: variantId, quantity: normalizeCartQuantity(quantity) },

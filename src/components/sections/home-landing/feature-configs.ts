@@ -45,9 +45,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   },
   detailsClassName: "z-10",
   animation: {
-    animateHeading: true,
-    headingDuration: 0.9,
-    headingStagger: 0.04,
+    animateHeading: false,
     animateDetails: true,
     scrollStart: "top bottom-=290px",
     scrollEnd: "top top",

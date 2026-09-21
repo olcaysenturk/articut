@@ -1,4 +1,5 @@
 import "server-only";
+import { DEFAULT_PRODUCT_FAQ } from "@/lib/product-faq";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
@@ -262,9 +263,9 @@ const cmsContentSchema = z.object({
     featureBackgroundMobile: imageSchema.optional(),
     featureBackground: imageSchema.default({ src: "/images/product-detail/in-use.jpg", alt: "Cutpilot in use" }),
     featureTexts: z.array(z.string().trim().min(1)).min(1).default([
-      "compatible with most hair types",
-      "full control with easy-to-hold grips",
-      "6 adjustable length options",
+      "compatible with#most hair types",
+      "full control with#easy-to-hold grips",
+      "6 adjustable#length options",
     ]),
     combsImage: imageSchema.default({
       src: "/images/product-detail/cutpilot-combs-grid.jpg",
@@ -276,6 +277,7 @@ const cmsContentSchema = z.object({
     revealSections: z.array(revealSectionSchema).optional(),
     revealSectionsMobile: z.array(revealSectionSchema).optional(),
     steps: z.array(stepSchema).min(1).default(DEFAULT_STEPS),
+    faq: z.array(faqItemSchema).min(1).default(DEFAULT_PRODUCT_FAQ),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema).min(1),
@@ -327,6 +329,7 @@ const legacyCmsContentSchema = z.object({
     revealSections: z.array(revealSectionSchema).optional(),
     revealSectionsMobile: z.array(revealSectionSchema).optional(),
     steps: z.array(stepSchema).optional(),
+    faq: z.array(faqItemSchema).min(1).optional(),
   }),
   faq: z.object({
     sections: z.array(faqSectionSchema),
@@ -403,10 +406,11 @@ export async function getCmsContent(): Promise<CmsContent> {
     productDetail: {
       featureBackgroundMobile: legacy.productDetail.featureBackgroundMobile,
       featureBackground: legacy.productDetail.featureBackground ?? { src: "/images/product-detail/in-use.jpg", alt: "Cutpilot in use" },
-      featureTexts: legacy.productDetail.featureTexts ?? ["compatible with most hair types", "full control with easy-to-hold grips", "6 adjustable length options"],
+      featureTexts: legacy.productDetail.featureTexts ?? ["compatible with#most hair types", "full control with#easy-to-hold grips", "6 adjustable#length options"],
       revealSections: legacy.productDetail.revealSections,
       revealSectionsMobile: legacy.productDetail.revealSectionsMobile,
       steps: legacy.productDetail.steps ?? DEFAULT_STEPS,
+      faq: legacy.productDetail.faq ?? DEFAULT_PRODUCT_FAQ,
       combsImage: legacy.productDetail.combsImage ?? {
         src: "/images/product-detail/cutpilot-combs-grid.jpg",
         alt: "Cutpilot combs and attachments",

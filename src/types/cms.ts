@@ -76,6 +76,7 @@ export type CmsContent = {
     revealSections?: CmsRevealSection[];
     revealSectionsMobile?: CmsRevealSection[];
     steps: CmsStep[];
+    faq: FaqItem[];
   };
   faq: {
     sections: FaqSection[];

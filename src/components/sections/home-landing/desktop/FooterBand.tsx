@@ -51,7 +51,7 @@ export function FooterBand() {
           info@articut.com
           <FooterArrow />
         </a>
-        <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link-with-arrow block">
+        <a href="https://www.instagram.com/_articut_/" target="_blank" rel="noreferrer" className="footer-link-with-arrow block">
           Instagram
           <FooterArrow />
         </a>

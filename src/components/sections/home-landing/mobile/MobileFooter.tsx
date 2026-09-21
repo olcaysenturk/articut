@@ -46,7 +46,7 @@ export function MobileFooter() {
           info@articut.com
           <FooterArrow />
         </a>
-        <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link-with-arrow block">
+        <a href="https://www.instagram.com/_articut_/" target="_blank" rel="noreferrer" className="footer-link-with-arrow block">
           Instagram
           <FooterArrow />
         </a>
@@ -60,15 +60,15 @@ export function MobileFooter() {
           className="object-contain"
         />
       </div>
-      <p className="absolute bottom-[min(14px,3.56vw)] left-[min(32px,8.14vw)] text-[min(8px,2.04vw)] uppercase leading-none">© 2026 ARTICUT™</p>
-      <p className="absolute bottom-[min(14px,3.56vw)] left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-[min(8px,2.04vw)] leading-none">
+      <p className="absolute bottom-[min(14px,3.56vw)] left-[min(32px,8.14vw)] text-[min(7px,1.79vw)] uppercase leading-none">© 2026 ARTICUT™</p>
+      <p className="absolute bottom-[min(14px,3.56vw)] left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-[min(7px,1.79vw)] leading-none">
         ALL RIGHTS RESERVED
       </p>
       <a
         href="https://artistudyo.com"
         target="_blank"
         rel="noreferrer"
-        className="absolute bottom-[min(14px,3.56vw)] right-[min(32px,8.14vw)] w-[min(103px,26.21vw)] text-right text-[min(8px,2.04vw)] uppercase leading-none"
+        className="absolute bottom-[min(14px,3.56vw)] right-[min(32px,8.14vw)] whitespace-nowrap text-right text-[min(7px,1.79vw)] uppercase leading-none"
       >
         DESIGNED BY ARTI STÜDYO®
       </a>

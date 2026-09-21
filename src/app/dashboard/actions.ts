@@ -253,6 +253,7 @@ export async function saveProductDetailContentAction(formData: FormData) {
       mediaStrip: mediaStrip.length > 0 ? mediaStrip : content.productDetail.mediaStrip,
       slider: slider.length > 0 ? slider : content.productDetail.slider,
       steps: steps.length > 0 ? steps : content.productDetail.steps,
+      faq: formData.has("product-faq") ? JSON.parse(field(formData, "product-faq")) : content.productDetail.faq,
     },
   });
 

@@ -11,7 +11,7 @@ import { ProductPurchaseCta } from "@/components/product-detail/ProductPurchaseC
 import { StepsSection } from "@/components/product-detail/StepsSection";
 import { StoreHeader } from "@/components/layout/StoreHeader";
 import { CutpilotPackageImage } from "@/components/sections/product/CutpilotPackageImage";
-import type { CmsImage, CmsMediaItem, CmsRevealSection, CmsStep } from "@/types/cms";
+import type { FaqItem, CmsImage, CmsMediaItem, CmsRevealSection, CmsStep } from "@/types/cms";
 import type { Product } from "@/types/shopify";
 
 const PRODUCT_ASSET = "/images/product-detail";
@@ -24,7 +24,25 @@ const HAIR_TYPES = [
   ["Thick / Coarse", "Clean, slightly damp, well-combed"],
 ];
 
+function FeatureOverlayText({ text }: { text: string }) {
+  const parts = text.split("#");
 
+  return (
+    <span>
+      {parts.map((part, index) => (
+        <span key={`${part}-${index}`}>
+          {index > 0 && (
+            <>
+              <br className="md:hidden" />
+              <span className="hidden md:inline"> </span>
+            </>
+          )}
+          {part}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 function ProductRevealSections({ sections, mobile = false }: { sections: CmsRevealSection[]; mobile?: boolean }) {
   return (
@@ -53,6 +71,7 @@ export function CutpilotProductPage({
   product,
   sliderImages,
   steps,
+  faq,
 }: {
   mediaStrip: CmsMediaItem[];
   packageImage: CmsImage;
@@ -64,6 +83,7 @@ export function CutpilotProductPage({
   product: Product;
   sliderImages: CmsImage[];
   steps: CmsStep[];
+  faq: FaqItem[];
 }) {
   return (
     <ProductDetailMotion>
@@ -85,7 +105,7 @@ export function CutpilotProductPage({
             className="w-screen max-w-none"
           />
         </div>
-        <div className="absolute inset-x-0 top-[19%] z-10 flex justify-center md:top-[-4%]">
+        <div className="absolute left-1/2 top-[19%] z-10 flex w-screen -translate-x-1/2 justify-center md:top-[-4%]">
           <Image
             data-hero-product
             src={`${PRODUCT_ASSET}/hero-product.png`}
@@ -94,7 +114,7 @@ export function CutpilotProductPage({
             height={1688}
             priority
             sizes="100vw"
-            className="w-[122vw] max-w-none shrink-0 -rotate-[20deg] md:w-[86%] md:max-w-[86%] md:-rotate-[0.8deg]"
+            className="mx-auto w-[112vw] max-w-none shrink-0 -rotate-[20deg] md:w-[86%] md:max-w-[86%] md:-rotate-[0.8deg]"
           />
         </div>
       </section>
@@ -192,7 +212,7 @@ export function CutpilotProductPage({
             <div data-feature-overlay-track className="absolute left-0 top-0 flex w-full flex-col items-center gap-[90px]">
               {featureTexts.map((feature, index) => (
                 <p data-feature-overlay-item key={index} className="flex shrink-0 items-center justify-center px-6 text-[28px] opacity-0">
-                  {feature}
+                  <FeatureOverlayText text={feature} />
                 </p>
               ))}
             </div>
@@ -201,7 +221,7 @@ export function CutpilotProductPage({
       </section>
 
       <div data-scroll-snap-ignore>
-        <ProductFaq />
+        <ProductFaq items={faq} />
       </div>
 
       <ProductMediaStrip>

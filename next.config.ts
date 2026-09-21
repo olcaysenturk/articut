@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       {
+        pathname: "/cms-import/**",
+        search: "",
+      },
+      {
         pathname: "/api/cms-media",
       },
       {

@@ -254,7 +254,7 @@ export function MobileScissorMenuButton({
                   info@articut.com
                   <MenuArrow />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link-with-arrow text-right">
+                <a href="https://www.instagram.com/_articut_/" target="_blank" rel="noreferrer" className="footer-link-with-arrow text-right">
                   Instagram
                   <MenuArrow />
                 </a>

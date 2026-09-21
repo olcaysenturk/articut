@@ -50,6 +50,7 @@ export default async function CutpilotPage() {
       product={product}
         sliderImages={cmsContent.productDetail.slider}
         steps={cmsContent.productDetail.steps}
+        faq={cmsContent.productDetail.faq}
       />
     </VideoLoadingGate>
   );

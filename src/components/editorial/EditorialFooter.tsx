@@ -38,7 +38,7 @@ export function EditorialFooter() {
             info@articut.com
             <FooterArrow />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-link-with-arrow">
+          <a href="https://www.instagram.com/_articut_/" target="_blank" rel="noreferrer" className="footer-link-with-arrow">
             Instagram
             <FooterArrow />
           </a>

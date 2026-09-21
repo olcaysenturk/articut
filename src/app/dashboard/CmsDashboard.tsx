@@ -33,6 +33,7 @@ export type ActivePanel =
   | "product-media-strip"
   | "product-reveal"
   | "product-detail"
+  | "product-faq"
   | "product-steps"
   | "faq"
   | "terms"
@@ -102,6 +103,7 @@ const panels = [
       { key: "product-media-strip" as const, label: "Media strip" },
       { key: "product-reveal" as const, label: "Product reveal" },
       { key: "product-steps" as const, label: "How-to-use steps" },
+      { key: "product-faq" as const, label: "Product questions" },
       { key: "product-features" as const, label: "Feature overlay" },
     ],
   },
@@ -203,6 +205,7 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "product-package") return "Package image";
   if (panel === "product-media-strip") return "Media strip";
   if (panel === "product-reveal") return "Product reveal";
+  if (panel === "product-faq") return "Product questions";
   if (panel === "product-steps") return "How-to-use steps";
   if (panel === "home-hero") return "Hero video";
   if (panel === "home-product") return "Product image";
@@ -1730,6 +1733,7 @@ export function CmsDashboard({
   const [featureBackgroundMobile, setFeatureBackgroundMobile] = useState<ManagedImage>(
     toManagedImage(content.productDetail.featureBackgroundMobile ?? content.productDetail.featureBackground, "product-feature-background-mobile", 0),
   );
+  const [productFaq, setProductFaq] = useState(content.productDetail.faq);
   const [featureTexts, setFeatureTexts] = useState(content.productDetail.featureTexts.join("\n"));
   const [productPackageImage, setProductPackageImage] = useState<ManagedImage>(
     toManagedImage(content.productDetail.packageImage, "product-package", 0),
@@ -2130,7 +2134,7 @@ export function CmsDashboard({
           <p className="text-sm text-[#6f6f6f]">The desktop image is used by default. Upload a different image to customize the mobile background.</p>
           <label className="block rounded-xl border border-[#e5e5e5] bg-white p-6 text-sm shadow-sm">
             <span className="font-semibold">Animated text</span>
-            <span id="feature-texts-help" className="mt-1 block text-xs text-[#6f6f6f]">Enter one message per line. Messages appear in this order while scrolling.</span>
+            <span id="feature-texts-help" className="mt-1 block text-xs text-[#6f6f6f]">Enter one message per line. Use # inside a message to force a mobile line break.</span>
             <textarea name="product-feature-texts" aria-describedby="feature-texts-help" rows={6} required
               value={featureTexts} onChange={(event) => setFeatureTexts(event.target.value)}
               className="mt-3 w-full rounded-lg border border-[#b8b8b8] p-3 focus:border-[#e04d26] focus:outline-none" />
@@ -2189,6 +2193,29 @@ export function CmsDashboard({
             sections={productRevealViewport === "desktop" ? revealSections : revealSectionsMobile}
             setSections={productRevealViewport === "desktop" ? setRevealSections : setRevealSectionsMobile}
           />
+        </div>
+
+        <input type="hidden" name="product-faq" value={JSON.stringify(productFaq)} />
+        <div className={activePanel === "product-faq" ? "space-y-4" : "hidden"}>
+          <p className="text-sm text-black/60">Edit the questions shown at the bottom of the Cutpilot product page.</p>
+          {productFaq.map((item, index) => (
+            <div key={index} className="space-y-3 rounded-xl border border-black/10 bg-white p-5">
+              <label className="block text-sm font-medium">
+                Question {index + 1}
+                <input className="mt-2 w-full rounded border border-black/20 p-3" value={item.question}
+                  onChange={(event) => setProductFaq((items) => items.map((entry, i) => i === index ? { ...entry, question: event.target.value } : entry))} />
+              </label>
+              <label className="block text-sm font-medium">
+                Answer
+                <textarea rows={4} className="mt-2 w-full rounded border border-black/20 p-3" value={item.answer}
+                  onChange={(event) => setProductFaq((items) => items.map((entry, i) => i === index ? { ...entry, answer: event.target.value } : entry))} />
+              </label>
+              <button type="button" disabled={productFaq.length <= 1} className="text-sm text-red-600 disabled:opacity-40"
+                onClick={() => setProductFaq((items) => items.filter((_, i) => i !== index))}>Remove question</button>
+            </div>
+          ))}
+          <button type="button" className="rounded-lg bg-black px-4 py-2 text-sm text-white"
+            onClick={() => setProductFaq((items) => [...items, { question: "", answer: "" }])}>Add question</button>
         </div>
 
         <div className={activePanel === "product-steps" ? "block" : "hidden"}>

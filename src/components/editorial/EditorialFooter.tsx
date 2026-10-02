@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 function FooterArrow() {
   return (
@@ -16,11 +17,14 @@ function FooterArrow() {
   );
 }
 
-export function EditorialFooter() {
+export function EditorialFooter({ className }: { className?: string }) {
   return (
     <footer
       data-site-footer
-      className="relative flex h-[min(453px,115.27vw)] flex-col justify-between overflow-hidden bg-[#a5a5a5] px-[min(32px,8.14vw)] pb-[min(14px,3.56vw)] pt-[min(24px,6.11vw)] text-[#e04d26] md:block md:h-[690px] md:px-[50px] md:pb-0 md:pt-[63px] [&_p]:leading-[inherit]"
+      className={cn(
+        "relative flex h-[min(453px,115.27vw)] flex-col justify-between overflow-hidden bg-[#a5a5a5] px-[min(32px,8.14vw)] pb-[min(14px,3.56vw)] pt-[min(24px,6.11vw)] text-[#e04d26] md:block md:h-[690px] md:px-[50px] md:pb-0 md:pt-[63px] [&_p]:leading-[inherit]",
+        className,
+      )}
     >
       <div className="relative z-10 grid grid-cols-[min(48px,12.21vw)_min(94px,23.92vw)_min(126px,32.06vw)] justify-between gap-0 text-[10px] leading-[24px] md:grid-cols-3 md:gap-4 md:text-[18px] md:leading-[24px]">
         <nav className="flex flex-col" aria-label="Footer navigation">
@@ -29,9 +33,17 @@ export function EditorialFooter() {
           <Link href="/cutpilot">Cutpilot™</Link>
         </nav>
         <nav className="flex flex-col" aria-label="Policies">
-          <Link href="/faq">FAQ</Link>
-          <Link href="/terms">Terms &amp; Conditions</Link>
-          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/faq">FAQs</Link>
+          <span>
+            <Link href="/returns">Returns</Link>
+            <span aria-hidden="true"> | </span>
+            <Link href="/privacy">Privacy Policy</Link>
+          </span>
+          <span>
+            <Link href="/safety-usage">Safety &amp; Usage</Link>
+            <span aria-hidden="true"> | </span>
+            <Link href="/terms">Terms &amp; Conditions</Link>
+          </span>
         </nav>
         <div className="flex flex-col items-end whitespace-nowrap text-right">
           <a href="mailto:info@articut.com" className="footer-link-with-arrow">

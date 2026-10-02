@@ -88,6 +88,26 @@ async function mediaItemFromForm(formData: FormData, prefix: string): Promise<Cm
   return null;
 }
 
+function indexedFieldNumbers(formData: FormData, prefix: string) {
+  return Array.from(new Set(Array.from(formData.keys())
+    .map((key) => key.match(new RegExp(`^${prefix}-(\\d+)-(?:type|src|file)$`))?.[1])
+    .filter((index): index is string => Boolean(index))
+    .map(Number)))
+    .sort((a, b) => a - b);
+}
+
+async function mediaListFromForm(formData: FormData, prefix: string, indexes: number[]) {
+  const items: CmsMediaItem[] = [];
+
+  // Upload one file at a time so multiple Blob writes cannot race each other.
+  for (const index of indexes) {
+    const item = await mediaItemFromForm(formData, `${prefix}-${index}`);
+    if (item) items.push(item);
+  }
+
+  return items;
+}
+
 function revalidateCmsContent() {
   revalidatePath("/");
   revalidatePath("/about");
@@ -95,6 +115,8 @@ function revalidateCmsContent() {
   revalidatePath("/faq");
   revalidatePath("/terms");
   revalidatePath("/privacy");
+  revalidatePath("/returns");
+  revalidatePath("/safety-usage");
   revalidatePath("/dashboard");
 }
 
@@ -152,16 +174,8 @@ export async function saveHomeContentAction(formData: FormData) {
     "home-product-image",
     content.home.productImage.src,
   );
-  const showcaseIndexes = Array.from(formData.keys())
-    .map((key) => key.match(/^showcase-(\d+)-type$/)?.[1])
-    .filter((index): index is string => Boolean(index))
-    .map(Number)
-    .sort((a, b) => a - b);
-  const imageShowcase = (
-    await Promise.all(
-      showcaseIndexes.map((index) => mediaItemFromForm(formData, `showcase-${index}`)),
-    )
-  ).filter((item): item is CmsMediaItem => Boolean(item));
+  const showcaseIndexes = indexedFieldNumbers(formData, "showcase");
+  const imageShowcase = await mediaListFromForm(formData, "showcase", showcaseIndexes);
 
   await saveCmsContent({
     ...content,
@@ -228,16 +242,8 @@ export async function saveProductDetailContentAction(formData: FormData) {
   const slider = await imageListFromForm(formData, "slider", sliderIndexes);
   const revealSections = await revealSectionsFromForm(formData, "reveal-sections");
   const revealSectionsMobile = await revealSectionsFromForm(formData, "reveal-sections-mobile");
-  const mediaStripIndexes = Array.from(formData.keys())
-    .map((key) => key.match(/^media-strip-(\d+)-type$/)?.[1])
-    .filter((index): index is string => Boolean(index))
-    .map(Number)
-    .sort((a, b) => a - b);
-  const mediaStrip = (
-    await Promise.all(
-      mediaStripIndexes.map((index) => mediaItemFromForm(formData, `media-strip-${index}`)),
-    )
-  ).filter((item): item is CmsMediaItem => Boolean(item));
+  const mediaStripIndexes = indexedFieldNumbers(formData, "media-strip");
+  const mediaStrip = await mediaListFromForm(formData, "media-strip", mediaStripIndexes);
   const steps = await stepsFromForm(formData, "product-step", content.productDetail.steps);
 
   await saveCmsContent({
@@ -276,8 +282,13 @@ export async function saveAboutContentAction(formData: FormData) {
     text: field(formData, `contact-${index}-text`),
     email: field(formData, `contact-${index}-email`),
   }));
-  const storyImageUpload = await uploadedImagePath(formData, "about-story-image");
+  const storyImageUpload = await uploadedImagePath(formData, "about-story-image-file");
   const storyImageUrl = storyImageUpload || field(formData, "about-story-image-url") || content.about.storyImageUrl;
+  const storyMobileImageUpload = await uploadedImagePath(formData, "about-story-mobile-image-file");
+  const storyMobileImageUrl =
+    storyMobileImageUpload ||
+    field(formData, "about-story-mobile-image-url") ||
+    storyImageUrl;
 
   await saveCmsContent({
     ...content,
@@ -288,6 +299,7 @@ export async function saveAboutContentAction(formData: FormData) {
       heroPosterUrl,
       storyContent: field(formData, "about-story-content"),
       storyImageUrl,
+      storyMobileImageUrl,
       contactTitle: field(formData, "about-contact-title"),
       contactItems: contactItems.length > 0 ? contactItems : content.about.contactItems,
     },
@@ -373,26 +385,60 @@ export async function saveTermsContentAction(formData: FormData) {
   revalidateCmsContent();
 }
 
-export async function savePrivacyContentAction(formData: FormData) {
-  const content = await getCmsContent();
+function legalSectionsFromForm(formData: FormData) {
   const sectionIndexes = Array.from(formData.keys())
     .map((key) => key.match(/^legal-section-(\d+)-title$/)?.[1])
     .filter((index): index is string => Boolean(index))
     .map(Number)
     .sort((a, b) => a - b);
 
-  const sections = sectionIndexes
+  return sectionIndexes
     .map((sectionIndex) => ({
       title: field(formData, `legal-section-${sectionIndex}-title`),
       content: field(formData, `legal-section-${sectionIndex}-content`),
     }))
     .filter((s) => s.title && s.content);
+}
+
+export async function savePrivacyContentAction(formData: FormData) {
+  const content = await getCmsContent();
+  const sections = legalSectionsFromForm(formData);
 
   await saveCmsContent({
     ...content,
     privacy: {
       updated: field(formData, "privacy-updated") || content.privacy.updated,
       sections: sections.length > 0 ? sections : content.privacy.sections,
+    },
+  });
+
+  revalidateCmsContent();
+}
+
+export async function saveReturnsContentAction(formData: FormData) {
+  const content = await getCmsContent();
+  const sections = legalSectionsFromForm(formData);
+
+  await saveCmsContent({
+    ...content,
+    returns: {
+      updated: field(formData, "returns-updated") || content.returns.updated,
+      sections: sections.length > 0 ? sections : content.returns.sections,
+    },
+  });
+
+  revalidateCmsContent();
+}
+
+export async function saveSafetyContentAction(formData: FormData) {
+  const content = await getCmsContent();
+  const sections = legalSectionsFromForm(formData);
+
+  await saveCmsContent({
+    ...content,
+    safety: {
+      updated: field(formData, "safety-updated") || content.safety.updated,
+      sections: sections.length > 0 ? sections : content.safety.sections,
     },
   });
 

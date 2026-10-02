@@ -240,6 +240,7 @@ const cmsContentSchema = z.object({
     heroPosterUrl: z.string().trim().min(1),
     storyContent: z.string().trim(),
     storyImageUrl: z.string().trim().min(1),
+    storyMobileImageUrl: z.string().trim().min(1).optional(),
     contactTitle: z.string().trim(),
     contactItems: z.array(
       z.object({
@@ -289,6 +290,14 @@ const cmsContentSchema = z.object({
     updated: z.string().trim().min(1),
     sections: z.array(legalSectionSchema).min(1),
   }),
+  returns: z.object({
+    updated: z.string().trim().min(1),
+    sections: z.array(legalSectionSchema).min(1),
+  }).optional(),
+  safety: z.object({
+    updated: z.string().trim().min(1),
+    sections: z.array(legalSectionSchema).min(1),
+  }).optional(),
 });
 
 const legacyCmsContentSchema = z.object({
@@ -299,6 +308,7 @@ const legacyCmsContentSchema = z.object({
     heroPosterUrl: z.string().trim().min(1),
     storyContent: z.string().trim(),
     storyImageUrl: z.string().trim().min(1),
+    storyMobileImageUrl: z.string().trim().min(1).optional(),
     contactTitle: z.string().trim(),
     contactItems: z.array(
       z.object({
@@ -341,6 +351,14 @@ const legacyCmsContentSchema = z.object({
     updated: z.string().trim().min(1),
     sections: z.array(legalSectionSchema),
   }).optional(),
+  returns: z.object({
+    updated: z.string().trim().min(1),
+    sections: z.array(legalSectionSchema),
+  }).optional(),
+  safety: z.object({
+    updated: z.string().trim().min(1),
+    sections: z.array(legalSectionSchema),
+  }).optional(),
 });
 
 const CMS_CONTENT_PATH = path.join(process.cwd(), "data", "cms-content.json");
@@ -356,7 +374,11 @@ export async function getCmsContent(): Promise<CmsContent> {
   const parsed = cmsContentSchema.safeParse(json);
 
   if (parsed.success) {
-    return parsed.data;
+    return {
+      ...parsed.data,
+      returns: parsed.data.returns ?? parsed.data.privacy,
+      safety: parsed.data.safety ?? parsed.data.privacy,
+    };
   }
 
   const legacy = legacyCmsContentSchema.parse(json);
@@ -372,6 +394,7 @@ export async function getCmsContent(): Promise<CmsContent> {
       heroPosterUrl: "/images/about-hero-poster.png",
       storyContent: "Articut™ carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut™, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\n\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut™.\n\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
       storyImageUrl: "/images/editorial/about-barber.png",
+      storyMobileImageUrl: "/images/editorial/about-barber.png",
       contactTitle: "Contact Us",
       contactItems: [
         { text: "Have a question? Reach out anytime.", email: "info@articut.com" },
@@ -530,6 +553,8 @@ export async function getCmsContent(): Promise<CmsContent> {
     },
     terms: legacy.terms ?? { sections: DEFAULT_TERMS_SECTIONS },
     privacy: legacy.privacy ?? { updated: DEFAULT_PRIVACY_UPDATED, sections: DEFAULT_PRIVACY_SECTIONS },
+    returns: legacy.returns ?? legacy.privacy ?? { updated: DEFAULT_PRIVACY_UPDATED, sections: DEFAULT_PRIVACY_SECTIONS },
+    safety: legacy.safety ?? legacy.privacy ?? { updated: DEFAULT_PRIVACY_UPDATED, sections: DEFAULT_PRIVACY_SECTIONS },
   };
 }
 

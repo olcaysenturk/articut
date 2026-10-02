@@ -293,7 +293,7 @@ export function FaqForm({
       <form id="faq-form" onSubmit={handleSubmit} className="space-y-6">
         {isSaving ? <div className="fixed inset-0 z-[100] grid place-items-center bg-black/25 px-4 backdrop-blur-[2px]" role="status"><div className="flex items-center gap-3 rounded-lg bg-white px-5 py-4 text-sm font-semibold text-[#1f1f1f] shadow-2xl"><span className="size-5 animate-spin rounded-full border-2 border-[#e04d26]/25 border-t-[#e04d26]" aria-hidden="true" />Saving changes...</div></div> : null}
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="text-lg font-semibold text-[#1f1f1f]">FAQ Sections</div>
+          <div className="text-lg font-semibold text-[#1f1f1f]">FAQs Sections</div>
           <button
             type="button"
             onClick={addSection}

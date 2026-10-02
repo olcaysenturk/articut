@@ -11,10 +11,18 @@ type DragState = { sectionIndex: number } | null;
 export function PrivacyForm({
   sections: initialSections,
   updated: initialUpdated,
+  formId = "privacy-form",
+  panelKey = "privacy",
+  title = "Privacy Policy Sections",
+  updatedFieldName = "privacy-updated",
   onSubmit,
 }: {
   sections: LegalSectionContent[];
   updated: string;
+  formId?: string;
+  panelKey?: string;
+  title?: string;
+  updatedFieldName?: string;
   onSubmit: (formData: FormData) => void;
 }) {
   const [sections, setSections] = useState<ManagedSection[]>(
@@ -84,8 +92,8 @@ export function PrivacyForm({
     setIsSaving(true);
 
     const formData = new FormData();
-    formData.append("active-panel", "privacy");
-    formData.append("privacy-updated", updated);
+    formData.append("active-panel", panelKey);
+    formData.append(updatedFieldName, updated);
 
     sections.forEach((section, index) => {
       formData.append(`legal-section-${index}-title`, section.title);
@@ -126,10 +134,10 @@ export function PrivacyForm({
         </div>
       </aside>
 
-      <form id="privacy-form" onSubmit={handleSubmit} className="space-y-6">
+      <form id={formId} onSubmit={handleSubmit} className="space-y-6">
         {isSaving ? <div className="fixed inset-0 z-[100] grid place-items-center bg-black/25 px-4 backdrop-blur-[2px]" role="status"><div className="flex items-center gap-3 rounded-lg bg-white px-5 py-4 text-sm font-semibold text-[#1f1f1f] shadow-2xl"><span className="size-5 animate-spin rounded-full border-2 border-[#e04d26]/25 border-t-[#e04d26]" aria-hidden="true" />Saving changes...</div></div> : null}
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="text-lg font-semibold text-[#1f1f1f]">Privacy Policy Sections</div>
+          <div className="text-lg font-semibold text-[#1f1f1f]">{title}</div>
           <button
             type="button"
             onClick={addSection}

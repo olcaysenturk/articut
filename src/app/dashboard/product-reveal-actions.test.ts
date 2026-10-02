@@ -1,5 +1,5 @@
 import { beforeEach, expect, it, vi } from "vitest";
-import { saveProductDetailContentAction } from "./actions";
+import { saveHomeContentAction, saveProductDetailContentAction } from "./actions";
 
 const mocks = vi.hoisted(() => ({ get: vi.fn(), save: vi.fn(), upload: vi.fn() }));
 vi.mock("@/lib/cms-content", () => ({ getCmsContent: mocks.get, saveCmsContent: mocks.save }));
@@ -15,7 +15,18 @@ const detail = {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.get.mockResolvedValue({ productDetail: detail });
+  mocks.get.mockResolvedValue({
+    home: {
+      heroVideoUrl: "/hero.mp4",
+      mobileHeroVideoUrl: "/hero-mobile.mp4",
+      heroPoster: image,
+      mobileHeroPoster: image,
+      packShowcaseImage: image,
+      productImage: image,
+      imageShowcase: [image],
+    },
+    productDetail: detail,
+  });
   mocks.upload.mockResolvedValue({ key: "uploaded.jpg" });
 });
 
@@ -28,21 +39,23 @@ it("saves ordered single/grid sections for both viewports and uploaded images", 
   form.set("reveal-sections-mobile", JSON.stringify([{ layout: "single", images: [image] }]));
   form.set("reveal-sections-1-1-file", new File(["image"], "new.jpg", { type: "image/jpeg" }));
   await saveProductDetailContentAction(form);
-  expect(mocks.save).toHaveBeenCalledWith({ productDetail: expect.objectContaining({
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({ productDetail: expect.objectContaining({
     combsImage: image,
     revealSections: [
       { layout: "single", images: [image] },
       { layout: "grid", images: [image, { src: "/media/uploaded.jpg", alt: "New image" }] },
     ],
     revealSectionsMobile: [{ layout: "single", images: [image] }],
-  }) });
+  }) }));
 });
 
 it("saves an explicitly empty section list", async () => {
   const form = new FormData();
   form.set("reveal-sections", "[]");
   await saveProductDetailContentAction(form);
-  expect(mocks.save).toHaveBeenCalledWith({ productDetail: expect.objectContaining({ revealSections: [] }) });
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({
+    productDetail: expect.objectContaining({ revealSections: [] }),
+  }));
 });
 
 it("saves the feature background and ordered text lines", async () => {
@@ -51,10 +64,10 @@ it("saves the feature background and ordered text lines", async () => {
   form.set("product-feature-background-alt", "Product in use");
   form.set("product-feature-texts", " First message \r\n\nSecond message\nThird message");
   await saveProductDetailContentAction(form);
-  expect(mocks.save).toHaveBeenCalledWith({ productDetail: expect.objectContaining({
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({ productDetail: expect.objectContaining({
     featureBackground: { src: "/new-background.jpg", alt: "Product in use" },
     featureTexts: ["First message", "Second message", "Third message"],
-  }) });
+  }) }));
 });
 
 it("rejects an empty feature text list", async () => {
@@ -71,10 +84,30 @@ it("saves direct video URLs and uploaded strip videos", async () => {
   form.set("media-strip-1-type", "video");
   form.set("media-strip-1-file", new File(["video"], "reel.mp4", { type: "video/mp4" }));
   await saveProductDetailContentAction(form);
-  expect(mocks.save).toHaveBeenCalledWith({ productDetail: expect.objectContaining({ mediaStrip: [
-    { type: "video", src: "https://example.com/video.mp4" },
-    { type: "video", src: "/media/uploaded.jpg" },
-  ] }) });
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({
+    productDetail: expect.objectContaining({
+      mediaStrip: [
+        { type: "video", src: "https://example.com/video.mp4" },
+        { type: "video", src: "/media/uploaded.jpg" },
+      ],
+    }),
+  }));
+});
+
+it("saves uploaded videos in the home gallery", async () => {
+  const form = new FormData();
+  form.set("home-hero-video-url", "/hero.mp4");
+  form.set("home-mobile-hero-video-url", "/hero-mobile.mp4");
+  form.set("showcase-0-type", "video");
+  form.set("showcase-0-file", new File(["video"], "homepage-reel.mp4", { type: "video/mp4" }));
+
+  await saveHomeContentAction(form);
+
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({
+    home: expect.objectContaining({
+      imageShowcase: [{ type: "video", src: "/media/uploaded.jpg" }],
+    }),
+  }));
 });
 
 it("saves additional images within both single and grid sections", async () => {
@@ -85,7 +118,9 @@ it("saves additional images within both single and grid sections", async () => {
   const form = new FormData();
   form.set("reveal-sections", JSON.stringify(sections));
   await saveProductDetailContentAction(form);
-  expect(mocks.save).toHaveBeenCalledWith({ productDetail: expect.objectContaining({ revealSections: sections }) });
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({
+    productDetail: expect.objectContaining({ revealSections: sections }),
+  }));
 });
 
 it.each([

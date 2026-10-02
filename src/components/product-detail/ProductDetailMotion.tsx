@@ -38,7 +38,6 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         "[data-scroll-snap-ignore]:not([data-product-reveal]):not([data-comb-callout-section]):not([data-feature-overlay-section])",
         root,
       );
-      const footer = root.querySelector<HTMLElement>("[data-site-footer]");
 
       if (introStory) {
         ScrollTrigger.getAll()
@@ -157,8 +156,8 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         introPrimaryRight &&
         introSecondary
       ) {
-        const introClosedLeft = "polygon(0% 0%, 59% 0%, 43% 100%, 0% 100%)";
-        const introClosedRight = "polygon(59% 0%, 100% 0%, 100% 100%, 43% 100%)";
+        const introClosedLeft = "polygon(0% 0%, 60% 0%, 44% 100%, 0% 100%)";
+        const introClosedRight = "polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%)";
         gsap.set(introSecondary, { opacity: 1 });
         gsap.set(introPrimaryLeft, { clipPath: introClosedLeft });
         gsap.set(introPrimaryRight, { clipPath: introClosedRight });
@@ -230,24 +229,6 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
           combTimeline.kill();
         };
       }
-
-      responsiveMotion.add(mediaQueries.tabletUp, () => {
-        if (!badge || !footer) {
-          return;
-        }
-
-        const badgeFooterTween = gsap.to(badge, {
-          opacity: 0,
-          duration: 0.4,
-          ease: "power1.out",
-          scrollTrigger: { trigger: footer, start: "top 90%", toggleActions: "play none none reverse" },
-        });
-
-        return () => {
-          badgeFooterTween.scrollTrigger?.kill();
-          badgeFooterTween.kill();
-        };
-      });
 
       let featureOverlayCleanup: (() => void) | undefined;
       if (featureOverlaySection && featureOverlayPanel && featureOverlayTrack && featureOverlayItems.length) {

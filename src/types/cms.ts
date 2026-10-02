@@ -51,6 +51,7 @@ export type CmsContent = {
     heroPosterUrl: string;
     storyContent: string;
     storyImageUrl: string;
+    storyMobileImageUrl?: string;
     contactTitle: string;
     contactItems: Array<{ text: string; email: string }>;
   };
@@ -85,6 +86,14 @@ export type CmsContent = {
     sections: LegalSectionContent[];
   };
   privacy: {
+    updated: string;
+    sections: LegalSectionContent[];
+  };
+  returns: {
+    updated: string;
+    sections: LegalSectionContent[];
+  };
+  safety: {
     updated: string;
     sections: LegalSectionContent[];
   };

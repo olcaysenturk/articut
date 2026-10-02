@@ -84,7 +84,22 @@ export default async function AboutPage() {
       </section>
 
       <div className="relative h-[393px] w-full md:h-[686px]">
-        <Image src={about.storyImageUrl} alt="Articut founder cutting a client’s hair" fill sizes="100vw" className="object-cover" priority />
+        <Image
+          src={about.storyMobileImageUrl ?? about.storyImageUrl}
+          alt="Articut founder cutting a client’s hair"
+          fill
+          sizes="100vw"
+          className="object-cover md:hidden"
+          priority
+        />
+        <Image
+          src={about.storyImageUrl}
+          alt="Articut founder cutting a client’s hair"
+          fill
+          sizes="100vw"
+          className="hidden object-cover md:block"
+          priority
+        />
       </div>
 
       <section className="h-[427px] bg-[#e04d26] px-6 py-[45px] text-[#e0e0e0] md:h-[810px] md:px-[50px] md:py-[190px]">

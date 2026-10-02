@@ -11,6 +11,8 @@ import type {
   saveFaqContentAction,
   saveTermsContentAction,
   savePrivacyContentAction,
+  saveReturnsContentAction,
+  saveSafetyContentAction,
 } from "@/app/dashboard/actions";
 import type { logoutAction } from "@/app/dashboard/login/actions";
 import type { CmsContent, CmsImage, CmsMediaItem, CmsRevealSection, CmsStep } from "@/types/cms";
@@ -38,6 +40,8 @@ export type ActivePanel =
   | "faq"
   | "terms"
   | "privacy"
+  | "returns"
+  | "safety"
   | "profile";
 
 type ManagedImage = CmsImage & {
@@ -75,6 +79,7 @@ const MEDIA_SPECS = {
   packShowcase: { width: 2200, height: 1000, ratioLabel: "~2.2:1, ultra-wide" },
   webShowcase: { width: 1920, height: 1080, ratioLabel: "16:9" },
   storyImage: { width: 1920, height: 1080, ratioLabel: "16:9" },
+  storyMobileImage: { width: 1080, height: 1350, ratioLabel: "4:5, vertical" },
   packageImage: { width: 2400, height: 1600, ratioLabel: "3:2" },
   combsImage: { width: 2880, height: 1620, ratioLabel: "16:9" },
   homeProduct: { width: 2400, height: 1600, ratioLabel: "3:2" },
@@ -117,9 +122,11 @@ const panels = [
       { key: "about-contact" as const, label: "Contact section" },
     ],
   },
-  { key: "faq" as const, label: "FAQ", icon: "faq" },
+  { key: "faq" as const, label: "FAQs", icon: "faq" },
   { key: "terms" as const, label: "Terms & Conditions", icon: "terms" },
   { key: "privacy" as const, label: "Privacy Policy", icon: "terms" },
+  { key: "returns" as const, label: "Returns", icon: "terms" },
+  { key: "safety" as const, label: "Safety & Usage", icon: "terms" },
   { key: "profile" as const, label: "Profile & Security", icon: "profile" },
 ];
 
@@ -210,9 +217,11 @@ function labelForPanel(panel: ActivePanel) {
   if (panel === "home-hero") return "Hero video";
   if (panel === "home-product") return "Product image";
   if (panel === "product-detail") return "Slider images";
-  if (panel === "faq") return "FAQ";
+  if (panel === "faq") return "FAQs";
   if (panel === "terms") return "Terms & Conditions";
   if (panel === "privacy") return "Privacy Policy";
+  if (panel === "returns") return "Returns";
+  if (panel === "safety") return "Safety & Usage";
   if (panel === "profile") return "Profile & Security";
 
   return homePanels.find((item) => item.key === panel)?.label ?? "Homepage";
@@ -491,9 +500,11 @@ function DashboardShell({
                       <option key={panel.key} value={panel.key}>{panel.label}</option>
                     ))}
                   </optgroup>
-                  <option value="faq">FAQ</option>
+                  <option value="faq">FAQs</option>
                   <option value="terms">Terms &amp; Conditions</option>
                   <option value="privacy">Privacy Policy</option>
+                  <option value="returns">Returns</option>
+                  <option value="safety">Safety &amp; Usage</option>
                   <option value="profile">Profile &amp; Security</option>
                 </select>
                 <button
@@ -1664,6 +1675,8 @@ export function CmsDashboard({
   saveFaqAction,
   saveTermsAction,
   savePrivacyAction,
+  saveReturnsAction,
+  saveSafetyAction,
   logoutAction: logoutActionProp,
   currentUsername,
 }: {
@@ -1676,6 +1689,8 @@ export function CmsDashboard({
   saveFaqAction: typeof saveFaqContentAction;
   saveTermsAction: typeof saveTermsContentAction;
   savePrivacyAction: typeof savePrivacyContentAction;
+  saveReturnsAction: typeof saveReturnsContentAction;
+  saveSafetyAction: typeof saveSafetyContentAction;
   currentUsername: string;
   logoutAction: typeof logoutAction;
 }) {
@@ -1705,6 +1720,11 @@ export function CmsDashboard({
     id: "about-story-image-0",
     src: content.about.storyImageUrl,
     alt: "About story image",
+  });
+  const [aboutStoryMobileImage, setAboutStoryMobileImage] = useState<ManagedImage>({
+    id: "about-story-mobile-image-0",
+    src: content.about.storyMobileImageUrl ?? content.about.storyImageUrl,
+    alt: "About story mobile image",
   });
   const [aboutContactTitle, setAboutContactTitle] = useState(content.about.contactTitle);
   const [aboutContactItems, setAboutContactItems] = useState(content.about.contactItems);
@@ -1763,6 +1783,13 @@ export function CmsDashboard({
     formData.set("about-story-image-url", aboutStoryImage.src);
     if (aboutStoryImage.file) {
       formData.set("about-story-image-file", aboutStoryImage.file);
+    }
+    const initialStoryMobileImageUrl = content.about.storyMobileImageUrl ?? content.about.storyImageUrl;
+    if (aboutStoryMobileImage.src !== initialStoryMobileImageUrl) {
+      formData.set("about-story-mobile-image-url", aboutStoryMobileImage.src);
+    }
+    if (aboutStoryMobileImage.file) {
+      formData.set("about-story-mobile-image-file", aboutStoryMobileImage.file);
     }
     formData.set("about-contact-title", aboutContactTitle);
     aboutContactItems.forEach((item, index) => {
@@ -1913,16 +1940,16 @@ export function CmsDashboard({
               />
             </label>
             <div className="rounded-xl border border-[#e5e5e5] bg-white p-5 shadow-sm">
-              <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">Story image</div>
+              <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">Desktop story image</div>
               <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
                 <ImagePreview
                   image={aboutStoryImage}
-                  label="Story image"
+                  label="Desktop story image"
                   recommendedNote={specNote(MEDIA_SPECS.storyImage)}
                 />
                 <div className="space-y-4">
                   <FileInput
-                    label="Upload story image"
+                    label="Upload desktop story image"
                     name="about-story-image-file"
                     onPreview={(previewSrc, file) =>
                       setAboutStoryImage((image) => ({ ...image, file, previewSrc }))
@@ -1936,6 +1963,33 @@ export function CmsDashboard({
                     onChange={(src) => setAboutStoryImage((image) => ({ ...image, src, file: undefined, previewSrc: undefined }))}
                   />
                   <p className="text-xs text-[#6f6f6f]">If both are provided, the uploaded image is used.</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl border border-[#e5e5e5] bg-white p-5 shadow-sm">
+              <div className="mb-4 text-[16px] font-semibold text-[#1f1f1f]">Mobile story image</div>
+              <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
+                <ImagePreview
+                  image={aboutStoryMobileImage}
+                  label="Mobile story image"
+                  recommendedNote={specNote(MEDIA_SPECS.storyMobileImage)}
+                />
+                <div className="space-y-4">
+                  <FileInput
+                    label="Upload mobile story image"
+                    name="about-story-mobile-image-file"
+                    onPreview={(previewSrc, file) =>
+                      setAboutStoryMobileImage((image) => ({ ...image, file, previewSrc }))
+                    }
+                    spec={MEDIA_SPECS.storyMobileImage}
+                  />
+                  <TextInput
+                    name="about-story-mobile-image-url"
+                    label="Or use mobile image URL"
+                    value={aboutStoryMobileImage.src}
+                    onChange={(src) => setAboutStoryMobileImage((image) => ({ ...image, src, file: undefined, previewSrc: undefined }))}
+                  />
+                  <p className="text-xs text-[#6f6f6f]">If this is empty, the desktop story image is used on mobile.</p>
                 </div>
               </div>
             </div>
@@ -2254,6 +2308,36 @@ export function CmsDashboard({
           updated={content.privacy.updated}
           onSubmit={async (formData) => {
             await savePrivacyAction(formData);
+            await completeSave();
+          }}
+        />
+      ) : null}
+
+      {activePanel === "returns" ? (
+        <PrivacyForm
+          formId="returns-form"
+          panelKey="returns"
+          title="Returns Sections"
+          updatedFieldName="returns-updated"
+          sections={content.returns.sections}
+          updated={content.returns.updated}
+          onSubmit={async (formData) => {
+            await saveReturnsAction(formData);
+            await completeSave();
+          }}
+        />
+      ) : null}
+
+      {activePanel === "safety" ? (
+        <PrivacyForm
+          formId="safety-form"
+          panelKey="safety"
+          title="Safety & Usage Sections"
+          updatedFieldName="safety-updated"
+          sections={content.safety.sections}
+          updated={content.safety.updated}
+          onSubmit={async (formData) => {
+            await saveSafetyAction(formData);
             await completeSave();
           }}
         />

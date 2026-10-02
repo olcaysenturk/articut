@@ -23,6 +23,7 @@ export function TrustInformation() {
         <Link href="/privacy">Privacy Policy</Link>
         <Link href="/terms">Terms & Conditions</Link>
         <Link href="/returns">Returns</Link>
+        <Link href="/safety-usage">Safety & Usage</Link>
       </div>
     </section>
   );

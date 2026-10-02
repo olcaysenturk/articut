@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { saveAboutContentAction, saveHomeContentAction, saveProductDetailContentAction, saveFaqContentAction, saveTermsContentAction, savePrivacyContentAction } from "@/app/dashboard/actions";
+import { saveAboutContentAction, saveHomeContentAction, saveProductDetailContentAction, saveFaqContentAction, saveTermsContentAction, savePrivacyContentAction, saveReturnsContentAction, saveSafetyContentAction } from "@/app/dashboard/actions";
 import { CmsDashboard, type ActivePanel } from "@/app/dashboard/CmsDashboard";
 import { logoutAction } from "@/app/dashboard/login/actions";
 import { getCmsContent } from "@/lib/cms-content";
@@ -29,6 +29,8 @@ function parsePanel(panel: string | undefined): ActivePanel {
     panel === "faq" ||
     panel === "terms" ||
     panel === "privacy" ||
+    panel === "returns" ||
+    panel === "safety" ||
     panel === "profile"
   ) {
     return panel;
@@ -75,6 +77,8 @@ export default async function DashboardPage({
       saveFaqAction={saveFaqContentAction}
       saveTermsAction={saveTermsContentAction}
       savePrivacyAction={savePrivacyContentAction}
+      saveReturnsAction={saveReturnsContentAction}
+      saveSafetyAction={saveSafetyContentAction}
       logoutAction={logoutAction}
       currentUsername={currentUsername}
     />

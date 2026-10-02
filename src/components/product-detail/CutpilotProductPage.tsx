@@ -134,8 +134,8 @@ export function CutpilotProductPage({
               style={{
                 clipPath:
                   side === "left"
-                    ? "polygon(0% 0%, 59% 0%, 43% 100%, 0% 100%)"
-                    : "polygon(59% 0%, 100% 0%, 100% 100%, 43% 100%)",
+                    ? "polygon(0% 0%, 60% 0%, 44% 100%, 0% 100%)"
+                    : "polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%)",
               }}
               className="absolute inset-0 z-10 flex items-center justify-center bg-[#E04D26] px-8 py-[58px] text-center text-[#d9d9d9] md:py-10"
             >
@@ -231,7 +231,7 @@ export function CutpilotProductPage({
       </ProductMediaStrip>
 
       <div data-scroll-snap-ignore>
-        <EditorialFooter />
+        <EditorialFooter className="md:z-40" />
       </div>
     </main>
     </ProductDetailMotion>

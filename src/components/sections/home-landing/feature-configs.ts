@@ -30,7 +30,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   },
   features: FEATURES,
   featuresClassName:
-    "absolute left-1/2 top-[436px] w-[330px] -translate-x-1/2 text-center text-[12px] leading-[17px]",
+    "absolute left-1/2 top-[415px] w-[330px] -translate-x-1/2 text-center text-[12px] leading-[17px]",
   featureItemClassName: "flex items-center justify-center gap-[10px]",
   showFeatureBullets: true,
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-[#e04d26]",
@@ -38,7 +38,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     href: "/cutpilot",
     label: "Explore Cutpilot™",
     className:
-      "feature-cta-hover absolute left-1/2 top-[508px] h-[46px] w-[241px] -translate-x-1/2",
+      "feature-cta-hover absolute left-1/2 top-[487px] h-[46px] w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
     contentClassName:
       "pointer-events-auto absolute inset-0 flex items-center justify-center text-[12px] text-[#e0e0e0]",

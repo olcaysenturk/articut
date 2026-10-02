@@ -4,7 +4,7 @@ import { EditorialFooter } from "@/components/editorial/EditorialFooter";
 import { EditorialHeader } from "@/components/editorial/EditorialHeader";
 import { FaqPageClient } from "./FaqPageClient";
 
-export const metadata: Metadata = { title: "FAQ" };
+export const metadata: Metadata = { title: "FAQs" };
 
 export default async function FaqPage() {
   const content = await getCmsContent();

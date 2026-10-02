@@ -36,7 +36,17 @@ export function ProductCarousel({
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
   const transitionTimerRef = useRef<number | undefined>(undefined);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    currentX: number;
+    currentY: number;
+    isDragging: boolean;
+  } | null>(null);
   const reduceMotion = useReducedMotion();
   const visibleSlides = slides.length > 0 ? slides : DEFAULT_SLIDES;
 
@@ -81,13 +91,81 @@ export function ProductCarousel({
     [changeSlide],
   );
 
+  const goToRelativeSlide = useCallback(
+    (direction: -1 | 1) => {
+      const nextIndex = (activeIndex + direction + visibleSlides.length) % visibleSlides.length;
+      changeSlide(nextIndex);
+    },
+    [activeIndex, changeSlide, visibleSlides.length],
+  );
+
+  function handlePointerDown(event: React.PointerEvent<HTMLElement>) {
+    if (visibleSlides.length < 2 || isTransitioning || event.pointerType === "mouse") return;
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      currentX: event.clientX,
+      currentY: event.clientY,
+      isDragging: false,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handlePointerMove(event: React.PointerEvent<HTMLElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    drag.currentX = event.clientX;
+    drag.currentY = event.clientY;
+    const deltaX = drag.currentX - drag.startX;
+    const deltaY = drag.currentY - drag.startY;
+
+    if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      drag.isDragging = true;
+      setDragOffset(deltaX);
+    }
+  }
+
+  function finishPointerGesture(event: React.PointerEvent<HTMLElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    const deltaX = drag.currentX - drag.startX;
+    const deltaY = drag.currentY - drag.startY;
+    const width = carouselRef.current?.clientWidth ?? 0;
+    const threshold = Math.max(40, Math.min(90, width * 0.16));
+
+    if (drag.isDragging && Math.abs(deltaX) > threshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+      goToRelativeSlide(deltaX < 0 ? 1 : -1);
+    }
+
+    setDragOffset(0);
+    dragRef.current = null;
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }
+
   return (
-    <section className={className} data-product-carousel data-node-id={nodeId}>
+    <section
+      className={className}
+      data-product-carousel
+      data-node-id={nodeId}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={finishPointerGesture}
+      onPointerCancel={finishPointerGesture}
+      style={{ touchAction: "pan-y" }}
+    >
       <div
+        ref={carouselRef}
         className="flex h-full w-full"
         style={{
-          transform: `translate3d(${-activeIndex * 100}%, 0, 0)`,
-          transition: reduceMotion
+          transform: `translate3d(calc(${-activeIndex * 100}% + ${dragOffset}px), 0, 0)`,
+          transition: reduceMotion || dragOffset !== 0
             ? "none"
             : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
         }}

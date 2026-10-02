@@ -5,17 +5,14 @@ import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 function StripArrow({ direction }: { direction: -1 | 1 }) {
   return (
     <svg
-      viewBox="0 0 42 24"
+      viewBox="0 0 40 31"
       aria-hidden="true"
       fill="none"
-      className={`h-8 w-14 ${direction === -1 ? "rotate-180" : ""}`}
+      className={`h-[31px] w-10 ${direction === -1 ? "rotate-180" : ""}`}
     >
       <path
-        d="M4 12H35M35 12L27 4M35 12L27 20"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M22.14 30.3599L33.66 17.1599H0V13.2599H33.72L22.14 0H27.12L39.72 15.18L27.12 30.3599H22.14Z"
+        fill="currentColor"
       />
     </svg>
   );
@@ -81,7 +78,7 @@ export function ProductMediaStrip({ children }: { children: ReactNode }) {
     scrollMedia(direction);
   }
 
-  const arrowButtonClass = "absolute bottom-3 z-10 flex size-16 items-center justify-center text-[#e04d26] transition-opacity hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e04d26] md:bottom-5 md:size-20";
+  const arrowButtonClass = "absolute top-1/2 z-10 flex size-16 -translate-y-1/2 cursor-pointer items-center justify-center text-[#e04d26] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e04d26] md:size-20";
 
   return (
     <section data-scroll-snap-ignore aria-label="Product media gallery" className="relative h-[250px] border-y-[3px] border-[#e04d26] md:h-[640px]">

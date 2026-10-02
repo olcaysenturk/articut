@@ -37,14 +37,18 @@ export function FooterBand() {
       </div>
       <div className="absolute left-[349px] top-[63px] text-[18px] leading-[24px]">
         <Link href="/faq" className="block">
-          FAQ
+          FAQs
         </Link>
-        <Link href="/terms" className="block">
-          Terms & Conditions
-        </Link>
-        <Link href="/privacy" className="block">
-          Privacy Policy
-        </Link>
+        <span className="block">
+          <Link href="/returns">Returns</Link>
+          <span aria-hidden="true"> | </span>
+          <Link href="/privacy">Privacy Policy</Link>
+        </span>
+        <span className="block">
+          <Link href="/safety-usage">Safety & Usage</Link>
+          <span aria-hidden="true"> | </span>
+          <Link href="/terms">Terms & Conditions</Link>
+        </span>
       </div>
       <div className="absolute right-[50px] top-[63px] text-right text-[18px] leading-[24px]">
         <a href="mailto:info@articut.com" className="footer-link-with-arrow block">

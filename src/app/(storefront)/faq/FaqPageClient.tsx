@@ -36,7 +36,7 @@ export function FaqPageClient({ sections }: { sections: FaqSection[] }) {
   return (
     <div className="grid grid-cols-[52px_minmax(0,1fr)] gap-x-[18px] px-[32px] pb-[42px] pt-[39px] md:grid-cols-[290px_minmax(0,1000px)] md:gap-[50px] md:px-[50px] md:pb-32 md:pt-[163px]">
       <aside className="contents md:sticky md:top-[50px] md:block md:self-start">
-        <h1 className="faq-title text-white">FAQ</h1>
+        <h1 className="faq-title text-white">FAQs</h1>
         <nav className="flex flex-col gap-[5px] font-[family-name:var(--font-body)] text-[14px] font-semibold leading-none text-white md:mt-[36px] md:gap-[18px] md:text-[20px]">
           {sections.map((section) => (
             <a

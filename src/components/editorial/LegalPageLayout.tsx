@@ -15,7 +15,7 @@ export function LegalPageLayout({
 }) {
   return (
     <div className="bg-[#d9d9d9] text-black">
-      <main className={long ? "md:min-h-[8652px]" : "md:min-h-[3004px]"}>
+      <main>
         <EditorialHeader />
         <div
           className={`mx-auto grid max-w-[1340px] gap-[50px] px-[31px] ${

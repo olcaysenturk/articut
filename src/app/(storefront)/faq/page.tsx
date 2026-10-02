@@ -12,7 +12,7 @@ export default async function FaqPage() {
 
   return (
     <div className="bg-[#e94b24] text-black">
-      <main className="relative bg-[#e94b24] md:min-h-[3527px]">
+      <main className="relative bg-[#e94b24]">
         <div className="faq-pattern" aria-hidden />
         <div className="relative z-10">
           <EditorialHeader />

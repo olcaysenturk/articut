@@ -13,7 +13,7 @@ export function TermsForm({
   onSubmit,
 }: {
   sections: LegalSectionContent[];
-  onSubmit: (formData: FormData) => void;
+  onSubmit: (formData: FormData) => Promise<void>;
 }) {
   const [sections, setSections] = useState<ManagedSection[]>(
     initialSections.map((s) => ({ ...s, tempId: crypto.randomUUID() })),

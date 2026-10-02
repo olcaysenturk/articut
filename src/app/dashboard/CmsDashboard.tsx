@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useRouter } from "next/navigation";
+import { unstable_isUnrecognizedActionError, useRouter } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { useEffect, useRef, useState, type DragEvent, type ReactNode } from "react";
 import { formIdForPanel, type ActivePanel } from "./panels";
@@ -180,6 +180,34 @@ function appendManagedMediaFiles(formData: FormData, prefix: string, items: Mana
   });
 }
 
+// Netlify Functions reject request bodies over 6 MB before Next.js sees them, which
+// crashed the dashboard into the generic error page. Multipart framing and base64
+// encoding eat into that, so keep uploads per save comfortably below it.
+const MAX_UPLOAD_BYTES_PER_SAVE = 4.5 * 1024 * 1024;
+
+function formatMegabytes(bytes: number) {
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function uploadSizeError(formData: FormData) {
+  let total = 0;
+  formData.forEach((value) => {
+    if (value instanceof File) total += value.size;
+  });
+
+  if (total <= MAX_UPLOAD_BYTES_PER_SAVE) return null;
+
+  return `Uploads in this save total ${formatMegabytes(total)}, but the limit is ${formatMegabytes(MAX_UPLOAD_BYTES_PER_SAVE)}. Compress the files, save them in smaller batches, or use a video URL (e.g. Vimeo) instead of uploading video files.`;
+}
+
+function saveErrorMessage(error: unknown) {
+  if (unstable_isUnrecognizedActionError(error)) {
+    return "The dashboard was updated since this page was opened. Reload the page and save again.";
+  }
+
+  return "Save failed and nothing was changed. Your edits are still on this page. If your session expired, reload and log in again, then retry.";
+}
+
 function labelForPanel(panel: ActivePanel) {
   if (panel === "about-hero") return "Hero section";
   if (panel === "about-story") return "Story section";
@@ -275,6 +303,8 @@ function DashboardShell({
   isSaved,
   isLocalCmsMode,
   saveVersion,
+  saveError,
+  onDismissSaveError,
   onPanelChange,
   logoutAction,
 }: {
@@ -283,6 +313,8 @@ function DashboardShell({
   isSaved: boolean;
   isLocalCmsMode: boolean;
   saveVersion: number;
+  saveError: string | null;
+  onDismissSaveError: () => void;
   onPanelChange: (panel: ActivePanel) => void;
   logoutAction: () => void;
 }) {
@@ -555,6 +587,28 @@ function DashboardShell({
             </button>
             </motion.div>
           </>
+        ) : null}
+        {saveError ? (
+          <motion.div
+            role="alert"
+            className="fixed bottom-8 right-8 z-50 flex max-w-[420px] items-start gap-4 rounded-lg border border-red-700 bg-red-600 px-6 py-4 text-sm font-semibold text-white shadow-2xl"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="flex-1 leading-[1.4]">{saveError}</span>
+            <button
+              type="button"
+              onClick={onDismissSaveError}
+              className="grid size-8 shrink-0 place-items-center rounded-md text-white/70 transition hover:bg-white/20 hover:text-white"
+              aria-label="Close error"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </motion.div>
         ) : null}
       </AnimatePresence>
     </main>
@@ -1691,8 +1745,27 @@ export function CmsDashboard({
   const router = useRouter();
   const [activePanel, setActivePanel] = useState<ActivePanel>(initialPanel);
   const [saveVersion, setSaveVersion] = useState(0);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  async function completeSave() {
+  // Every save goes through here so a failed or rejected request shows an error
+  // toast instead of throwing into the route's error page and losing the edits.
+  async function runSave(formData: FormData, save: (formData: FormData) => Promise<unknown>) {
+    setSaveError(null);
+
+    const sizeError = uploadSizeError(formData);
+    if (sizeError) {
+      setSaveError(sizeError);
+      return;
+    }
+
+    try {
+      await save(formData);
+    } catch (error) {
+      console.error("CMS save failed", error);
+      setSaveError(saveErrorMessage(error));
+      return;
+    }
+
     setSaveVersion((version) => version + 1);
     router.refresh();
   }
@@ -1790,8 +1863,7 @@ export function CmsDashboard({
       formData.set(`contact-${index}-text`, item.text);
       formData.set(`contact-${index}-email`, item.email);
     });
-    await saveAboutAction(formData);
-    await completeSave();
+    await runSave(formData, saveAboutAction);
   }
 
   async function submitHomeContent(formData: FormData) {
@@ -1812,8 +1884,7 @@ export function CmsDashboard({
     }
 
     appendManagedMediaFiles(formData, "showcase", showcaseItems);
-    await saveHomeAction(formData);
-    await completeSave();
+    await runSave(formData, saveHomeAction);
   }
 
   async function submitProductDetailContent(formData: FormData) {
@@ -1832,8 +1903,7 @@ export function CmsDashboard({
         formData.set(`product-step-${index}-image-file`, step.image.file);
       }
     });
-    await saveProductDetailAction(formData);
-    await completeSave();
+    await runSave(formData, saveProductDetailAction);
   }
 
   return (
@@ -1842,6 +1912,8 @@ export function CmsDashboard({
       isSaved={isSaved}
       isLocalCmsMode={isLocalCmsMode}
       saveVersion={saveVersion}
+      saveError={saveError}
+      onDismissSaveError={() => setSaveError(null)}
       onPanelChange={handlePanelChange}
       logoutAction={logoutActionProp}
     >
@@ -2280,20 +2352,14 @@ export function CmsDashboard({
       {activePanel === "faq" ? (
         <FaqForm
           sections={content.faq.sections}
-          onSubmit={async (formData) => {
-            await saveFaqAction(formData);
-            await completeSave();
-          }}
+          onSubmit={(formData) => runSave(formData, saveFaqAction)}
         />
       ) : null}
 
       {activePanel === "terms" ? (
         <TermsForm
           sections={content.terms.sections}
-          onSubmit={async (formData) => {
-            await saveTermsAction(formData);
-            await completeSave();
-          }}
+          onSubmit={(formData) => runSave(formData, saveTermsAction)}
         />
       ) : null}
 
@@ -2301,10 +2367,7 @@ export function CmsDashboard({
         <PrivacyForm
           sections={content.privacy.sections}
           updated={content.privacy.updated}
-          onSubmit={async (formData) => {
-            await savePrivacyAction(formData);
-            await completeSave();
-          }}
+          onSubmit={(formData) => runSave(formData, savePrivacyAction)}
         />
       ) : null}
 
@@ -2316,10 +2379,7 @@ export function CmsDashboard({
           updatedFieldName="returns-updated"
           sections={content.returns.sections}
           updated={content.returns.updated}
-          onSubmit={async (formData) => {
-            await saveReturnsAction(formData);
-            await completeSave();
-          }}
+          onSubmit={(formData) => runSave(formData, saveReturnsAction)}
         />
       ) : null}
 
@@ -2331,10 +2391,7 @@ export function CmsDashboard({
           updatedFieldName="safety-updated"
           sections={content.safety.sections}
           updated={content.safety.updated}
-          onSubmit={async (formData) => {
-            await saveSafetyAction(formData);
-            await completeSave();
-          }}
+          onSubmit={(formData) => runSave(formData, saveSafetyAction)}
         />
       ) : null}
 

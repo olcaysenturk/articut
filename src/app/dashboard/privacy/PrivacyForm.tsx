@@ -23,7 +23,7 @@ export function PrivacyForm({
   panelKey?: string;
   title?: string;
   updatedFieldName?: string;
-  onSubmit: (formData: FormData) => void;
+  onSubmit: (formData: FormData) => Promise<void>;
 }) {
   const [sections, setSections] = useState<ManagedSection[]>(
     initialSections.map((s) => ({ ...s, tempId: crypto.randomUUID() })),

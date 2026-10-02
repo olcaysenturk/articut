@@ -79,6 +79,10 @@ it("rejects an empty feature text list", async () => {
 
 it("saves direct video URLs and uploaded strip videos", async () => {
   const form = new FormData();
+  form.set("media-strip", JSON.stringify([
+    { type: "video", src: "https://example.com/video.mp4" },
+    { type: "video", src: "" },
+  ]));
   form.set("media-strip-0-type", "video");
   form.set("media-strip-0-src", "https://example.com/video.mp4");
   form.set("media-strip-1-type", "video");
@@ -98,6 +102,7 @@ it("saves uploaded videos in the home gallery", async () => {
   const form = new FormData();
   form.set("home-hero-video-url", "/hero.mp4");
   form.set("home-mobile-hero-video-url", "/hero-mobile.mp4");
+  form.set("showcase", JSON.stringify([{ type: "video", src: "" }]));
   form.set("showcase-0-type", "video");
   form.set("showcase-0-file", new File(["video"], "homepage-reel.mp4", { type: "video/mp4" }));
 

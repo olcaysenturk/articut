@@ -283,18 +283,7 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
         };
       }
 
-      // Lazy-loaded media can move later sections after ScrollTrigger measures them.
-      // Keep scroll ranges aligned with the actual layout, including on reverse scroll.
-      let layoutRefreshFrame = 0;
-      const layoutObserver = new ResizeObserver(() => {
-        cancelAnimationFrame(layoutRefreshFrame);
-        layoutRefreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
-      });
-      layoutObserver.observe(root);
-
       return () => {
-        layoutObserver.disconnect();
-        cancelAnimationFrame(layoutRefreshFrame);
         combCleanup?.();
         featureOverlayCleanup?.();
         scrollSnapRevealTriggers.forEach((trigger) => trigger.kill());

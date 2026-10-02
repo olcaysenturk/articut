@@ -108,6 +108,32 @@ async function mediaListFromForm(formData: FormData, prefix: string, indexes: nu
   return items;
 }
 
+async function mediaListFromManifest(formData: FormData, prefix: string) {
+  const raw = formData.get(prefix);
+  if (typeof raw !== "string") return null;
+
+  const draftMedia = z.discriminatedUnion("type", [
+    z.object({ type: z.literal("image"), src: z.string(), alt: z.string() }),
+    z.object({ type: z.literal("video"), src: z.string() }),
+  ]);
+  const draftItems = z.array(draftMedia).parse(JSON.parse(raw));
+  const items: CmsMediaItem[] = [];
+
+  // Upload one file at a time so multiple Blob writes cannot race each other.
+  for (const [index, item] of draftItems.entries()) {
+    const uploadedSrc = await uploadedImagePath(formData, `${prefix}-${index}-file`);
+    const src = uploadedSrc ?? item.src.trim();
+
+    if (!src) continue;
+
+    items.push(item.type === "image"
+      ? { type: "image", src, alt: item.alt.trim() }
+      : { type: "video", src });
+  }
+
+  return items;
+}
+
 function revalidateCmsContent() {
   revalidatePath("/");
   revalidatePath("/about");
@@ -175,7 +201,7 @@ export async function saveHomeContentAction(formData: FormData) {
     content.home.productImage.src,
   );
   const showcaseIndexes = indexedFieldNumbers(formData, "showcase");
-  const imageShowcase = await mediaListFromForm(formData, "showcase", showcaseIndexes);
+  const imageShowcase = await mediaListFromManifest(formData, "showcase") ?? await mediaListFromForm(formData, "showcase", showcaseIndexes);
 
   await saveCmsContent({
     ...content,
@@ -243,7 +269,7 @@ export async function saveProductDetailContentAction(formData: FormData) {
   const revealSections = await revealSectionsFromForm(formData, "reveal-sections");
   const revealSectionsMobile = await revealSectionsFromForm(formData, "reveal-sections-mobile");
   const mediaStripIndexes = indexedFieldNumbers(formData, "media-strip");
-  const mediaStrip = await mediaListFromForm(formData, "media-strip", mediaStripIndexes);
+  const mediaStrip = await mediaListFromManifest(formData, "media-strip") ?? await mediaListFromForm(formData, "media-strip", mediaStripIndexes);
   const steps = await stepsFromForm(formData, "product-step", content.productDetail.steps);
 
   await saveCmsContent({

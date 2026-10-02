@@ -230,8 +230,8 @@ export function CutpilotProductPage({
         ))}
       </ProductMediaStrip>
 
-      <div data-scroll-snap-ignore>
-        <EditorialFooter className="md:z-40" />
+      <div data-scroll-snap-ignore className="relative z-[80]">
+        <EditorialFooter className="z-[80]" />
       </div>
     </main>
     </ProductDetailMotion>

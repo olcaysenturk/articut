@@ -34,12 +34,12 @@ export function MobileFooter() {
         <Link href="/faq" className="block">
           FAQs
         </Link>
-        <span className="block">
+        <span className="block whitespace-nowrap">
           <Link href="/returns">Returns</Link>
           <span aria-hidden="true"> | </span>
           <Link href="/privacy">Privacy Policy</Link>
         </span>
-        <span className="block">
+        <span className="block whitespace-nowrap">
           <Link href="/safety-usage">Safety & Usage</Link>
           <span aria-hidden="true"> | </span>
           <Link href="/terms">Terms & Conditions</Link>

@@ -34,12 +34,12 @@ export function EditorialFooter({ className }: { className?: string }) {
         </nav>
         <nav className="flex flex-col" aria-label="Policies">
           <Link href="/faq">FAQs</Link>
-          <span>
+          <span className="whitespace-nowrap md:whitespace-normal">
             <Link href="/returns">Returns</Link>
             <span aria-hidden="true"> | </span>
             <Link href="/privacy">Privacy Policy</Link>
           </span>
-          <span>
+          <span className="whitespace-nowrap md:whitespace-normal">
             <Link href="/safety-usage">Safety &amp; Usage</Link>
             <span aria-hidden="true"> | </span>
             <Link href="/terms">Terms &amp; Conditions</Link>

@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { saveAboutContentAction, saveHomeContentAction, saveProductDetailContentAction, saveFaqContentAction, saveTermsContentAction, savePrivacyContentAction, saveReturnsContentAction, saveSafetyContentAction } from "@/app/dashboard/actions";
-import { CmsDashboard, type ActivePanel } from "@/app/dashboard/CmsDashboard";
+import { CmsDashboard } from "@/app/dashboard/CmsDashboard";
+import { isActivePanel, type ActivePanel } from "@/app/dashboard/panels";
 import { logoutAction } from "@/app/dashboard/login/actions";
-import { getCmsContent } from "@/lib/cms-content";
+import { getCmsContent, isLocalCmsContent } from "@/lib/cms-content";
 import { DASHBOARD_SESSION_COOKIE, verifySessionToken, getDashboardUsername } from "@/lib/dashboard-auth";
 
 export const metadata = {
@@ -13,26 +14,7 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 function parsePanel(panel: string | undefined): ActivePanel {
-  if (
-    panel === "about-hero" ||
-    panel === "about-story" ||
-    panel === "about-contact" ||
-    panel === "home-hero" ||
-    panel === "home-product" ||
-    panel === "home-pack-showcase" ||
-    panel === "home-showcase" ||
-    panel === "product-features" ||
-    panel === "product-package" ||
-    panel === "product-media-strip" ||
-    panel === "product-reveal" ||
-    panel === "product-detail" ||
-    panel === "faq" ||
-    panel === "terms" ||
-    panel === "privacy" ||
-    panel === "returns" ||
-    panel === "safety" ||
-    panel === "profile"
-  ) {
+  if (isActivePanel(panel)) {
     return panel;
   }
 
@@ -71,6 +53,7 @@ export default async function DashboardPage({
       content={content}
       initialPanel={initialPanel}
       isSaved={params.saved === "1"}
+      isLocalCmsMode={isLocalCmsContent()}
       saveAboutAction={saveAboutContentAction}
       saveHomeAction={saveHomeContentAction}
       saveProductDetailAction={saveProductDetailContentAction}

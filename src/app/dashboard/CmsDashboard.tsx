@@ -3,7 +3,8 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useFormStatus } from "react-dom";
-import { useEffect, useState, type DragEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type DragEvent, type ReactNode } from "react";
+import { formIdForPanel, type ActivePanel } from "./panels";
 import type {
   saveAboutContentAction,
   saveHomeContentAction,
@@ -22,27 +23,6 @@ import { TermsForm } from "./terms/TermsForm";
 import { PrivacyForm } from "./privacy/PrivacyForm";
 import { ProfileForm } from "./profile/ProfileForm";
 
-export type ActivePanel =
-  | "about-hero"
-  | "about-story"
-  | "about-contact"
-  | "home-hero"
-  | "home-product"
-  | "home-pack-showcase"
-  | "home-showcase"
-  | "product-features"
-  | "product-package"
-  | "product-media-strip"
-  | "product-reveal"
-  | "product-detail"
-  | "product-faq"
-  | "product-steps"
-  | "faq"
-  | "terms"
-  | "privacy"
-  | "returns"
-  | "safety"
-  | "profile";
 
 type ManagedImage = CmsImage & {
   file?: File;
@@ -187,21 +167,17 @@ function appendManagedImageFiles(formData: FormData, prefix: string, images: Man
 }
 
 function appendManagedMediaFiles(formData: FormData, prefix: string, items: ManagedMediaItem[]) {
+  formData.set(prefix, JSON.stringify(items.map((item) => (
+    item.type === "image"
+      ? { type: "image", src: item.src, alt: item.alt }
+      : { type: "video", src: item.src }
+  ))));
+
   items.forEach((item, index) => {
     if (item.file) {
       formData.set(`${prefix}-${index}-file`, item.file);
     }
   });
-}
-
-function formIdForPanel(panel: ActivePanel) {
-  if (panel.startsWith("about-")) return "about-form";
-  if (panel.startsWith("product-")) return "product-detail-form";
-  if (panel === "faq") return "faq-form";
-  if (panel === "terms") return "terms-form";
-  if (panel === "privacy") return "privacy-form";
-  if (panel === "profile") return "profile-form";
-  return "home-form";
 }
 
 function labelForPanel(panel: ActivePanel) {
@@ -297,6 +273,7 @@ function DashboardShell({
   activePanel,
   children,
   isSaved,
+  isLocalCmsMode,
   saveVersion,
   onPanelChange,
   logoutAction,
@@ -304,6 +281,7 @@ function DashboardShell({
   activePanel: ActivePanel;
   children: ReactNode;
   isSaved: boolean;
+  isLocalCmsMode: boolean;
   saveVersion: number;
   onPanelChange: (panel: ActivePanel) => void;
   logoutAction: () => void;
@@ -528,6 +506,13 @@ function DashboardShell({
           </header>
 
           <section className="mx-auto max-w-[1440px] px-6 pb-28 pt-6 md:py-8">
+            {isLocalCmsMode ? (
+              <div role="note" className="mb-6 rounded-lg border border-[#fab446] bg-[#fff7e4] px-4 py-3 text-sm text-[#7a4a12]">
+                <span className="font-semibold">Local mode:</span> content saves go to <code>data/cms-content.json</code>, not
+                the live site. Uploaded media still goes to Netlify Blobs, and <code>npm run sync:cms</code> overwrites
+                local edits.
+              </div>
+            ) : null}
             {children}
             {/* FAQ Form rendered here */}
           </section>
@@ -754,6 +739,7 @@ function FileInput({
   onPreview: (src: string, file: File) => void;
   spec: MediaDimensionSpec;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
 
@@ -763,7 +749,7 @@ function FileInput({
   }
 
   return (
-    <label
+    <div
       className={`block rounded-lg border border-dashed p-3 text-sm transition-colors ${
         isDragging ? "border-[#e04d26] bg-[#fff0e9]" : "border-[#e04d26]/45 bg-[#fff7e4]"
       }`}
@@ -784,6 +770,7 @@ function FileInput({
         <span className="text-xs font-normal text-[#8a8a8a]">Drop or browse</span>
       </span>
       <input
+        ref={inputRef}
         accept={accept}
         className="sr-only"
         name={name}
@@ -793,13 +780,18 @@ function FileInput({
           if (!file) return;
 
           void handleFile(file);
+          event.target.value = "";
         }}
       />
-      <span className="mt-3 flex cursor-pointer items-center justify-center rounded-md border border-[#e04d26]/25 bg-white px-3 py-2 text-xs font-semibold text-[#e04d26]">
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        className="mt-3 flex w-full cursor-pointer items-center justify-center rounded-md border border-[#e04d26]/25 bg-white px-3 py-2 text-xs font-semibold text-[#e04d26]"
+      >
         Choose {kind}
-      </span>
+      </button>
       {warning ? <span className="mt-2 block text-xs leading-[1.35] text-[#9a541b]">{warning}</span> : null}
-    </label>
+    </div>
   );
 }
 
@@ -1668,6 +1660,7 @@ function MediaStripEditor({
 export function CmsDashboard({
   content,
   isSaved,
+  isLocalCmsMode,
   initialPanel,
   saveAboutAction,
   saveHomeAction,
@@ -1682,6 +1675,7 @@ export function CmsDashboard({
 }: {
   content: CmsContent;
   isSaved: boolean;
+  isLocalCmsMode: boolean;
   initialPanel: ActivePanel;
   saveAboutAction: typeof saveAboutContentAction;
   saveHomeAction: typeof saveHomeContentAction;
@@ -1846,6 +1840,7 @@ export function CmsDashboard({
     <DashboardShell
       activePanel={activePanel}
       isSaved={isSaved}
+      isLocalCmsMode={isLocalCmsMode}
       saveVersion={saveVersion}
       onPanelChange={handlePanelChange}
       logoutAction={logoutActionProp}

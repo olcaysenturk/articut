@@ -18,10 +18,10 @@ export function MobileProductSection({ product, image }: { product: Product; ima
             variantId={variant?.id ?? null}
             quantity={1}
             disabled={!variant?.available || !product.available}
-            label={`Add to Cart    →    ${formatCompactMoney(variant?.price ?? product.price)}`}
+            label={`Add to Cart, ${formatCompactMoney(variant?.price ?? product.price)}`}
             className="yellow-center-hover h-[46px] w-[241px] whitespace-pre bg-[#e0e0e0] px-4 text-[12px] font-normal text-[#e04d26]"
           >
-            Add to Cart    <span className="relative left-[-10px] mx-[5px] text-[12px]"><ArrowIcon className="inline-block h-auto w-[15px]" /></span>    {formatCompactMoney(variant?.price ?? product.price)}
+            Add to Cart    <span className="relative left-[-10px] mx-[5px] text-[12px]"><ArrowIcon className="inline-block h-auto w-[16px]" /></span>    {formatCompactMoney(variant?.price ?? product.price)}
           </AddToCartButton>
         }
         buttonClassName="absolute left-1/2 top-[583px] -translate-x-1/2"

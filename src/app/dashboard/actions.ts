@@ -55,7 +55,7 @@ async function uploadedImagePath(formData: FormData, name: string) {
   return `/uploads/cms/${fileName}`;
 }
 
-async function imageFromForm(formData: FormData, prefix: string, fallbackSrc = ""): Promise<CmsImage | null> {
+async function imageFromForm(formData: FormData, prefix: string, fallbackSrc = "", fallbackAlt = ""): Promise<CmsImage | null> {
   const uploadedSrc = await uploadedImagePath(formData, `${prefix}-file`);
   const existingSrc = field(formData, `${prefix}-src`);
   const src = uploadedSrc ?? (existingSrc || fallbackSrc);
@@ -66,7 +66,7 @@ async function imageFromForm(formData: FormData, prefix: string, fallbackSrc = "
 
   return {
     src,
-    alt: field(formData, `${prefix}-alt`),
+    alt: field(formData, `${prefix}-alt`) || fallbackAlt,
   };
 }
 
@@ -184,21 +184,29 @@ async function stepsFromForm(
 
 export async function saveHomeContentAction(formData: FormData) {
   const content = await getCmsContent();
-  const heroPoster = await imageFromForm(formData, "home-hero-poster", content.home.heroPoster.src);
+  const heroPoster = await imageFromForm(
+    formData,
+    "home-hero-poster",
+    content.home.heroPoster.src,
+    content.home.heroPoster.alt,
+  );
   const mobileHeroPoster = await imageFromForm(
     formData,
     "home-mobile-hero-poster",
     content.home.mobileHeroPoster.src,
+    content.home.mobileHeroPoster.alt,
   );
   const packShowcaseImage = await imageFromForm(
     formData,
     "home-pack-showcase-image",
     content.home.packShowcaseImage.src,
+    content.home.packShowcaseImage.alt,
   );
   const productImage = await imageFromForm(
     formData,
     "home-product-image",
     content.home.productImage.src,
+    content.home.productImage.alt,
   );
   const showcaseIndexes = indexedFieldNumbers(formData, "showcase");
   const imageShowcase = await mediaListFromManifest(formData, "showcase") ?? await mediaListFromForm(formData, "showcase", showcaseIndexes);

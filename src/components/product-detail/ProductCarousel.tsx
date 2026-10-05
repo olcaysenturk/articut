@@ -35,9 +35,12 @@ export function ProductCarousel({
   slideLabel?: string;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isJumpResetting, setIsJumpResetting] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const transitionTimerRef = useRef<number | undefined>(undefined);
+  const resetFrameRef = useRef<number | undefined>(undefined);
   const carouselRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{
     pointerId: number;
@@ -49,36 +52,76 @@ export function ProductCarousel({
   } | null>(null);
   const reduceMotion = useReducedMotion();
   const visibleSlides = slides.length > 0 ? slides : DEFAULT_SLIDES;
+  const renderedSlides =
+    visibleSlides.length > 1
+      ? [visibleSlides[visibleSlides.length - 1], ...visibleSlides, visibleSlides[0]]
+      : visibleSlides;
+  const currentTrackIndex = visibleSlides.length > 1 ? trackIndex : 0;
 
   const changeSlide = useCallback(
-    (index: number) => {
+    (index: number, direction?: -1 | 1) => {
       if (index === activeIndex || (isTransitioning && !reduceMotion)) {
         return;
       }
 
+      let nextTrackIndex = visibleSlides.length > 1 ? index + 1 : index;
+
+      if (visibleSlides.length > 1) {
+        if (direction === 1 && activeIndex === visibleSlides.length - 1 && index === 0) {
+          nextTrackIndex = visibleSlides.length + 1;
+        }
+
+        if (direction === -1 && activeIndex === 0 && index === visibleSlides.length - 1) {
+          nextTrackIndex = 0;
+        }
+      }
+
       setActiveIndex(index);
+      setTrackIndex(nextTrackIndex);
 
       if (!reduceMotion) {
         window.clearTimeout(transitionTimerRef.current);
+        window.cancelAnimationFrame(resetFrameRef.current ?? 0);
         setIsTransitioning(true);
         transitionTimerRef.current = window.setTimeout(() => {
+          if (nextTrackIndex === visibleSlides.length + 1) {
+            setIsJumpResetting(true);
+            setTrackIndex(1);
+            resetFrameRef.current = window.requestAnimationFrame(() => {
+              setIsJumpResetting(false);
+              resetFrameRef.current = undefined;
+            });
+          }
+
+          if (nextTrackIndex === 0) {
+            setIsJumpResetting(true);
+            setTrackIndex(visibleSlides.length);
+            resetFrameRef.current = window.requestAnimationFrame(() => {
+              setIsJumpResetting(false);
+              resetFrameRef.current = undefined;
+            });
+          }
+
           setIsTransitioning(false);
           transitionTimerRef.current = undefined;
         }, SLIDE_TRANSITION_MS);
       }
     },
-    [activeIndex, isTransitioning, reduceMotion],
+    [activeIndex, isTransitioning, reduceMotion, visibleSlides.length],
   );
 
   useEffect(() => {
-    return () => window.clearTimeout(transitionTimerRef.current);
+    return () => {
+      window.clearTimeout(transitionTimerRef.current);
+      window.cancelAnimationFrame(resetFrameRef.current ?? 0);
+    };
   }, []);
 
   useEffect(() => {
     if (reduceMotion || isTransitioning || visibleSlides.length < 2) return;
 
     const timer = window.setTimeout(() => {
-      changeSlide((activeIndex + 1) % visibleSlides.length);
+      changeSlide((activeIndex + 1) % visibleSlides.length, 1);
     }, AUTO_ADVANCE_MS);
 
     return () => window.clearTimeout(timer);
@@ -86,15 +129,25 @@ export function ProductCarousel({
 
   const goToSlide = useCallback(
     (index: number) => {
+      if (index === 0 && activeIndex === visibleSlides.length - 1) {
+        changeSlide(index, 1);
+        return;
+      }
+
+      if (index === visibleSlides.length - 1 && activeIndex === 0) {
+        changeSlide(index, -1);
+        return;
+      }
+
       changeSlide(index);
     },
-    [changeSlide],
+    [activeIndex, changeSlide, visibleSlides.length],
   );
 
   const goToRelativeSlide = useCallback(
     (direction: -1 | 1) => {
       const nextIndex = (activeIndex + direction + visibleSlides.length) % visibleSlides.length;
-      changeSlide(nextIndex);
+      changeSlide(nextIndex, direction);
     },
     [activeIndex, changeSlide, visibleSlides.length],
   );
@@ -164,28 +217,42 @@ export function ProductCarousel({
         ref={carouselRef}
         className="flex h-full w-full"
         style={{
-          transform: `translate3d(calc(${-activeIndex * 100}% + ${dragOffset}px), 0, 0)`,
-          transition: reduceMotion || dragOffset !== 0
+          transform: `translate3d(calc(${-currentTrackIndex * 100}% + ${dragOffset}px), 0, 0)`,
+          transition: reduceMotion || dragOffset !== 0 || isJumpResetting
             ? "none"
             : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
         }}
       >
-        {visibleSlides.map((slide, index) => (
-          <div key={`${slide.src}-${index}`} className="relative h-full w-full shrink-0">
-          {"type" in slide && slide.type === "video" ? (
-            <video src={slide.src} autoPlay loop muted playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover" />
-          ) : (
-          <Image
-            src={slide.src}
-            alt={"alt" in slide ? slide.alt : ""}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority={index === 0}
-          />
-          )}
-          </div>
-        ))}
+        {renderedSlides.map((slide, index) => {
+          const sourceIndex = visibleSlides.length > 1
+            ? (index - 1 + visibleSlides.length) % visibleSlides.length
+            : index;
+
+          return (
+            <div key={`${slide.src}-${index}`} className="relative h-full w-full shrink-0">
+              {"type" in slide && slide.type === "video" ? (
+                <video
+                  src={slide.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={slide.src}
+                  alt={"alt" in slide ? slide.alt : ""}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority={sourceIndex === 0}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
       {visibleSlides.length > 1 && <div className="absolute bottom-[28px] left-1/2 z-10 flex -translate-x-1/2 gap-[10px] md:bottom-[32px]">
         {visibleSlides.map((slide, index) => (

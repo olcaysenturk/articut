@@ -115,6 +115,21 @@ it("saves uploaded videos in the home gallery", async () => {
   }));
 });
 
+it("keeps the existing pack showcase alt text when uploading a replacement image", async () => {
+  const form = new FormData();
+  form.set("home-hero-video-url", "/hero.mp4");
+  form.set("home-mobile-hero-video-url", "/hero-mobile.mp4");
+  form.set("home-pack-showcase-image-file", new File(["image"], "pack-showcase.jpg", { type: "image/jpeg" }));
+
+  await saveHomeContentAction(form);
+
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({
+    home: expect.objectContaining({
+      packShowcaseImage: { src: "/media/uploaded.jpg", alt: "Old image" },
+    }),
+  }));
+});
+
 it("saves additional images within both single and grid sections", async () => {
   const sections = [
     { layout: "single", images: [image, { src: "/second.jpg", alt: "Second" }] },

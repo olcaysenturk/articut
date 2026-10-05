@@ -5,6 +5,7 @@ import Link from "next/link";
 import { type MouseEvent, useCallback, useState } from "react";
 import { motion, useAnimationControls } from "motion/react";
 import { BrandAMark } from "@/components/editorial/BrandAMark";
+import { FooterArrowIcon } from "@/components/ui/FooterArrowIcon";
 import { useOverlayBehavior } from "@/components/ui/useOverlayBehavior";
 import { useScrollLock } from "@/components/ui/useScrollLock";
 import { useCartStore } from "@/features/cart/cart-store";
@@ -31,18 +32,7 @@ const menuItem = {
 const panelTransition = { duration: 1.75, ease: [0.22, 1, 0.36, 1] as const };
 
 function MenuArrow() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="footer-link-arrow ml-[0.28em] inline-block size-[0.82em]"
-    >
-      <path
-        d="M4.8 20.7L17.1 8.4H8.3V5.2h14.1v14.1h-3.2v-8.7L7.1 22.9Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
+  return <FooterArrowIcon />;
 }
 
 export function MobileScissorMenuButton({

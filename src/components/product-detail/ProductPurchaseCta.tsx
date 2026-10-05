@@ -48,7 +48,7 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
             label={`Add to Cart, ${price}`}
             className="h-full w-full cursor-pointer whitespace-pre bg-transparent px-4 text-[14px] font-normal text-[#e0e0e0] md:px-8 md:text-[20px]"
           >
-            Add to Cart    <span className="relative left-[-10px] text-[12px]"><ArrowIcon /></span>    {price}
+            Add to Cart    <span className="relative left-[-10px] mx-[5px] text-[12px]"><ArrowIcon className="inline-block h-auto w-[15px]" /></span>    {price}
           </AddToCartButton>
         </motion.div>
       </div>

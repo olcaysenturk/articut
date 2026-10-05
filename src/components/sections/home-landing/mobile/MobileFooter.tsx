@@ -1,19 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FooterArrowIcon } from "@/components/ui/FooterArrowIcon";
 
 function FooterArrow() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="footer-link-arrow ml-[0.28em] inline-block size-[0.82em]"
-    >
-      <path
-        d="M4.8 20.7L17.1 8.4H8.3V5.2h14.1v14.1h-3.2v-8.7L7.1 22.9Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
+  return <FooterArrowIcon />;
 }
 
 export function MobileFooter() {

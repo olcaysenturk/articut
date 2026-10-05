@@ -1802,7 +1802,7 @@ export function CmsDashboard({
     toManagedImage(content.home.heroPoster, "hero-poster", 0),
   );
   const [packShowcaseImage, setPackShowcaseImage] = useState<ManagedImage>(
-    toManagedImage(content.home.packShowcaseImage, "pack-showcase", 0),
+    toManagedImage(content.home.packShowcaseImage, "home-pack-showcase-image", 0),
   );
   const [homeProductImage, setHomeProductImage] = useState<ManagedImage>(
     toManagedImage(content.home.productImage, "home-product", 0),

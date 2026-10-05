@@ -1,22 +1,7 @@
 "use client";
 
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
-
-function StripArrow({ direction }: { direction: -1 | 1 }) {
-  return (
-    <svg
-      viewBox="0 0 40 31"
-      aria-hidden="true"
-      fill="none"
-      className={`h-[31px] w-10 ${direction === -1 ? "rotate-180" : ""}`}
-    >
-      <path
-        d="M22.14 30.3599L33.66 17.1599H0V13.2599H33.72L22.14 0H27.12L39.72 15.18L27.12 30.3599H22.14Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+import { ArrowIcon } from "@/components/ui/ArrowIcon";
 
 export function ProductMediaStrip({ children }: { children: ReactNode }) {
   const stripRef = useRef<HTMLDivElement>(null);
@@ -97,7 +82,7 @@ export function ProductMediaStrip({ children }: { children: ReactNode }) {
           onClick={() => scrollMedia(-1)}
           onKeyDown={(event) => handleKeyDown(event, -1)}
         >
-          <StripArrow direction={-1} />
+          <ArrowIcon className="h-auto w-[38px] rotate-180" />
         </button>
       )}
       {canScrollRight && (
@@ -108,7 +93,7 @@ export function ProductMediaStrip({ children }: { children: ReactNode }) {
           onClick={() => scrollMedia(1)}
           onKeyDown={(event) => handleKeyDown(event, 1)}
         >
-          <StripArrow direction={1} />
+          <ArrowIcon className="h-auto w-[38px]" />
         </button>
       )}
     </section>

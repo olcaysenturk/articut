@@ -21,9 +21,9 @@
   },
   "home": {
     "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1233320017/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=cd825e3e1d0ad499128ce93721a889d9e4f7cc6cb923509c4c62fd32dd96540d",
-    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218870695/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=9e163b09729e2009c057f3d2936e8e6bac42563673c8f3aca3eebbf31d1f5e48",
+    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1233320017/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=cd825e3e1d0ad499128ce93721a889d9e4f7cc6cb923509c4c62fd32dd96540d",
     "heroPoster": {
-      "src": "/api/cms-media/cms-media/1791281983356-3cc79b1d70292f2c-articut-cutpilot-preview.jpg",
+      "src": "/images/hero-poster.png",
       "alt": "Homepage hero poster"
     },
     "productImage": {
@@ -31,11 +31,11 @@
       "alt": "Cutpilot package"
     },
     "packShowcaseImage": {
-      "src": "/api/cms-media/cms-media/1791238233251-c12d44dfcce65463-set-place-split-cut6.jpg",
+      "src": "/api/cms-media/cms-media/1791285454045-c12d44dfcce65463-set-place-split-cut6.jpg",
       "alt": "Cutpilot tool"
     },
     "mobilePackShowcaseImage": {
-      "src": "/figma/cutpilot-pack-mobile.png",
+      "src": "/api/cms-media/cms-media/1791285454218-c12d44dfcce65463-set-place-split-cut6.jpg",
       "alt": "Cutpilot tool"
     },
     "mobileHeroPoster": {
@@ -62,36 +62,26 @@
   "productDetail": {
     "mediaStrip": [
       {
-        "src": "/api/cms-media/cms-media/1790936046954-e5b8d3c758baa009-articut-cutpilot-media1.jpg",
+        "src": "/images/product-detail/gallery-left.jpg",
         "alt": "Cutpilot lifestyle 1",
         "type": "image"
       },
       {
         "type": "video",
-        "src": "/api/cms-media/cms-media/1790940644583-9a77fd88636fc37d-whatsapp-video-2026-10-02-at-14-28-09.mp4"
+        "src": "/videos/gallery-video-1.mp4"
       },
       {
-        "src": "/api/cms-media/cms-media/1790936047098-79afd0272a392b7c-articut-cutpilot-media3.jpg",
+        "src": "/images/product-detail/package-room.jpg",
         "alt": "Cutpilot lifestyle 3",
         "type": "image"
       },
       {
         "type": "video",
-        "src": "/api/cms-media/cms-media/1790940644423-9322de79699c4bab-whatsapp-video-2026-10-02-at-14-28-10.mp4"
-      },
-      {
-        "src": "/api/cms-media/cms-media/1790936047290-004ac3d60de10425-articut-cutpilot-media6.jpg",
-        "alt": "",
-        "type": "image"
-      },
-      {
-        "src": "/api/cms-media/cms-media/1790936047483-770f81f886fd2a81-articut-cutpilot-media2.jpg",
-        "alt": "",
-        "type": "image"
+        "src": "/videos/gallery-video-2.mp4"
       }
     ],
     "packageImage": {
-      "src": "/api/cms-media/cms-media/1790781848968-1ddd9e831553a49a-cutpilot-add-to-cart-final.jpg",
+      "src": "/images/product-detail/package-room.jpg",
       "alt": "Cutpilot product packaging"
     },
     "featureBackgroundMobile": {

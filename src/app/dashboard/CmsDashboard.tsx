@@ -74,7 +74,6 @@ const homePanels = [
   { key: "home-hero" as const, label: "Hero video" },
   { key: "home-product" as const, label: "Product image" },
   { key: "home-pack-showcase" as const, label: "Pack showcase image" },
-  { key: "home-mobile-pack-showcase" as const, label: "Mobile pack showcase image" },
   { key: "home-showcase" as const, label: "Web image showcase" },
 ];
 
@@ -1816,6 +1815,7 @@ export function CmsDashboard({
     toManagedImage(content.home.mobileHeroPoster, "mobile-hero-poster", 0),
   );
   const [homeHeroViewport, setHomeHeroViewport] = useState<"desktop" | "mobile">("desktop");
+  const [packShowcaseViewport, setPackShowcaseViewport] = useState<"desktop" | "mobile">("desktop");
   const [showcaseItems, setShowcaseItems] = useState<ManagedMediaItem[]>(
     content.home.imageShowcase.map((item, index) => toManagedMediaItem(item, "showcase", index)),
   );
@@ -2203,24 +2203,45 @@ export function CmsDashboard({
           />
         </div>
 
-        <div className={activePanel === "home-pack-showcase" ? "block" : "hidden"}>
-          <SingleImageEditor
-            fieldPrefix="home-pack-showcase-image"
-            image={packShowcaseImage}
-            label="Pack showcase image"
-            setImage={setPackShowcaseImage}
-            spec={MEDIA_SPECS.packShowcase}
-          />
-        </div>
+        <div className={activePanel === "home-pack-showcase" ? "space-y-4" : "hidden"}>
+          <div className="inline-flex rounded-lg border border-[#d0d0d0] bg-white p-1 shadow-sm" role="tablist" aria-label="Pack showcase viewport">
+            {(["desktop", "mobile"] as const).map((viewport) => (
+              <button
+                key={viewport}
+                type="button"
+                role="tab"
+                aria-selected={packShowcaseViewport === viewport}
+                onClick={() => setPackShowcaseViewport(viewport)}
+                className={`rounded-md px-5 py-2 text-sm font-semibold capitalize transition-colors ${
+                  packShowcaseViewport === viewport
+                    ? "bg-[#e04d26] text-white"
+                    : "text-[#6f6f6f] hover:bg-[#fff7e4] hover:text-[#e04d26]"
+                }`}
+              >
+                {viewport}
+              </button>
+            ))}
+          </div>
 
-        <div className={activePanel === "home-mobile-pack-showcase" ? "block" : "hidden"}>
-          <SingleImageEditor
-            fieldPrefix="home-mobile-pack-showcase-image"
-            image={mobilePackShowcaseImage}
-            label="Mobile pack showcase image"
-            setImage={setMobilePackShowcaseImage}
-            spec={MEDIA_SPECS.mobilePackShowcase}
-          />
+          <div className={packShowcaseViewport === "desktop" ? "block" : "hidden"}>
+            <SingleImageEditor
+              fieldPrefix="home-pack-showcase-image"
+              image={packShowcaseImage}
+              label="Desktop pack showcase image"
+              setImage={setPackShowcaseImage}
+              spec={MEDIA_SPECS.packShowcase}
+            />
+          </div>
+
+          <div className={packShowcaseViewport === "mobile" ? "block" : "hidden"}>
+            <SingleImageEditor
+              fieldPrefix="home-mobile-pack-showcase-image"
+              image={mobilePackShowcaseImage}
+              label="Mobile pack showcase image"
+              setImage={setMobilePackShowcaseImage}
+              spec={MEDIA_SPECS.mobilePackShowcase}
+            />
+          </div>
         </div>
 
         <div className={activePanel === "home-product" ? "block" : "hidden"}>

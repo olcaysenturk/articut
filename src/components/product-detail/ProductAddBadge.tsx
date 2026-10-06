@@ -14,7 +14,7 @@ export function ProductAddBadge({ product }: { product: Product }) {
   return (
     <div
       data-product-badge
-      className="pointer-events-none fixed top-[calc(50dvh-120.5px)] -right-40 z-10 opacity-0 motion-reduce:opacity-100 md:top-auto md:-right-30 md:-bottom-30"
+      className="pointer-events-none fixed top-[calc(50dvh-120.5px)] -right-40 z-[79] opacity-0 motion-reduce:opacity-100 md:top-auto md:-right-30 md:-bottom-30"
     >
       <motion.div
         initial={false}

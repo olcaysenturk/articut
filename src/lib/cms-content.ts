@@ -255,6 +255,7 @@ const cmsContentSchema = z.object({
     heroPoster: imageSchema,
     productImage: imageSchema,
     packShowcaseImage: imageSchema,
+    mobilePackShowcaseImage: imageSchema,
     mobileHeroPoster: imageSchema,
     imageShowcase: z.array(mediaItemSchema).min(1),
   }),
@@ -323,6 +324,7 @@ const legacyCmsContentSchema = z.object({
     heroPoster: imageSchema.optional(),
     productImage: imageSchema.optional(),
     packShowcaseImage: imageSchema.optional(),
+    mobilePackShowcaseImage: imageSchema.optional(),
     mobileHeroPoster: imageSchema.optional(),
     imageShowcase: z.array(mediaItemSchema).optional(),
   }),
@@ -414,6 +416,10 @@ export async function getCmsContent(): Promise<CmsContent> {
       },
       packShowcaseImage: {
         src: "/figma/cutpilot-pack.png",
+        alt: "Cutpilot tool",
+      },
+      mobilePackShowcaseImage: legacy.home.mobilePackShowcaseImage ?? {
+        src: "/figma/cutpilot-pack-mobile.png",
         alt: "Cutpilot tool",
       },
       mobileHeroPoster: {

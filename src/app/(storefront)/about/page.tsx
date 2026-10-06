@@ -41,8 +41,8 @@ export default async function AboutPage() {
       <section data-video-frame className="relative h-[420px] overflow-hidden bg-black md:h-dvh">
         <StoreHeader />
         <video
+          data-start-on-ready
           className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
           muted
           loop
           playsInline

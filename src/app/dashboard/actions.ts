@@ -202,6 +202,12 @@ export async function saveHomeContentAction(formData: FormData) {
     content.home.packShowcaseImage.src,
     content.home.packShowcaseImage.alt,
   );
+  const mobilePackShowcaseImage = await imageFromForm(
+    formData,
+    "home-mobile-pack-showcase-image",
+    content.home.mobilePackShowcaseImage.src,
+    content.home.mobilePackShowcaseImage.alt,
+  );
   const productImage = await imageFromForm(
     formData,
     "home-product-image",
@@ -219,6 +225,7 @@ export async function saveHomeContentAction(formData: FormData) {
       heroPoster: heroPoster ?? content.home.heroPoster,
       productImage: productImage ?? content.home.productImage,
       packShowcaseImage: packShowcaseImage ?? content.home.packShowcaseImage,
+      mobilePackShowcaseImage: mobilePackShowcaseImage ?? content.home.mobilePackShowcaseImage,
       mobileHeroPoster: mobileHeroPoster ?? content.home.mobileHeroPoster,
       imageShowcase: imageShowcase.length > 0 ? imageShowcase : content.home.imageShowcase,
     },

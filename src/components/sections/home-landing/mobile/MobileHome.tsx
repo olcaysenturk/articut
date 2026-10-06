@@ -19,7 +19,10 @@ export function MobileHome({ cmsContent, product }: { cmsContent: CmsContent; pr
       />
       <FeatureSection config={MOBILE_CUTPILOT_FEATURE_CONFIG} />
       <MobileProductSection product={product} image={cmsContent.home.productImage} />
-      <MobilePackShowcase />
+      <MobilePackShowcase
+        imageAlt={cmsContent.home.mobilePackShowcaseImage.alt}
+        imageSrc={cmsContent.home.mobilePackShowcaseImage.src}
+      />
       <DesktopImageShowcase
         images={cmsContent.home.imageShowcase}
         className="absolute left-0 top-[2199px] h-[580px] w-full overflow-hidden bg-black"

@@ -61,6 +61,7 @@ export type CmsContent = {
     heroPoster: CmsImage;
     productImage: CmsImage;
     packShowcaseImage: CmsImage;
+    mobilePackShowcaseImage: CmsImage;
     mobileHeroPoster: CmsImage;
     imageShowcase: CmsMediaItem[];
   };

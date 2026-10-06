@@ -7,6 +7,7 @@ export const ACTIVE_PANELS = [
   "home-hero",
   "home-product",
   "home-pack-showcase",
+  "home-mobile-pack-showcase",
   "home-showcase",
   "product-features",
   "product-package",
@@ -40,6 +41,7 @@ export function formIdForPanel(panel: ActivePanel): string {
     case "home-hero":
     case "home-product":
     case "home-pack-showcase":
+    case "home-mobile-pack-showcase":
     case "home-showcase":
       return "home-form";
     case "product-features":

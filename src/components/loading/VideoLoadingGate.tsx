@@ -23,6 +23,23 @@ export function VideoLoadingGate({ children }: { children: ReactNode }) {
     let cancelled = false;
     let rafId: number;
     const start = performance.now();
+    const startVideos = () => {
+      const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video[data-start-on-ready]"));
+
+      videos.forEach((video) => {
+        video.pause();
+        video.currentTime = 0;
+      });
+
+      requestAnimationFrame(() => {
+        videos.forEach((video) => {
+          video.currentTime = 0;
+          void video.play().catch(() => {
+            // Browser autoplay policies can still reject in unusual cases.
+          });
+        });
+      });
+    };
 
     const tick = () => {
       const elapsed = performance.now() - start;
@@ -39,7 +56,10 @@ export function VideoLoadingGate({ children }: { children: ReactNode }) {
       animate(progress, 1, {
         duration: FINISH_DURATION_S,
         ease: "easeOut",
-        onComplete: () => setReady(true),
+        onComplete: () => {
+          startVideos();
+          setReady(true);
+        },
       });
     };
 

@@ -22,6 +22,7 @@ beforeEach(() => {
       heroPoster: image,
       mobileHeroPoster: image,
       packShowcaseImage: image,
+      mobilePackShowcaseImage: image,
       productImage: image,
       imageShowcase: [image],
     },

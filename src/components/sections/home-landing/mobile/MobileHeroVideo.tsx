@@ -15,8 +15,8 @@ export function MobileHeroVideo({
       className="absolute left-0 top-0 h-[620px] w-full overflow-hidden bg-black md:h-[492px]"
     >
       <video
+        data-start-on-ready
         className="absolute inset-0 h-[620px] w-full object-cover md:h-[492px]"
-        autoPlay
         muted
         loop
         playsInline

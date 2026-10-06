@@ -79,14 +79,14 @@ export function HeroProductReveal({
       >
         {header}
         <video
+          data-start-on-ready
           className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
           muted
           loop
-        playsInline
-        preload="metadata"
-        poster={posterUrl}
-      >
+          playsInline
+          preload="metadata"
+          poster={posterUrl}
+        >
           <source src={videoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/10" />

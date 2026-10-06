@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { RibbonMarquee } from "@/components/sections/home-landing/RibbonMarquee";
 
-export function MobilePackShowcase() {
+type MobilePackShowcaseProps = {
+  imageAlt: string;
+  imageSrc: string;
+};
+
+export function MobilePackShowcase({ imageAlt, imageSrc }: MobilePackShowcaseProps) {
   return (
     <section className="absolute left-0 top-[1899px] h-[300px] w-full overflow-hidden bg-[#fab446] [container-type:size]">
       <RibbonMarquee className="absolute left-[52px] top-0 h-[52px] w-[calc(100%-104px)]" />
@@ -24,8 +29,8 @@ export function MobilePackShowcase() {
       </div>
       <div className="absolute left-[52px] right-[52px] top-[52px] h-[196px] overflow-hidden">
         <Image
-          src="/figma/cutpilot-pack-mobile.png"
-          alt="Cutpilot tool"
+          src={imageSrc}
+          alt={imageAlt}
           fill
           sizes="calc(100vw - 104px)"
           className="object-center object-cover"

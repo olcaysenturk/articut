@@ -57,6 +57,7 @@ const MEDIA_SPECS = {
   desktopHero: { width: 1920, height: 1080, ratioLabel: "16:9" },
   mobileHero: { width: 1080, height: 1350, ratioLabel: "4:5, vertical" },
   packShowcase: { width: 2200, height: 1000, ratioLabel: "~2.2:1, ultra-wide" },
+  mobilePackShowcase: { width: 1080, height: 810, ratioLabel: "4:3, mobile crop" },
   webShowcase: { width: 1920, height: 1080, ratioLabel: "16:9" },
   storyImage: { width: 1920, height: 1080, ratioLabel: "16:9" },
   storyMobileImage: { width: 1080, height: 1350, ratioLabel: "4:5, vertical" },
@@ -73,6 +74,7 @@ const homePanels = [
   { key: "home-hero" as const, label: "Hero video" },
   { key: "home-product" as const, label: "Product image" },
   { key: "home-pack-showcase" as const, label: "Pack showcase image" },
+  { key: "home-mobile-pack-showcase" as const, label: "Mobile pack showcase image" },
   { key: "home-showcase" as const, label: "Web image showcase" },
 ];
 
@@ -1804,6 +1806,9 @@ export function CmsDashboard({
   const [packShowcaseImage, setPackShowcaseImage] = useState<ManagedImage>(
     toManagedImage(content.home.packShowcaseImage, "home-pack-showcase-image", 0),
   );
+  const [mobilePackShowcaseImage, setMobilePackShowcaseImage] = useState<ManagedImage>(
+    toManagedImage(content.home.mobilePackShowcaseImage, "home-mobile-pack-showcase-image", 0),
+  );
   const [homeProductImage, setHomeProductImage] = useState<ManagedImage>(
     toManagedImage(content.home.productImage, "home-product", 0),
   );
@@ -1877,6 +1882,10 @@ export function CmsDashboard({
 
     if (packShowcaseImage.file) {
       formData.set("home-pack-showcase-image-file", packShowcaseImage.file);
+    }
+
+    if (mobilePackShowcaseImage.file) {
+      formData.set("home-mobile-pack-showcase-image-file", mobilePackShowcaseImage.file);
     }
 
     if (homeProductImage.file) {
@@ -2201,6 +2210,16 @@ export function CmsDashboard({
             label="Pack showcase image"
             setImage={setPackShowcaseImage}
             spec={MEDIA_SPECS.packShowcase}
+          />
+        </div>
+
+        <div className={activePanel === "home-mobile-pack-showcase" ? "block" : "hidden"}>
+          <SingleImageEditor
+            fieldPrefix="home-mobile-pack-showcase-image"
+            image={mobilePackShowcaseImage}
+            label="Mobile pack showcase image"
+            setImage={setMobilePackShowcaseImage}
+            spec={MEDIA_SPECS.mobilePackShowcase}
           />
         </div>
 

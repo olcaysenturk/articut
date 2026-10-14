@@ -145,6 +145,10 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       for (let i = index; i >= 0 && !frame; i -= 1) {
         frame = images[i];
       }
+      // A later frame may finish first on a slow connection.
+      for (let i = index + 1; i < images.length && !frame; i += 1) {
+        frame = images[i];
+      }
       if (!frame) return;
 
       ctx.clearRect(0, 0, sequence.frameWidth, sequence.frameHeight);
@@ -173,18 +177,17 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
       for (let i = 0; i < sequenceConfig.frameCount; i += 1) {
         const image = new window.Image();
+        image.onload = () => {
+          if (cancelled) return;
+          images[i] = image;
+          // Scroll can advance before its requested frame has loaded.
+          drawFrame(currentFrameRef.current);
+        };
         image.src = sequenceFrameUrl(
           sequenceConfig.path,
           i,
           sequenceConfig.indexPadding ?? 3,
         );
-        image.onload = () => {
-          if (cancelled) return;
-          images[i] = image;
-          if (i === currentFrameRef.current) {
-            drawFrame(currentFrameRef.current);
-          }
-        };
       }
     }
 
@@ -417,6 +420,17 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       className={config.sectionClassName}
       data-node-id={config.nodeId}
     >
+      {enablePngSequence && sequence
+        ? Array.from({ length: sequence.frameCount }, (_, index) => (
+            <link
+              key={index}
+              rel="preload"
+              as="image"
+              href={sequenceFrameUrl(sequence.path, index, sequence.indexPadding ?? 3)}
+              media={sequence.preloadMediaQuery ?? mediaQueries.tabletUp}
+            />
+          ))
+        : null}
       {config.backgroundImage ? <ConfiguredImage image={config.backgroundImage} /> : null}
 
       <Heading

@@ -1,10 +1,10 @@
 {
   "about": {
-    "heroTitle": "We are Articut™.\r\nAn innovative company designing tools\r\nthat make professional-quality haircuts possible at home.",
+    "heroTitle": "We are Articut®.\r\nAn innovative company designing tools\r\nthat make professional-quality haircuts possible at home.",
     "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
     "heroMobileVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218880253/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=ee867fcc4b86d4754674feafe98a27224bc83f41791b75d3aba032e94a6eccf6",
     "heroPosterUrl": "/images/about-hero-poster.png",
-    "storyContent": "Articut™ carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut™, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\r\n\r\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut™.\r\n\r\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
+    "storyContent": "Articut® carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut®, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\r\n\r\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut®.\r\n\r\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
     "storyImageUrl": "/api/cms-media/cms-media/1790974586946-43e86f533efe1439-articut-sinan.jpg",
     "storyMobileImageUrl": "/api/cms-media/cms-media/1790974587089-43e86f533efe1439-articut-sinan.jpg",
     "contactTitle": "Contact Us",
@@ -62,22 +62,32 @@
   "productDetail": {
     "mediaStrip": [
       {
-        "src": "/images/product-detail/gallery-left.jpg",
+        "src": "/api/cms-media/cms-media/1791294563163-e5b8d3c758baa009-articut-cutpilot-media1.jpg",
         "alt": "Cutpilot lifestyle 1",
         "type": "image"
       },
       {
         "type": "video",
-        "src": "/videos/gallery-video-1.mp4"
+        "src": "https://player.vimeo.com/progressive_redirect/playback/1232309257/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=b0be5488f7141b3f8e66e721c42f4186c9416c71399d80bf61ebd6253fc7a809"
       },
       {
-        "src": "/images/product-detail/package-room.jpg",
+        "src": "/api/cms-media/cms-media/1791294563293-79afd0272a392b7c-articut-cutpilot-media3.jpg",
         "alt": "Cutpilot lifestyle 3",
         "type": "image"
       },
       {
         "type": "video",
-        "src": "/videos/gallery-video-2.mp4"
+        "src": "https://player.vimeo.com/progressive_redirect/playback/1232310209/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=ce890b94dcb779b6ece65a4f0dc7a8c4d2df39024b86788b82e2a7b1e27e7653"
+      },
+      {
+        "src": "/api/cms-media/cms-media/1791294563444-004ac3d60de10425-articut-cutpilot-media6.jpg",
+        "alt": "",
+        "type": "image"
+      },
+      {
+        "src": "/api/cms-media/cms-media/1791294563575-770f81f886fd2a81-articut-cutpilot-media2.jpg",
+        "alt": "",
+        "type": "image"
       }
     ],
     "packageImage": {

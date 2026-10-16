@@ -17,7 +17,7 @@ export function MobileStickyHeader({ tone = "accent" }: { tone?: "accent" | "bla
           className="fixed left-[32px] top-[19px] z-30 h-[25px] w-[129px]"
         >
           <Image
-            src="/figma/articut-logo.svg"
+            src="/figma/articut-registered-logo.svg"
             alt="Articut"
             fill
             priority

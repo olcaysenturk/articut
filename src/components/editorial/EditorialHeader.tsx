@@ -18,15 +18,18 @@ export function EditorialHeader() {
         }`}
       >
       <nav className="hidden md:block" aria-label="Primary navigation">
-        <Link href="/about" className="absolute left-[50px] top-[42px]">
+        <Link href="/" className="absolute left-[50px] top-[42px]">
+          Home
+        </Link>
+        <Link href="/about" className="absolute left-[115px] top-[42px]">
           About
         </Link>
-        <Link href="/cutpilot" className="absolute left-[163px] top-[42px]">
-          Cutpilot™
+        <Link href="/cutpilot" className="absolute left-[190px] top-[42px]">
+          Cutpilot®
         </Link>
         <Link href="/" aria-label="Articut home" className="absolute left-1/2 top-[30px] h-[41px] w-[215px] -translate-x-1/2">
           <Image
-            src="/figma/articut-logo.svg"
+            src="/figma/articut-registered-logo.svg"
             alt="Articut"
             fill
             priority
@@ -39,7 +42,7 @@ export function EditorialHeader() {
 
       <Link href="/" aria-label="Articut home" className="absolute left-[32px] top-[19px] h-[25px] w-[129px] md:hidden">
         <Image
-          src="/figma/articut-logo.svg"
+          src="/figma/articut-registered-logo.svg"
           alt="Articut"
           fill
           priority

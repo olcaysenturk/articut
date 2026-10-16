@@ -18,7 +18,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
     "absolute left-0 top-[620px] h-[580px] w-full overflow-hidden bg-black text-white",
   enablePngSequence: true,
   sequence: {
-    path: "/images/sequence/mobile/cutpilot_3D_Mobile_HigRes{index}.webp",
+    path: "/images/sequence/mobile/cutpilot_3D_Mobile_HigRes{index}.webp?v=rev-final-20261017",
     frameCount: 125,
     frameWidth: 1179,
     frameHeight: 1740,
@@ -36,7 +36,7 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-[#e04d26]",
   cta: {
     href: "/cutpilot",
-    label: "Explore Cutpilot™",
+    label: "Explore Cutpilot®",
     className:
       "feature-cta-hover absolute left-1/2 top-[487px] h-[46px] w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
@@ -86,7 +86,7 @@ export const DESKTOP_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
   bulletClassName: "h-[8px] w-[8px] shrink-0 rounded-full bg-white",
   cta: {
     href: "#product",
-    label: "Explore CutScissors™",
+    label: "Explore CutScissors®",
     className:
       "feature-cta-hover absolute bottom-[75px] left-1/2 h-[61px] w-[296px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#d9d9d9]",
@@ -136,7 +136,7 @@ export const MOBILE_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-white",
   cta: {
     href: "/cutpilot",
-    label: "Explore Cutpilot™",
+    label: "Explore Cutpilot®",
     className:
       "feature-cta-hover absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",

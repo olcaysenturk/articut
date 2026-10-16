@@ -17,7 +17,7 @@ export function MobileFooter() {
           About
         </Link>
         <Link href="/cutpilot" className="block">
-          Cutpilot™
+          Cutpilot®
         </Link>
       </div>
       <div className="absolute left-[min(103px,26.21vw)] top-[min(24px,6.11vw)] w-[min(94px,23.92vw)] text-[10px] leading-[24px]">
@@ -54,7 +54,7 @@ export function MobileFooter() {
           className="object-contain"
         />
       </div>
-      <p className="absolute bottom-[min(14px,3.56vw)] left-[min(32px,8.14vw)] text-[min(7px,1.79vw)] uppercase leading-none">© 2026 ARTICUT™</p>
+      <p className="absolute bottom-[min(14px,3.56vw)] left-[min(32px,8.14vw)] text-[min(7px,1.79vw)] uppercase leading-none">© 2026 ARTICUT®</p>
       <p className="absolute bottom-[min(14px,3.56vw)] left-1/2 -translate-x-1/2 whitespace-nowrap text-center text-[min(7px,1.79vw)] leading-none">
         ALL RIGHTS RESERVED
       </p>

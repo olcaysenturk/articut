@@ -21,7 +21,7 @@ export function HeaderOverlay() {
             About
           </Link>
           <Link href="/cutpilot" tabIndex={2} className="fixed left-[163px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none">
-            Cutpilot™
+            Cutpilot®
           </Link>
           <Link
             href="/"
@@ -29,7 +29,7 @@ export function HeaderOverlay() {
             tabIndex={3}
             className="fixed left-1/2 top-[calc(30px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 h-[41px] w-[215px] -translate-x-1/2"
           >
-            <Image src="/figma/articut-logo.svg" alt="Articut" fill priority className="object-contain" />
+            <Image src="/figma/articut-registered-logo.svg" alt="Articut" fill priority className="object-contain" />
           </Link>
           <CartButton tabIndex={4} className="fixed right-[50px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 text-[14px] leading-none" />
           <button

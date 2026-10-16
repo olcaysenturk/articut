@@ -5,6 +5,7 @@ import {
 } from "@/components/sections/features/FeatureSection";
 import { VideoMuteButton } from "@/components/media/VideoMuteButton";
 import { VideoPlaybackButton } from "@/components/media/VideoPlaybackButton";
+import { VideoFullscreenButton } from "@/components/media/VideoFullscreenButton";
 import { FEATURES } from "@/components/sections/hero/hero-content";
 import { HERO_VIDEO_POSTER_URL, HERO_VIDEO_URL } from "@/config/hero-video";
 
@@ -17,7 +18,7 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   nodeId: "1:503",
   enablePngSequence: true,
   sequence: {
-    path: "/images/sequence/Cutpilot_3D_Desktop{index}.webp",
+    path: "/images/sequence/Cutpilot_3D_Desktop{index}.webp?v=rev-final-20261017",
     frameCount: 125,
     frameWidth: 1440,
     frameHeight: 810,
@@ -35,7 +36,7 @@ const CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   bulletClassName: "h-[8px] w-[8px] shrink-0 rounded-full bg-[#e04d26]",
   cta: {
     href: "/cutpilot",
-    label: "Explore Cutpilot™",
+    label: "Explore Cutpilot®",
     className:
       "feature-cta-hover absolute bottom-[75px] left-1/2 h-[61px] w-[304px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
@@ -91,7 +92,8 @@ export function HeroProductReveal({
         </video>
         <div className="absolute inset-0 bg-black/10" />
         <VideoPlaybackButton className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2" />
-        <VideoMuteButton className="absolute bottom-[34px] right-[50px] z-20" />
+        <VideoMuteButton className="absolute bottom-[34px] left-[50px] z-20" />
+        <VideoFullscreenButton className="absolute bottom-[28px] right-[44px] z-20" />
       </section>
 
       <FeatureSection config={CUTPILOT_FEATURE_CONFIG} />

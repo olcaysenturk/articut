@@ -42,10 +42,10 @@ export default async function CheckoutPage() {
       <header className="border-b border-black/10">
         <div className="mx-auto flex h-[116px] w-full max-w-[1200px] items-center justify-between px-[24px] sm:px-[40px]">
           <Link href="/" aria-label="Articut home" className="relative h-[39px] w-[204px] sm:h-[46px] sm:w-[240px]">
-            <Image src="/figma/articut-logo.svg" alt="Articut" fill priority sizes="240px" />
+            <Image src="/figma/articut-registered-logo.svg" alt="Articut" fill priority sizes="240px" />
           </Link>
           <Link href="/" className="text-[13px] font-medium text-[#e94b24]">
-            Return to store
+            Home
           </Link>
         </div>
       </header>

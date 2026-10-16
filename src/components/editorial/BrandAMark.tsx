@@ -4,7 +4,7 @@ export function BrandAMark({ className = "" }: { className?: string }) {
   return (
     <div className={`overflow-hidden ${className}`} aria-hidden>
       <Image
-        src="/figma/articut-logo.svg"
+        src="/figma/articut-registered-logo.svg"
         alt=""
         width={1685}
         height={319}

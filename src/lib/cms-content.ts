@@ -9,7 +9,7 @@ import type { CmsContent, CmsStep, LegalSectionContent } from "@/types/cms";
 const DEFAULT_TERMS_SECTIONS: LegalSectionContent[] = [
   {
     title: "OVERVIEW",
-    content: `<p>This website is operated by Articut™. Throughout the site, the terms "we", "us" and "our" refer to Articut™. Articut™ offers this website, including all information, tools and Services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.</p>
+    content: `<p>This website is operated by Articut®. Throughout the site, the terms "we", "us" and "our" refer to Articut®. Articut® offers this website, including all information, tools and Services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.</p>
 <p>By visiting our site and/or purchasing something from us, you engage in our "Service" and agree to be bound by the following terms and conditions ("Terms of Service", "Terms"), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/or contributors of content.</p>
 <p>Please read these Terms of Service carefully before accessing or using our website. By accessing or using any part of the site, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any Services. If these Terms of Service are considered an offer, acceptance is expressly limited to these Terms of Service.</p>
 <p>Any new features or tools which are added to the current store shall also be subject to the Terms of Service. You can review the most current version of the Terms of Service at any time on this page. We reserve the right to update, change or replace any part of these Terms of Service by posting updates and/or changes to our website. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website following the posting of any changes constitutes acceptance of those changes.</p>
@@ -96,7 +96,7 @@ const DEFAULT_TERMS_SECTIONS: LegalSectionContent[] = [
 <p>We do not warrant that the results that may be obtained from the use of the Service will be accurate or reliable.</p>
 <p>You agree that from time to time we may remove the Service for indefinite periods of time or cancel the Service at any time, without notice to you. You expressly agree that your use of, or inability to use, the Service is at your sole risk.</p>
 <p>The Service and all products and Services delivered to you through the Service are, except as expressly stated by us, provided "as is" and "as available" without any representation, warranties or conditions of any kind, either express or implied, including implied warranties or conditions of merchantability, quality, fitness for a particular purpose, durability, title, and non-infringement.</p>
-<p>In no case shall Articut™, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, Service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including lost profits, lost revenue, lost savings, loss of data, replacement costs, or similar damages arising from your use of the Service or any products procured using the Service. Because some states or jurisdictions do not allow the exclusion or limitation of liability for consequential or incidental damages, in such states or jurisdictions our liability shall be limited to the maximum extent permitted by law.</p>`,
+<p>In no case shall Articut®, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, Service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including lost profits, lost revenue, lost savings, loss of data, replacement costs, or similar damages arising from your use of the Service or any products procured using the Service. Because some states or jurisdictions do not allow the exclusion or limitation of liability for consequential or incidental damages, in such states or jurisdictions our liability shall be limited to the maximum extent permitted by law.</p>`,
   },
 ];
 
@@ -161,7 +161,7 @@ const DEFAULT_PRIVACY_SECTIONS: LegalSectionContent[] = [
   {
     title: "Contact Us",
     content: `<p>If you have any questions about this Privacy Policy, please contact us:</p>
-<p>Articut™<br />Email: info@articut.com<br />Website: articut.com</p>`,
+<p>Articut®<br />Email: info@articut.com<br />Website: articut.com</p>`,
   },
 ];
 
@@ -390,11 +390,11 @@ export async function getCmsContent(): Promise<CmsContent> {
 
   return {
     about: legacy.about ?? {
-      heroTitle: "We are Articut™. An innovative company designing tools\nthat make professional-quality haircuts possible at home.",
+      heroTitle: "We are Articut®. An innovative company designing tools\nthat make professional-quality haircuts possible at home.",
       heroVideoUrl: "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
       heroMobileVideoUrl: "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/360p/file.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
       heroPosterUrl: "/images/about-hero-poster.png",
-      storyContent: "Articut™ carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut™, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\n\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut™.\n\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
+      storyContent: "Articut® carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot® by Articut®, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\n\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot® prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot®, the very first tool by Articut®.\n\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
       storyImageUrl: "/images/editorial/about-barber.png",
       storyMobileImageUrl: "/images/editorial/about-barber.png",
       contactTitle: "Contact Us",

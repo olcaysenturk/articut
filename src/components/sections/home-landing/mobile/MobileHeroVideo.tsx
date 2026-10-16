@@ -1,5 +1,6 @@
 import { VideoMuteButton } from "@/components/media/VideoMuteButton";
 import { VideoPlaybackButton } from "@/components/media/VideoPlaybackButton";
+import { VideoFullscreenButton } from "@/components/media/VideoFullscreenButton";
 import { HERO_VIDEO_POSTER_URL, MOBILE_HERO_VIDEO_URL } from "@/config/hero-video";
 
 export function MobileHeroVideo({
@@ -12,7 +13,7 @@ export function MobileHeroVideo({
   return (
     <section
       data-video-frame
-      className="absolute left-0 top-0 h-[620px] w-full overflow-hidden bg-black md:h-[492px]"
+      className="mobile-hero-video absolute left-0 top-0 h-[620px] w-full overflow-hidden bg-black md:h-[492px]"
     >
       <video
         data-start-on-ready
@@ -26,7 +27,8 @@ export function MobileHeroVideo({
         <source src={videoUrl} type="video/mp4" />
       </video>
       <VideoPlaybackButton className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 scale-[0.82]" />
-      <VideoMuteButton className="absolute bottom-[18px] right-[18px] z-20 scale-[0.82]" />
+      <VideoMuteButton className="absolute bottom-[24px] left-[26px] z-20 scale-[0.82]" />
+      <VideoFullscreenButton lockPortrait className="absolute bottom-[24px] right-[26px] z-20" />
     </section>
   );
 }

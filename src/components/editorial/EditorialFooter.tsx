@@ -20,7 +20,7 @@ export function EditorialFooter({ className }: { className?: string }) {
         <nav className="flex flex-col" aria-label="Footer navigation">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
-          <Link href="/cutpilot">Cutpilot™</Link>
+          <Link href="/cutpilot">Cutpilot®</Link>
         </nav>
         <nav className="flex flex-col" aria-label="Policies">
           <Link href="/faq">FAQs</Link>
@@ -51,12 +51,12 @@ export function EditorialFooter({ className }: { className?: string }) {
         <Image src="/figma/footer-mobile-mark.svg" alt="Articut" fill sizes="(max-width: 393px) 83.72vw, 329px" className="object-contain" />
       </div>
 
-      <div className="absolute bottom-[50px] left-[50px] hidden aspect-[670/131] w-[calc(100%-100px)] md:block">
-        <Image src="/figma/footer-logo.svg" alt="Articut" fill sizes="calc(100vw - 100px)" className="object-contain" />
+      <div className="absolute bottom-[50px] left-[50px] hidden aspect-[46362/8972] w-[calc(100%-100px)] md:block">
+        <Image src="/figma/articut-registered-logo.svg" alt="Articut" fill sizes="calc(100vw - 100px)" className="object-contain" />
       </div>
 
       <div className="relative z-10 text-[min(7px,1.79vw)] uppercase leading-none md:absolute md:bottom-[16px] md:left-[50px] md:right-[50px] md:grid md:grid-cols-3 md:items-end md:gap-2 md:text-[12px] md:leading-none">
-        <p className="absolute bottom-0 left-0 md:static">© 2026 ARTICUT™</p>
+        <p className="absolute bottom-0 left-0 md:static">© 2026 ARTICUT®</p>
         <p className="absolute inset-x-0 bottom-0 whitespace-nowrap text-center md:static">ALL RIGHTS RESERVED</p>
         <p className="absolute bottom-0 right-0 text-right md:static">
           <a href="https://artistudyo.com" target="_blank" rel="noreferrer">

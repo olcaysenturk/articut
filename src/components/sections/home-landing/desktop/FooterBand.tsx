@@ -19,7 +19,7 @@ export function FooterBand() {
           Home
         </Link>
         <Link href="/cutpilot" className="block">
-          Cutpilot™
+          Cutpilot®
         </Link>
         <Link href="/about" className="block">
           About
@@ -50,7 +50,7 @@ export function FooterBand() {
           <FooterArrow />
         </a>
       </div>
-      <p className="absolute bottom-[16px] left-[50px] text-[14px] uppercase leading-none">© 2026 ARTICUT™</p>
+      <p className="absolute bottom-[16px] left-[50px] text-[14px] uppercase leading-none">© 2026 ARTICUT®</p>
       <p className="absolute bottom-[16px] left-1/2 -translate-x-1/2 text-[14px] uppercase leading-none">
         ALL RIGHTS RESERVED
       </p>
@@ -62,9 +62,9 @@ export function FooterBand() {
       >
         DESIGNED BY ARTI STÜDYO®
       </a>
-      <div className="absolute bottom-[50px] left-[50px] aspect-[670/131] w-[calc(100%-100px)]">
+      <div className="absolute bottom-[50px] left-[50px] aspect-[46362/8972] w-[calc(100%-100px)]">
         <Image
-          src="/figma/footer-logo.svg"
+          src="/figma/articut-registered-logo.svg"
           alt="Articut"
           fill
           sizes="calc(100vw - 100px)"

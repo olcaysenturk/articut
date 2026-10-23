@@ -154,6 +154,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
       ctx.clearRect(0, 0, sequence.frameWidth, sequence.frameHeight);
       ctx.drawImage(frame, 0, 0, sequence.frameWidth, sequence.frameHeight);
+      canvasRef.current.dataset.sequenceReady = "true";
     },
     [enablePngSequence, sequence],
   );
@@ -169,35 +170,73 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
     let cancelled = false;
     let loaded = false;
 
+    const requestedImages = new Set<HTMLImageElement>();
+    const retryTimers = new Set<ReturnType<typeof setTimeout>>();
+
     function preloadFrames() {
       if (!media.matches || loaded || cancelled) return;
       loaded = true;
 
       const images: (HTMLImageElement | null)[] = new Array(sequenceConfig.frameCount).fill(null);
       imagesRef.current = images;
+      const pending = new Set(Array.from({ length: sequenceConfig.frameCount }, (_, index) => index));
+      const attempts = new Map<number, number>();
+      let active = 0;
 
-      for (let i = 0; i < sequenceConfig.frameCount; i += 1) {
-        const image = new window.Image();
-        image.onload = () => {
-          if (cancelled) return;
-          images[i] = image;
-          // Scroll can advance before its requested frame has loaded.
-          drawFrame(currentFrameRef.current);
-        };
-        image.src = sequenceFrameUrl(
-          sequenceConfig.path,
-          i,
-          sequenceConfig.indexPadding ?? 3,
-        );
+      function pump() {
+        if (cancelled) return;
+        // Bound cold-load downloads/decodes and prioritize the current scroll frame.
+        while (active < 6 && pending.size) {
+          const target = currentFrameRef.current;
+          const index = pending.has(target) ? target : pending.values().next().value!;
+          pending.delete(index);
+          active += 1;
+          const attempt = (attempts.get(index) ?? 0) + 1;
+          attempts.set(index, attempt);
+          const image = new window.Image();
+          requestedImages.add(image);
+          image.onload = () => {
+            if (cancelled) return;
+            requestedImages.delete(image);
+            active -= 1;
+            images[index] = image;
+            // Draw even if scrolling stopped while this frame was downloading.
+            drawFrame(currentFrameRef.current);
+            pump();
+          };
+          image.onerror = () => {
+            if (cancelled) return;
+            requestedImages.delete(image);
+            active -= 1;
+            if (attempt < 3) {
+              const timer = setTimeout(() => {
+                retryTimers.delete(timer);
+                if (cancelled) return;
+                pending.add(index);
+                pump();
+              }, attempt * 300);
+              retryTimers.add(timer);
+            }
+            pump();
+          };
+          image.src = sequenceFrameUrl(sequenceConfig.path, index, sequenceConfig.indexPadding ?? 3);
+        }
       }
+      pump();
     }
 
+    const canvas = canvasRef.current;
+    const redraw = () => drawFrame(currentFrameRef.current);
     preloadFrames();
+    canvas?.addEventListener("contextrestored", redraw);
     media.addEventListener("change", preloadFrames);
 
     return () => {
       cancelled = true;
       media.removeEventListener("change", preloadFrames);
+      canvas?.removeEventListener("contextrestored", redraw);
+      retryTimers.forEach(clearTimeout);
+      requestedImages.forEach((image) => { image.onload = null; image.onerror = null; });
       imagesRef.current = [];
     };
   }, [drawFrame, enablePngSequence, sequence]);
@@ -421,17 +460,14 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       className={config.sectionClassName}
       data-node-id={config.nodeId}
     >
-      {enablePngSequence && sequence
-        ? Array.from({ length: sequence.frameCount }, (_, index) => (
-            <link
-              key={index}
-              rel="preload"
-              as="image"
-              href={sequenceFrameUrl(sequence.path, index, sequence.indexPadding ?? 3)}
-              media={sequence.preloadMediaQuery ?? mediaQueries.tabletUp}
-            />
-          ))
-        : null}
+      {enablePngSequence && sequence ? (
+        <link
+          rel="preload"
+          as="image"
+          href={sequenceFrameUrl(sequence.path, 0, sequence.indexPadding ?? 3)}
+          media={sequence.preloadMediaQuery ?? mediaQueries.tabletUp}
+        />
+      ) : null}
       {config.backgroundImage ? <ConfiguredImage image={config.backgroundImage} /> : null}
 
       <Heading

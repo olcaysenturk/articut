@@ -252,6 +252,7 @@ const cmsContentSchema = z.object({
   home: z.object({
     heroVideoUrl: z.string().trim().min(1),
     mobileHeroVideoUrl: z.string().trim().min(1),
+    mobileHeroFullscreenVideoUrl: z.string().trim().optional(),
     heroPoster: imageSchema,
     productImage: imageSchema,
     packShowcaseImage: imageSchema,
@@ -321,6 +322,7 @@ const legacyCmsContentSchema = z.object({
   home: z.object({
     heroVideoUrl: z.string().trim().min(1),
     mobileHeroVideoUrl: z.string().trim().optional(),
+    mobileHeroFullscreenVideoUrl: z.string().trim().optional(),
     heroPoster: imageSchema.optional(),
     productImage: imageSchema.optional(),
     packShowcaseImage: imageSchema.optional(),
@@ -394,7 +396,7 @@ export async function getCmsContent(): Promise<CmsContent> {
       heroVideoUrl: "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
       heroMobileVideoUrl: "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/360p/file.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
       heroPosterUrl: "/images/about-hero-poster.png",
-      storyContent: "Articut® carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot® by Articut®, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\n\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot® prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot®, the very first tool by Articut®.\n\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
+      storyContent: "Articut® carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut®, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\n\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut®.\n\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
       storyImageUrl: "/images/editorial/about-barber.png",
       storyMobileImageUrl: "/images/editorial/about-barber.png",
       contactTitle: "Contact Us",
@@ -405,7 +407,8 @@ export async function getCmsContent(): Promise<CmsContent> {
     },
     home: {
       heroVideoUrl: legacy.home.heroVideoUrl,
-      mobileHeroVideoUrl: legacy.home.heroVideoUrl,
+      mobileHeroVideoUrl: legacy.home.mobileHeroVideoUrl || legacy.home.heroVideoUrl,
+      mobileHeroFullscreenVideoUrl: legacy.home.mobileHeroFullscreenVideoUrl,
       heroPoster: {
         src: "/images/hero-poster.png",
         alt: "Homepage hero poster",

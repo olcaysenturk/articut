@@ -19,7 +19,7 @@ export function FooterBand() {
           Home
         </Link>
         <Link href="/cutpilot" className="block">
-          Cutpilot®
+          Cutpilot™
         </Link>
         <Link href="/about" className="block">
           About

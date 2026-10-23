@@ -83,7 +83,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <div className="relative h-[393px] w-full md:h-[686px]">
+      <div className="relative h-[393px] w-full md:h-auto">
         <Image
           src={about.storyMobileImageUrl ?? about.storyImageUrl}
           alt="Articut founder cutting a client’s hair"
@@ -95,15 +95,16 @@ export default async function AboutPage() {
         <Image
           src={about.storyImageUrl}
           alt="Articut founder cutting a client’s hair"
-          fill
+          width={1987}
+          height={1122}
           sizes="100vw"
-          className="hidden object-cover md:block"
+          className="hidden h-auto w-full md:block"
           priority
         />
       </div>
 
       <section className="h-[427px] bg-[#e04d26] px-6 py-[45px] text-[#e0e0e0] md:h-[810px] md:px-[50px] md:py-[190px]">
-        <div className="mx-auto grid max-w-[1340px] gap-[40px] md:items-center md:grid-cols-[260px_minmax(0,1fr)] md:gap-[80px]">
+        <div className="mx-auto grid max-w-[1340px] gap-[40px] md:items-start md:grid-cols-[260px_minmax(0,1fr)] md:gap-[80px]">
           <Reveal>
             <h2 className="contact-heading text-center md:text-left">{about.contactTitle}</h2>
           </Reveal>

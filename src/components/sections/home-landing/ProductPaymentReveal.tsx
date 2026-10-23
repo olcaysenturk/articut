@@ -17,8 +17,10 @@ export function ProductPaymentReveal({
   button,
   buttonClassName,
   paymentClassName,
+  className = "pointer-events-none absolute inset-0",
 }: {
   button: ReactNode;
+  className?: string;
   buttonClassName: string;
   paymentClassName: string;
 }) {
@@ -28,7 +30,7 @@ export function ProductPaymentReveal({
   const isVisible = reduceMotion || isInView;
 
   return (
-    <div className="pointer-events-none absolute inset-0">
+    <div className={className}>
       <div ref={buttonRef} className={`pointer-events-auto ${buttonClassName}`}>
         <motion.div
           data-product-button-reveal

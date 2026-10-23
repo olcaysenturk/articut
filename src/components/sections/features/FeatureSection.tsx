@@ -78,6 +78,7 @@ type FeatureSectionBaseConfig = {
     contentClassName: string;
   };
   detailsClassName?: string;
+  detailsLayout?: "overlay" | "flow";
   animation?: FeatureSectionAnimation;
 };
 
@@ -477,7 +478,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
       ) : null}
 
       <div
-        className={`pointer-events-none absolute inset-0 ${config.detailsClassName ?? "z-30"}`}
+        className={`pointer-events-none ${config.detailsLayout === "flow" ? "relative" : "absolute inset-0"} ${config.detailsClassName ?? "z-30"}`}
       >
         <ul className={config.featuresClassName}>
           {config.features.map((feature) => (

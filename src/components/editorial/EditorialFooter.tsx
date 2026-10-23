@@ -20,7 +20,7 @@ export function EditorialFooter({ className }: { className?: string }) {
         <nav className="flex flex-col" aria-label="Footer navigation">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
-          <Link href="/cutpilot">Cutpilot®</Link>
+          <Link href="/cutpilot">Cutpilot™</Link>
         </nav>
         <nav className="flex flex-col" aria-label="Policies">
           <Link href="/faq">FAQs</Link>

@@ -18,9 +18,12 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
       }, fraction);
     };
 
+    await scrollTo(0.7);
+    await expect.poll(angle).toBeGreaterThan(34);
+
     // Poll the position too: lazy media above the stage may still be loading.
     await expect.poll(async () => {
-      await scrollTo(0.6);
+      await scrollTo(0.4);
       return angle();
     }).toBeGreaterThan(10);
     await expect.poll(angle).toBeLessThan(25);
@@ -33,15 +36,15 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
       section.before(spacer);
     });
     await expect.poll(async () => {
-      await scrollTo(0.6);
+      await scrollTo(0.4);
       return Math.abs((await angle()) - middleAngle);
     }).toBeLessThan(1);
 
-    await scrollTo(0.25);
+    await scrollTo(0.1);
     await expect.poll(angle).toBeLessThan(1);
-    await scrollTo(0.6);
+    await scrollTo(0.4);
     await expect.poll(async () => Math.abs((await angle()) - middleAngle)).toBeLessThan(1);
-    await scrollTo(0.96);
+    await scrollTo(0.7);
     await expect.poll(angle).toBeGreaterThan(34);
   });
 }

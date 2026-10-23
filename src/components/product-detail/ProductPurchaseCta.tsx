@@ -18,6 +18,7 @@ const PAYMENT_METHODS = [
 
 export function ProductPurchaseCta({ product }: { product: Product }) {
   const variant = product.variants.find((item) => item.available) ?? product.variants[0];
+  const isAvailable = Boolean(product.available && variant?.available);
   const price = formatCompactMoney(variant?.price ?? product.price);
   const rootRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(rootRef, { amount: 0.85 });
@@ -26,7 +27,7 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
 
   return (
     <div ref={rootRef} className="flex flex-col items-center gap-[22px]">
-      <div className="product-purchase-hover relative h-[46px] w-[227px] md:h-[61px] md:w-[304px]">
+      {isAvailable && <div className="product-purchase-hover relative h-[46px] w-[227px] md:h-[61px] md:w-[304px]">
         <motion.div
           aria-hidden
           initial={false}
@@ -51,7 +52,7 @@ export function ProductPurchaseCta({ product }: { product: Product }) {
             Add to Cart    <span className="relative left-[-10px] mx-[5px] text-[12px]"><ArrowIcon className="inline-block h-auto w-[16px]" /></span>    {price}
           </AddToCartButton>
         </motion.div>
-      </div>
+      </div>}
       <motion.div
         initial={false}
         animate={isVisible ? "visible" : "hidden"}

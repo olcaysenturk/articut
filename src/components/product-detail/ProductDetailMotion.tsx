@@ -217,8 +217,8 @@ export function ProductDetailMotion({ children }: { children: ReactNode }) {
 
         const combScrollTrigger = ScrollTrigger.create({
           trigger: combStage,
-          start: "top 95%",
-          end: "top 30%",
+          start: "top 65%",
+          end: "top 15%",
           scrub: true,
           animation: combTimeline,
           invalidateOnRefresh: true,

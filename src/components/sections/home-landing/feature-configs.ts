@@ -13,9 +13,9 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   titleAriaLabel: "Revolutionary at-home hair cutting gadget",
   headingLevel: 2,
   headingClassName:
-    "mobile-feature-heading absolute left-1/2 top-[40px] z-10 w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
+    "mobile-feature-heading relative z-10 mx-auto w-full max-w-[329px]",
   sectionClassName:
-    "absolute left-0 top-[620px] h-[580px] w-full overflow-hidden bg-black text-white",
+    "relative flex min-h-[580px] w-full flex-col gap-12 overflow-hidden bg-black px-8 pb-[47px] pt-10 text-white",
   enablePngSequence: true,
   sequence: {
     path: "/images/sequence/mobile/cutpilot_3D_Mobile_HigRes{index}.webp?v=rev-final-20261017",
@@ -30,20 +30,21 @@ export const MOBILE_CUTPILOT_FEATURE_CONFIG: FeatureSectionConfig = {
   },
   features: FEATURES,
   featuresClassName:
-    "absolute left-1/2 top-[415px] w-[330px] -translate-x-1/2 text-center text-[12px] leading-[17px]",
+    "mx-auto w-full max-w-[330px] text-center text-[12px] leading-[17px]",
   featureItemClassName: "flex items-center justify-center gap-[10px]",
   showFeatureBullets: true,
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-[#e04d26]",
   cta: {
     href: "/cutpilot",
-    label: "Explore Cutpilot®",
+    label: "Explore Cutpilot™",
     className:
-      "feature-cta-hover absolute left-1/2 top-[487px] h-[46px] w-[calc(100%-64px)] max-w-[329px] -translate-x-1/2",
+      "feature-cta-hover relative mx-auto min-h-[46px] w-full max-w-[329px]",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",
     contentClassName:
-      "pointer-events-auto absolute inset-0 flex items-center justify-center text-[12px] text-[#e0e0e0]",
+      "pointer-events-auto relative flex min-h-[46px] items-center justify-center px-4 py-3 text-center text-[12px] text-[#e0e0e0]",
   },
-  detailsClassName: "z-10",
+  detailsLayout: "flow",
+  detailsClassName: "z-10 mt-auto flex flex-col gap-[21px]",
   animation: {
     animateHeading: false,
     animateDetails: true,
@@ -136,7 +137,7 @@ export const MOBILE_CUTSCISSORS_FEATURE_CONFIG: FeatureSectionConfig = {
   bulletClassName: "h-[5px] w-[5px] shrink-0 rounded-full bg-white",
   cta: {
     href: "/cutpilot",
-    label: "Explore Cutpilot®",
+    label: "Explore Cutpilot™",
     className:
       "feature-cta-hover absolute left-1/2 top-[494px] h-[46px] w-[241px] -translate-x-1/2",
     backgroundClassName: "feature-cta-pill absolute inset-0 rounded-full bg-[#e04d26]",

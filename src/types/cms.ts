@@ -58,6 +58,7 @@ export type CmsContent = {
   home: {
     heroVideoUrl: string;
     mobileHeroVideoUrl: string;
+    mobileHeroFullscreenVideoUrl?: string;
     heroPoster: CmsImage;
     productImage: CmsImage;
     packShowcaseImage: CmsImage;

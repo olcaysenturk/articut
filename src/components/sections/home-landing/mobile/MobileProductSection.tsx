@@ -10,8 +10,8 @@ export function MobileProductSection({ product, image }: { product: Product; ima
   const variant = product.variants.find((item) => item.available) ?? product.variants[0];
 
   return (
-    <section id="product-mobile" className="absolute left-0 top-[1200px] h-[699px] w-full overflow-hidden">
-      <CutpilotPackageImage src={image.src} alt={image.alt} imageClassName="scale-[1.045] object-cover" sizes="393px" />
+    <section id="product-mobile" className="relative flex min-h-[699px] w-full flex-col justify-end overflow-hidden px-6 pb-[39px] pt-12">
+      <CutpilotPackageImage src={image.src} alt={image.alt} imageClassName="scale-[1.045] object-cover" sizes="(max-width: 767px) 100vw, 393px" />
       <ProductPaymentReveal
         button={
           <AddToCartButton
@@ -24,8 +24,9 @@ export function MobileProductSection({ product, image }: { product: Product; ima
             Add to Cart    <span className="relative left-[-10px] mx-[5px] text-[12px]"><ArrowIcon className="inline-block h-auto w-[16px]" /></span>    {formatCompactMoney(variant?.price ?? product.price)}
           </AddToCartButton>
         }
-        buttonClassName="absolute left-1/2 top-[583px] -translate-x-1/2"
-        paymentClassName="absolute left-1/2 top-[649px] w-[241px] -translate-x-1/2"
+        className="relative z-10 flex flex-col items-center gap-5"
+        buttonClassName="relative max-w-full"
+        paymentClassName="w-full max-w-[241px]"
       />
     </section>
   );

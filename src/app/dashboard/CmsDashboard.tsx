@@ -864,6 +864,7 @@ function VideoEditor({
   title,
   videoUrl,
   videoUrlName,
+  videoAspectRatio,
 }: {
   filePrefix: string;
   isMobile?: boolean;
@@ -878,6 +879,7 @@ function VideoEditor({
   title: string;
   videoUrl: string;
   videoUrlName: string;
+  videoAspectRatio?: string;
 }) {
   return (
     <section className="rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
@@ -899,7 +901,7 @@ function VideoEditor({
         </div>
 
         <div className={`grid gap-6 ${isMobile ? "lg:grid-cols-[220px_1fr]" : "lg:grid-cols-[360px_1fr]"}`}>
-          <div className={`overflow-hidden rounded-lg bg-black ${isMobile ? "aspect-[9/16]" : "aspect-video"}`}>
+          <div className="overflow-hidden rounded-lg bg-black" style={{ aspectRatio: videoAspectRatio ?? (isMobile ? "9 / 16" : "16 / 9") }}>
             <video
               src={videoUrl}
               className="h-full w-full object-cover"
@@ -1799,6 +1801,7 @@ export function CmsDashboard({
   const [aboutStoryContent, setAboutStoryContent] = useState(content.about.storyContent);
   const [heroVideoUrl, setHeroVideoUrl] = useState(content.home.heroVideoUrl);
   const [mobileHeroVideoUrl, setMobileHeroVideoUrl] = useState(content.home.mobileHeroVideoUrl);
+  const [mobileHeroFullscreenVideoUrl, setMobileHeroFullscreenVideoUrl] = useState(content.home.mobileHeroFullscreenVideoUrl ?? "");
   const [heroPoster, setHeroPoster] = useState<ManagedImage>(
     toManagedImage(content.home.heroPoster, "hero-poster", 0),
   );
@@ -2197,10 +2200,16 @@ export function CmsDashboard({
             setPoster={setMobileHeroPoster}
             setVideoUrl={setMobileHeroVideoUrl}
             spec={MEDIA_SPECS.mobileHero}
-            title="Mobile hero video"
+            title="Mobile hero video (4:5)"
+            videoAspectRatio="4 / 5"
             videoUrl={mobileHeroVideoUrl}
             videoUrlName="home-mobile-hero-video-url"
           />
+          <section className="mt-4 space-y-4 rounded-xl border border-[#e5e5e5] bg-white p-6 shadow-sm">
+            <TextInput name="home-mobile-hero-fullscreen-video-url" label="Mobile fullscreen video URL (9:16)" value={mobileHeroFullscreenVideoUrl} onChange={setMobileHeroFullscreenVideoUrl} />
+            <p className="text-sm text-[#6f6f6f]">Use a 9:16 version of the same edit. Leave empty to use the inline video in fullscreen.</p>
+            {mobileHeroFullscreenVideoUrl ? <video src={mobileHeroFullscreenVideoUrl} controls playsInline preload="metadata" className="aspect-[9/16] w-[220px] bg-black object-contain" /> : null}
+          </section>
         </div>
 
         <div className={activePanel === "home-pack-showcase" ? "space-y-4" : "hidden"}>

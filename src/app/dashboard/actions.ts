@@ -222,6 +222,9 @@ export async function saveHomeContentAction(formData: FormData) {
     home: {
       heroVideoUrl: field(formData, "home-hero-video-url"),
       mobileHeroVideoUrl: field(formData, "home-mobile-hero-video-url"),
+      mobileHeroFullscreenVideoUrl: formData.has("home-mobile-hero-fullscreen-video-url")
+        ? field(formData, "home-mobile-hero-fullscreen-video-url")
+        : content.home.mobileHeroFullscreenVideoUrl,
       heroPoster: heroPoster ?? content.home.heroPoster,
       productImage: productImage ?? content.home.productImage,
       packShowcaseImage: packShowcaseImage ?? content.home.packShowcaseImage,

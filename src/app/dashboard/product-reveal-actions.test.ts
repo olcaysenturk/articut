@@ -155,3 +155,18 @@ it.each([
   expect(mocks.save).not.toHaveBeenCalled();
   expect(mocks.upload).not.toHaveBeenCalled();
 });
+
+
+it("saves a separate fullscreen mobile hero video", async () => {
+  const form = new FormData();
+  form.set("home-hero-video-url", "/hero.mp4");
+  form.set("home-mobile-hero-video-url", "/hero-4x5.mp4");
+  form.set("home-mobile-hero-fullscreen-video-url", "/hero-9x16.mp4");
+  await saveHomeContentAction(form);
+  expect(mocks.save).toHaveBeenCalledWith(expect.objectContaining({
+    home: expect.objectContaining({
+      mobileHeroVideoUrl: "/hero-4x5.mp4",
+      mobileHeroFullscreenVideoUrl: "/hero-9x16.mp4",
+    }),
+  }));
+});

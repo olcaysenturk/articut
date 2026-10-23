@@ -4,7 +4,7 @@
     "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218880252/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=5b6ef1a7d3adfa4e94ad0c0a94ee4a7d086c0532783314683e6cc5141c80e16e",
     "heroMobileVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1218880253/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=ee867fcc4b86d4754674feafe98a27224bc83f41791b75d3aba032e94a6eccf6",
     "heroPosterUrl": "/images/about-hero-poster.png",
-    "storyContent": "Articut® carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot® by Articut®, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\r\n\r\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot® prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot®, the very first tool by Articut®.\r\n\r\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
+    "storyContent": "Articut® carries a dream that’s been decades in the making. Sinan, the visionary behind Cutpilot™ by Articut®, grew up in a family of hairdressers. His early years were shaped by mirrors, scissors, and the constant buzz of clippers. At just 13, he and two close friends dreamed of designing and selling their own hair tool, a simple idea that never faded.\r\n\r\nDecades later, the trio reunited. Sinan had become a successful hairdresser in New York. One friend helped craft the first Cutpilot™ prototype, while the other now manages its production at a family-run factory. What began as a childhood dream evolved into a story of real collaboration. More than thirty years on, that dream lives on in Cutpilot™, the very first tool by Articut®.\r\n\r\nRooted in experience. Built with care. Designed by someone who’s lived and breathed the world of hair.",
     "storyImageUrl": "/api/cms-media/cms-media/1792059540903-9a06afd8c09a4d89-articut-sinan-final.jpg",
     "storyMobileImageUrl": "/api/cms-media/cms-media/1792059541053-fd256559ca3e4f1a-articut-sinan-mobile-final.jpg",
     "contactTitle": "Contact Us",
@@ -21,7 +21,7 @@
   },
   "home": {
     "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1233320017/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=cd825e3e1d0ad499128ce93721a889d9e4f7cc6cb923509c4c62fd32dd96540d",
-    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1233320017/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=cd825e3e1d0ad499128ce93721a889d9e4f7cc6cb923509c4c62fd32dd96540d",
+    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1237595631/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=eaea5df8247c749c7d85c8238d31279297b809aa8ecb641df999a114b7de69ab",
     "heroPoster": {
       "src": "/images/hero-poster.png",
       "alt": "Homepage hero poster"
@@ -57,7 +57,8 @@
         "alt": "Cutpilot unboxing",
         "type": "image"
       }
-    ]
+    ],
+    "mobileHeroFullscreenVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1237596256/rendition/1440p/file.mp4%20%281440p%29.mp4?loc=external&signature=16f6d83077c81003f9f6a0a462d2d233eefa771e5642101ca49fd8fbf481ad55"
   },
   "productDetail": {
     "mediaStrip": [

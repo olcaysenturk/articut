@@ -26,7 +26,7 @@ export function StoreHeader() {
             About
           </Link>
           <Link href="/cutpilot" tabIndex={3} className="fixed left-[190px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none">
-            Cutpilot®
+            Cutpilot™
           </Link>
           <Link
             href="/"

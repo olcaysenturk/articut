@@ -25,7 +25,7 @@ export function EditorialHeader() {
           About
         </Link>
         <Link href="/cutpilot" className="absolute left-[190px] top-[42px]">
-          Cutpilot®
+          Cutpilot™
         </Link>
         <Link href="/" aria-label="Articut home" className="absolute left-1/2 top-[30px] h-[41px] w-[215px] -translate-x-1/2">
           <Image

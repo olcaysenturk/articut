@@ -15,9 +15,11 @@ export function VideoMuteButton({ className = "" }: VideoMuteButtonProps) {
       ?.closest<HTMLElement>("[data-video-frame]")
       ?.querySelector("video");
 
-    if (video) {
-      setIsMuted(video.muted);
-    }
+    if (!video) return;
+    const syncMuted = () => setIsMuted(video.muted);
+    syncMuted();
+    video.addEventListener("volumechange", syncMuted);
+    return () => video.removeEventListener("volumechange", syncMuted);
   }, []);
 
   function toggleMute() {

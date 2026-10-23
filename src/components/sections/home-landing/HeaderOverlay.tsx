@@ -21,7 +21,7 @@ export function HeaderOverlay() {
             About
           </Link>
           <Link href="/cutpilot" tabIndex={2} className="fixed left-[163px] top-[calc(42px+var(--header-offset))] transition-[top] duration-300 ease-out z-30 leading-none">
-            Cutpilot®
+            Cutpilot™
           </Link>
           <Link
             href="/"

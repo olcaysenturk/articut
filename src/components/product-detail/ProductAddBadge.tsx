@@ -11,6 +11,8 @@ export function ProductAddBadge({ product }: { product: Product }) {
   const variant = product.variants.find((item) => item.available) ?? product.variants[0];
   const isDrawerOpen = useCartStore((state) => state.isDrawerOpen);
 
+  if (!product.available || !variant?.available) return null;
+
   return (
     <div
       data-product-badge

@@ -66,7 +66,7 @@ export function ProductMediaStrip({ children }: { children: ReactNode }) {
   const arrowButtonClass = "absolute top-1/2 z-10 flex size-16 -translate-y-1/2 cursor-pointer items-center justify-center text-[#e04d26] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e04d26] md:size-20";
 
   return (
-    <section data-scroll-snap-ignore aria-label="Product media gallery" className="relative border-y-[3px] border-[#e04d26]">
+    <section data-scroll-snap-ignore aria-label="Product media gallery" className="relative overflow-hidden border-y-[3px] border-[#e04d26] bg-[#d9d9d9]">
       <div
         ref={stripRef}
         tabIndex={0}

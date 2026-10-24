@@ -18,16 +18,20 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
       }, fraction);
     };
 
-    await scrollTo(0.7);
+    await scrollTo(0.75);
     await expect.poll(angle).toBeGreaterThan(34);
 
     // Poll the position too: lazy media above the stage may still be loading.
     await expect.poll(async () => {
-      await scrollTo(0.4);
+      await scrollTo(0.375);
       return angle();
     }).toBeGreaterThan(10);
     await expect.poll(angle).toBeLessThan(25);
     const middleAngle = await angle();
+    await expect.poll(() => page.locator("[data-comb-right]").evaluate((element) => {
+      const matrix = new DOMMatrixReadOnly(getComputedStyle(element).transform);
+      return Math.atan2(matrix.b, matrix.a) * 180 / Math.PI;
+    })).toBeCloseTo(-middleAngle, 0);
 
     // Reproduce a late-loading block changing the section's document position.
     await page.locator("[data-comb-callout-section]").evaluate((section) => {
@@ -36,15 +40,15 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
       section.before(spacer);
     });
     await expect.poll(async () => {
-      await scrollTo(0.4);
+      await scrollTo(0.375);
       return Math.abs((await angle()) - middleAngle);
     }).toBeLessThan(1);
 
-    await scrollTo(0.1);
+    await scrollTo(0);
     await expect.poll(angle).toBeLessThan(1);
-    await scrollTo(0.4);
+    await scrollTo(0.375);
     await expect.poll(async () => Math.abs((await angle()) - middleAngle)).toBeLessThan(1);
-    await scrollTo(0.7);
+    await scrollTo(0.75);
     await expect.poll(angle).toBeGreaterThan(34);
   });
 }

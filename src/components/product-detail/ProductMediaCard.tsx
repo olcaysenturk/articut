@@ -10,7 +10,7 @@ export function ProductMediaCard({ item }: { item: CmsMediaItem }) {
   const failed = () => setStatus("error");
 
   return (
-    <div className="relative aspect-[9/16] w-[165px] shrink-0 snap-start overflow-hidden border-r-[3px] border-[#e04d26] bg-[#d9d9d9] last:border-r-0 md:w-auto" aria-busy={status === "loading"}>
+    <div className="relative aspect-[9/16] w-[165px] shrink-0 snap-start overflow-hidden bg-[#d9d9d9] after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-[3px] after:bg-[#e04d26] last:after:hidden md:w-auto" aria-busy={status === "loading"}>
       {status !== "ready" && (
         <div className="absolute inset-0 flex items-center justify-center" role="status">
           {status === "loading" ? (
@@ -27,7 +27,7 @@ export function ProductMediaCard({ item }: { item: CmsMediaItem }) {
           alt={item.alt}
           fill
           sizes="(max-width: 767px) 165px, 25vw"
-          className={`object-contain transition-opacity duration-300 motion-reduce:transition-none ${status === "ready" ? "opacity-100" : "opacity-0"}`}
+          className={`object-cover transition-opacity duration-300 motion-reduce:transition-none ${status === "ready" ? "opacity-100" : "opacity-0"}`}
           onLoad={ready}
           onError={failed}
         />
@@ -43,7 +43,7 @@ export function ProductMediaCard({ item }: { item: CmsMediaItem }) {
           onLoadedData={ready}
           onCanPlay={ready}
           onError={failed}
-          className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 motion-reduce:transition-none ${status === "ready" ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 motion-reduce:transition-none ${status === "ready" ? "opacity-100" : "opacity-0"}`}
         />
       )}
     </div>

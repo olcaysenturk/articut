@@ -43,7 +43,7 @@ test("a delayed first load paints the current frame after the user stops scrolli
     await page.goto("/", { waitUntil: "domcontentloaded" });
     const section = page.locator('[data-node-id="1:503"]');
     const canvas = section.locator("canvas");
-    await expect.poll(() => section.evaluate((element) => element.parentElement?.className)).toContain("pin-spacer");
+    await expect(section).toHaveAttribute("data-motion-ready", "true");
     await page.evaluate(() => document.fonts.ready);
     await section.evaluate((element) => {
       window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top + innerHeight * 1.5, behavior: "instant" });

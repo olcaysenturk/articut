@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef } from "react";
+import { type CSSProperties, useCallback, useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsapPlugins, ScrollTrigger } from "@/lib/animation/gsap";
 import { mediaQueries } from "@/lib/animation/breakpoints";
@@ -52,6 +52,7 @@ type FeatureSectionAnimation = {
   scrollScrub?: number | boolean;
   pin?: boolean;
   pinAnticipate?: number;
+  pinScrollDistance?: number;
 };
 
 type FeatureSectionBaseConfig = {
@@ -124,6 +125,7 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
     sequence,
   } = config;
   const stageRef = useRef<HTMLElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const productImageRef = useRef<HTMLDivElement>(null);
@@ -321,7 +323,6 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
 
       let headingScrollTrigger: ScrollTrigger | undefined;
       let headingTimeline: gsap.core.Timeline | undefined;
-      let pinScrollTrigger: ScrollTrigger | undefined;
 
       if (animateHeading && hasDedicatedHeadingScroll) {
         headingTimeline = gsap
@@ -415,19 +416,10 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         );
       }
 
-      if (animation?.pin) {
-        pinScrollTrigger = ScrollTrigger.create({
-          trigger: stage,
-          start: animation.scrollStart ?? "top top",
-          end: animation.scrollEnd ?? "+=220%",
-          pin: true,
-          anticipatePin: animation.pinAnticipate ?? 1,
-          invalidateOnRefresh: true,
-        });
-      }
-
+      // CSS sticky owns positioning; ScrollTrigger only advances the animation.
+      // This avoids retaining pin transforms/spacer heights across refreshes.
       const animationScrollTrigger = ScrollTrigger.create({
-        trigger: stage,
+        trigger: animation?.pin ? scrollContainerRef.current : stage,
         start: animation?.animationStart ?? animation?.scrollStart ?? "top 78%",
         end: animation?.animationEnd ?? animation?.scrollEnd ?? "top top",
         scrub: animation?.animationScrub ?? animation?.scrollScrub ?? 0.35,
@@ -435,10 +427,12 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         invalidateOnRefresh: true,
       });
 
+      stage.dataset.motionReady = "true";
+
       return () => {
+        delete stage.dataset.motionReady;
         headingScrollTrigger?.kill();
         headingTimeline?.kill();
-        pinScrollTrigger?.kill();
         animationScrollTrigger.kill();
         timeline.kill();
       };
@@ -453,11 +447,13 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
   const title = Array.isArray(config.title) ? config.title : [config.title];
   const shouldHideHeadingInitially = animation?.animateHeading && Array.isArray(config.title);
 
-  return (
+  const featureSection = (
     <section
       ref={stageRef}
       id={config.sectionId}
-      className={config.sectionClassName}
+      className={animation?.pin
+        ? `${config.sectionClassName.replace(/\brelative\b/g, "")} sticky top-0 motion-reduce:relative`
+        : config.sectionClassName}
       data-node-id={config.nodeId}
     >
       {enablePngSequence && sequence ? (
@@ -547,5 +543,18 @@ export function FeatureSection({ config }: { config: FeatureSectionConfig }) {
         </div>
       </div>
     </section>
+  );
+
+  if (!animation?.pin) return featureSection;
+
+  return (
+    <div
+      ref={scrollContainerRef}
+      data-sequence-scroll
+      className="relative h-[var(--sequence-scroll-height)] motion-reduce:h-auto"
+      style={{ "--sequence-scroll-height": `${(1 + (animation.pinScrollDistance ?? 2.2)) * 100}dvh` } as CSSProperties}
+    >
+      {featureSection}
+    </div>
   );
 }

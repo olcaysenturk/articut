@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { getCmsContent } from "@/lib/cms-content";
 import { LegalPageLayout, LegalSection } from "@/components/editorial/LegalPageLayout";
 
-export const metadata: Metadata = { title: "Terms & Conditions" };
+export const metadata: Metadata = {
+  alternates: { canonical: "/terms" },
+  title: "Terms & Conditions",
+};
 
 export default async function TermsPage() {
   const content = await getCmsContent();

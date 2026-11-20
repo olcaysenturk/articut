@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { canonicalOrigin } from "@/lib/site-url";
 import "./globals.css";
 
 const gamayEditorial = localFont({
@@ -29,9 +30,7 @@ const gamayWide = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: process.env.NEXT_PUBLIC_SITE_URL
-    ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
-    : undefined,
+  metadataBase: new URL(canonicalOrigin),
   title: {
     default: "Articut",
     template: "%s | Articut",

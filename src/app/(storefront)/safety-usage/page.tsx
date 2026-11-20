@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { getCmsContent } from "@/lib/cms-content";
 import { LegalPageLayout, LegalSection } from "@/components/editorial/LegalPageLayout";
 
-export const metadata: Metadata = { title: "Safety & Usage" };
+export const metadata: Metadata = {
+  alternates: { canonical: "/safety-usage" },
+  title: "Safety & Usage",
+};
 
 export default async function SafetyUsagePage() {
   const content = await getCmsContent();

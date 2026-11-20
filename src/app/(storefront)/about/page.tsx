@@ -25,6 +25,7 @@ function ContactArrow() {
 }
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About",
   description: "The story behind Articut and Cutpilot.",
 };

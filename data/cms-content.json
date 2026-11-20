@@ -20,22 +20,23 @@
     ]
   },
   "home": {
-    "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1233320017/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=cd825e3e1d0ad499128ce93721a889d9e4f7cc6cb923509c4c62fd32dd96540d",
-    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1237595631/rendition/2160p/file.mp4%20%282160p%29.mp4?loc=external&signature=eaea5df8247c749c7d85c8238d31279297b809aa8ecb641df999a114b7de69ab",
+    "heroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1233320017/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=46584d0aeab89767ee8289e49473d0412bf11fd189916de7a611e22f4dbeb583",
+    "mobileHeroVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1237595631/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=65ff39cdeb63c4cb7a8371576e6d19cde7438c4312759a01c809421905a81e1e",
+    "mobileHeroFullscreenVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1237596256/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=ad91fee54244e2d3da4c03c75b5b40b2b3627aa3efdf221e6d4a0858d6422331",
     "heroPoster": {
       "src": "/images/hero-poster.png",
       "alt": "Homepage hero poster"
     },
     "productImage": {
-      "src": "/api/cms-media/cms-media/1790974017202-55e44b2c153d91d2-cutpilot-tile-final.jpg",
+      "src": "/api/cms-media/cms-media/1792787512215-e40bf9cb0f74b6a2-cutpilot-tile-final.jpg",
       "alt": "Cutpilot package"
     },
     "packShowcaseImage": {
-      "src": "/api/cms-media/cms-media/1791285454045-c12d44dfcce65463-set-place-split-cut6.jpg",
+      "src": "/api/cms-media/cms-media/1792787511634-1e5654a2344fb04c-set-place-split-cut6.jpg",
       "alt": "Cutpilot tool"
     },
     "mobilePackShowcaseImage": {
-      "src": "/api/cms-media/cms-media/1791285454218-c12d44dfcce65463-set-place-split-cut6.jpg",
+      "src": "/api/cms-media/cms-media/1792787511926-1e5654a2344fb04c-set-place-split-cut6.jpg",
       "alt": "Cutpilot tool"
     },
     "mobileHeroPoster": {
@@ -45,7 +46,7 @@
     "imageShowcase": [
       {
         "type": "video",
-        "src": "https://player.vimeo.com/progressive_redirect/playback/1231295727/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=51d4549560c92ca4e257cb3e0b788878db8b126635e8326e156274acff9da8ee"
+        "src": "https://player.vimeo.com/progressive_redirect/playback/1235877019/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=71b631c726cb39d3f02c6e35d85d11cc59e61d7c1f51379282ae47ece683b021"
       },
       {
         "src": "/api/cms-media/cms-media/1790974017362-b7b4a05903501115-articut-cutpilot-carousel7.jpg",
@@ -57,8 +58,7 @@
         "alt": "Cutpilot unboxing",
         "type": "image"
       }
-    ],
-    "mobileHeroFullscreenVideoUrl": "https://player.vimeo.com/progressive_redirect/playback/1237596256/rendition/1440p/file.mp4%20%281440p%29.mp4?loc=external&signature=16f6d83077c81003f9f6a0a462d2d233eefa771e5642101ca49fd8fbf481ad55"
+    ]
   },
   "productDetail": {
     "mediaStrip": [
@@ -151,7 +151,7 @@
         "layout": "grid",
         "images": [
           {
-            "src": "/api/cms-media/cms-media/1790781849398-901c0425a3aae5f4-articut-cutpilot-grid1.jpg",
+            "src": "/api/cms-media/cms-media/1792772353845-c58d9e503b5d734c-articut-cutpilot-grid1-2.jpg",
             "alt": ""
           },
           {
@@ -183,11 +183,11 @@
         "layout": "grid",
         "images": [
           {
-            "src": "/api/cms-media/cms-media/1788860328265-aaa85f265f8ac20f-artboard-1-04-1.png",
+            "src": "/api/cms-media/cms-media/1792877372009-c58d9e503b5d734c-articut-cutpilot-grid1-2.jpg",
             "alt": "Cutpilot package held above a model"
           },
           {
-            "src": "/api/cms-media/cms-media/1788860328640-2e67e07c817cad6c-artboard-1-08-1.png",
+            "src": "/api/cms-media/cms-media/1792877372011-36cd877762dd8041-articut-cutpilot-grid2.jpg",
             "alt": "Open Cutpilot package on a chair"
           }
         ]
@@ -196,8 +196,16 @@
         "layout": "single",
         "images": [
           {
-            "src": "/images/product-detail/cutpilot-combs-grid.jpg",
+            "src": "/api/cms-media/cms-media/1792877372027-d5ec09583e68e1a4-articut-cutpilot-grid6.jpg",
             "alt": "Cutpilot combs and attachments"
+          },
+          {
+            "src": "/api/cms-media/cms-media/1792877372046-32959a10c6203084-articut-cutpilot-grid7.jpg",
+            "alt": ""
+          },
+          {
+            "src": "/api/cms-media/cms-media/1792877372050-6e5f9d6b23a34038-cutpilot-combs.jpg",
+            "alt": ""
           }
         ]
       }

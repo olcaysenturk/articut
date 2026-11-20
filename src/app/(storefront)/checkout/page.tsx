@@ -12,6 +12,7 @@ import type { Cart } from "@/types/shopify";
 
 export const metadata: Metadata = {
   title: "Checkout",
+  robots: { index: false, follow: false },
   description: "Complete your Articut order securely.",
 };
 

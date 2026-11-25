@@ -4,6 +4,7 @@ import { LegalPageLayout, LegalSection } from "@/components/editorial/LegalPageL
 
 export const metadata: Metadata = {
   alternates: { canonical: "/returns" },
+  description: "Read Articut’s return policy and find out how to request a return for your order.",
   title: "Returns",
 };
 

@@ -4,6 +4,7 @@ import { LegalPageLayout, LegalSection } from "@/components/editorial/LegalPageL
 
 export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
+  description: "Learn how Articut collects, uses, and protects your personal information.",
   title: "Privacy Policy",
 };
 

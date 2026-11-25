@@ -16,7 +16,7 @@ export default async function CutpilotPage() {
 
   return (
     <VideoLoadingGate>
-      <CutpilotStructuredData product={product} path="/cutpilot" />
+      <CutpilotStructuredData product={product} />
       <CutpilotProductPage
         mediaStrip={cmsContent.productDetail.mediaStrip}
         packageImage={cmsContent.productDetail.packageImage}

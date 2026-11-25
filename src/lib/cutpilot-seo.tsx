@@ -29,19 +29,22 @@ function getProductImages(product: Product) {
 }
 
 export function cutpilotMetadata(product: Product, path: "/" | "/cutpilot"): Metadata {
-  const { title, description } = product;
+  const title = path === "/" ? "Cutpilot At-Home Haircutting Kit" : product.title;
+  const description = path === "/"
+    ? "Meet Cutpilot by Articut, a haircutting kit designed to help you cut your own hair at home."
+    : product.description.trim() || "Explore the Cutpilot at-home haircutting kit from Articut.";
   const images = getProductImages(product);
   return {
-    title: path === "/" ? "Cutpilot At-Home Haircutting Kit" : title,
+    title,
     description,
     alternates: { canonical: path },
-    openGraph: { title, description, url: path, images },
+    openGraph: { type: "website", siteName: "Articut", title, description, url: path, images },
     twitter: { card: "summary_large_image", title, description, images: [images[0].url] },
   };
 }
 
-export function CutpilotStructuredData({ product, path }: { product: Product; path: "/" | "/cutpilot" }) {
-  const url = new URL(path, canonicalOrigin).href;
+export function CutpilotStructuredData({ product }: { product: Product }) {
+  const url = new URL("/cutpilot", canonicalOrigin).href;
   const data = {
     "@context": "https://schema.org",
     "@type": "Product",

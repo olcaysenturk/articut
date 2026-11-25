@@ -4,6 +4,7 @@ import { LegalPageLayout, LegalSection } from "@/components/editorial/LegalPageL
 
 export const metadata: Metadata = {
   alternates: { canonical: "/terms" },
+  description: "Read the terms and conditions for using the Articut website and placing an order.",
   title: "Terms & Conditions",
 };
 

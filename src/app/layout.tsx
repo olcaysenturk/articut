@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     default: "Articut",
     template: "%s | Articut",
   },
-  description: "Articut",
+  description: "Discover Cutpilot, the Articut kit designed for at-home haircuts.",
   manifest: "/site.webmanifest",
 };
 

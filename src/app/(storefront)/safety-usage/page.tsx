@@ -4,6 +4,7 @@ import { LegalPageLayout, LegalSection } from "@/components/editorial/LegalPageL
 
 export const metadata: Metadata = {
   alternates: { canonical: "/safety-usage" },
+  description: "Read Articut’s safety and usage guidance before using the Cutpilot at-home haircutting kit.",
   title: "Safety & Usage",
 };
 

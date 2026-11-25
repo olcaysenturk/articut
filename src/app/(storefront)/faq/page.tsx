@@ -6,6 +6,7 @@ import { FaqPageClient } from "./FaqPageClient";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
+  description: "Find answers about Cutpilot, the Articut at-home haircutting kit, and ordering from Articut.",
   title: "FAQs",
 };
 

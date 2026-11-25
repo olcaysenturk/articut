@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { VideoLoadingGate } from "@/components/loading/VideoLoadingGate";
 import { HomeLanding } from "@/components/sections/home-landing/HomeLanding";
-import { CutpilotStructuredData, cutpilotMetadata, loadCutpilot } from "@/lib/cutpilot-seo";
+import { cutpilotMetadata, loadCutpilot } from "@/lib/cutpilot-seo";
 import { getCmsContent } from "@/lib/cms-content";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +15,6 @@ export default async function HomePage() {
 
   return (
     <VideoLoadingGate>
-      <CutpilotStructuredData product={product} path="/" />
       <HomeLanding cmsContent={cmsContent} product={product} />
     </VideoLoadingGate>
   );

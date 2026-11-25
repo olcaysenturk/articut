@@ -274,21 +274,113 @@
         "title": "Products",
         "questions": [
           {
-            "question": "Are Articut products dishwasher safe?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "What is Cutpilot?",
+            "answer": "Cutpilot is Articut’s patented at home hair cutting guide. It helps a partner, roommate, or other helper measure and trim hair evenly to a set length from half inch to three inches, using the same kind of hand measuring approach a barber uses. It is a guide only, so you cut with your own scissors or clippers.",
             "mobileOnly": false
           },
           {
-            "question": "Is Articut environmentally friendly?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis. Gorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "Who is Cutpilot designed for?",
+            "answer": "Cutpilot is a complete at home hair cutting tool for assisted cuts: a partner, roommate, parent, or friend cutting someone else’s hair, anytime. You can use it for a full haircut as well as for trims between salon or barbershop visits. It is a good fit for busy parents cutting their kids’ hair at home and for roommates helping each other. Results depend on the helper’s care and technique, and Cutpilot does not replace a professional hairdresser.",
             "mobileOnly": false
           },
           {
-            "question": "What is your packaging made from? Is it recyclable?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "Who created Cutpilot?",
+            "answer": "Cutpilot was created by Sinan Akyurt, a hairdresser with over twenty years of experience cutting hair. Sinan has worked as a hairdresser in New York, in Williamsburg, Brooklyn, for over fifteen years. The Cutpilot product design was created in New York. The physical design was developed with New York based engineers. Cutpilot is the first tool from a childhood idea he later built with two close friends: one helped with the prototype, and the other manages production.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What’s in the box?",
+            "answer": "Do scissors or clippers come with it? Each Cutpilot order includes the Cutpilot guide and a couple of extra combs if you prefer a right hand Cutpilot grip. Scissors and hair clippers are not included. Cutpilot is a measuring and cutting guide, so you use the scissors or clippers you already have and are comfortable with.",
+            "mobileOnly": false
+          },
+          {
+            "question": "How do I use Cutpilot?",
+            "answer": "Follow four steps: Set, Place, Split, Cut. Set the numbered dial in the center to your desired cutting length. Place Cutpilot on the hair to position the cutting angle. Split Cutpilot with both fingers as much as you can. Then cut any hair that remains outside Cutpilot with scissors or a hair clipper.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Can I cut my own hair with Cutpilot?",
+            "answer": "Cutpilot is designed for assisted use, and it is easier and more even when someone else cuts for you. Have a partner, roommate, or helper follow the Set, Place, Split, Cut steps rather than trying to cut the back of your own head.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Which hand should I use to hold Cutpilot?",
+            "answer": "Hold Cutpilot in the opposite hand from your cutting tool. If you cut with your right hand, hold Cutpilot in your left. If you cut with your left hand, hold Cutpilot in your right. Extra combs are included if you prefer a right hand Cutpilot grip.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What cutting tools can I use with Cutpilot?",
+            "answer": "Use the scissors or hair clippers you are most comfortable with. Texturizing shears also work well with Cutpilot. Always cut only the hair that remains outside the guide, and use sharp hair cutting scissors rather than household scissors for a cleaner result.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Should the hair be wet or dry?",
+            "answer": "Either is fine, as long as the hair is easy to comb through. For a more even result, match the prep to the hair type. For example, towel dried and fully detangled for straight or fine hair, or slightly damp and well combed for thick or coarse hair.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What lengths can Cutpilot measure and cut to?",
+            "answer": "Cutpilot adjusts to precise lengths from half inch to three inches, with six length options on the numbered center dial. It is made to follow the natural contours of the head so the helper can hold a consistent length while cutting.",
+            "mobileOnly": false
+          },
+          {
+            "question": "How do I set the cutting length?",
+            "answer": "Turn the numbered dial in the center of Cutpilot to the length you want before you place it on the hair. Start with a longer setting if you are unsure. You can always go shorter after you check the first section.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What if the hair is longer than three inches?",
+            "answer": "Cutpilot guides cuts to a finished length between half inch and three inches. It will not set or measure a length longer than three inches. If the hair is currently longer than three inches and you want a style in the half to three inch range, a helper can still use Cutpilot to cut it down to the dialed length. For trims that should stay longer than three inches, use a different method or see a professional.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Does Cutpilot work on all hair types?",
+            "answer": "Cutpilot is compatible with most hair types when the hair is clean, detangled, and in the right state for cutting. Straight or fine hair should be clean, towel dried, and fully detangled. Wavy hair should be clean, seventy to eighty percent dry, and combed straight. Loose curly hair, three A to three C, should be clean, damp, and detangled with a wide tooth comb. Thick or coarse hair should be clean, slightly damp, and well combed. Coily or kinky hair, four A to four C, is usually not recommended for Cutpilot type tools.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Can I use Cutpilot on curly hair?",
+            "answer": "Yes, on loose curls in the three A to three C range, with the hair clean, damp, and detangled with a wide tooth comb. Coily or kinky hair, four A to four C, is usually not recommended for this type of tool. If you are unsure, try Cutpilot on a small, hidden section first, or ask a stylist who knows that hair type.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Can I use Cutpilot on thick or coarse hair?",
+            "answer": "Yes. Start with clean, slightly damp, well combed hair so the guide can sit evenly. Work in smaller sections if a large amount of hair is hard to place in the guide, and check the length as you go.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Can I use Cutpilot on children’s hair?",
+            "answer": "Yes. The product is positioned for parents cutting kids’ hair at home, with an adult helper doing the cut. An adult should always handle Cutpilot and the scissors or clippers, and you should not use the tool on anyone who cannot communicate discomfort. When you are not using it, keep Cutpilot away from children and pets, because the stainless steel screws and plastic parts can be a choking hazard if swallowed.",
+            "mobileOnly": false
+          },
+          {
+            "question": "I’m left handed. Can I use Cutpilot?",
+            "answer": "Yes. The person cutting should hold Cutpilot in the opposite hand from the scissors or clippers, so a left handed cutter holds Cutpilot in the right hand. Extra combs are included if you prefer a right hand Cutpilot grip.",
+            "mobileOnly": false
+          },
+          {
+            "question": "Is Cutpilot safe to use at home? Is it a medical device?",
+            "answer": "Cutpilot is designed for home use as a hair measuring and cutting guide only. It is not a medical device and is not intended to diagnose, treat, or prevent any medical condition. Before each use, inspect the tool for cracks, sharp edges, or loose parts, and do not use it if anything looks damaged. If you have a scalp condition, open wounds, or sensitive skin, consult a healthcare professional before use. Read the full guidance on the Safety and Usage page at articut.com.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What is Cutpilot made of?",
+            "answer": "Cutpilot has a plastic body with stainless steel screws.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What should I do if someone feels pain or irritation during a cut?",
+            "answer": "Stop immediately if you experience pain, bleeding, or skin irritation, and consult a healthcare professional. Do not use Cutpilot on anyone who is unconscious, unresponsive, or unable to communicate discomfort.",
+            "mobileOnly": false
+          },
+          {
+            "question": "How do I clean and store Cutpilot?",
+            "answer": "After each use, brush or wipe off loose hair and let the tool dry completely before you put it away. Store it out of reach of children and pets.",
+            "mobileOnly": false
+          },
+          {
+            "question": "What if Cutpilot is cracked, loose, or damaged?",
+            "answer": "Do not use it. Inspect the tool before every use, and set it aside if you see cracks, sharp edges, or loose parts. If your articut.com order arrived damaged or does not work as described, start a return on our ShipBob Returns portal. Enter your order number and email, choose the reason that fits, damaged, defective, or wrong item, answer the condition questions, and submit. Once approved, a prepaid return shipping label is emailed to you automatically. For Amazon orders, please refer to the question titled “I bought Cutpilot on Amazon. How do I get help or make a return?”",
             "mobileOnly": false
           }
         ]
@@ -298,21 +390,8 @@
         "title": "Shipping",
         "questions": [
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
-            "mobileOnly": false
-          },
-          {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
-            "mobileOnly": false
-          },
-          {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "Where do you ship, and how long does delivery take?",
+            "answer": "We ship within the United States, including Alaska and Hawaii. Orders leave our warehouse within one to two business days and usually arrive within three to seven business days after shipment via USPS or UPS. Shipping is free on orders over one hundred fifty dollars.",
             "mobileOnly": false
           }
         ]
@@ -322,21 +401,18 @@
         "title": "Orders and Payments",
         "questions": [
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "Should I buy Cutpilot on articut.com or on Amazon?",
+            "answer": "You can buy the same Cutpilot from articut.com or from Amazon, listed under the brand name Articut, UPC eight six zero zero one six zero nine nine four zero one. The retail price is ninety five dollars. Orders from articut.com are packed and fulfilled by ShipBob, and ShipBob handles shipping updates and returns for those orders under our Returns policy. Amazon orders are packed and fulfilled by Amazon, and Amazon’s checkout, shipping, and return rules apply to those purchases.",
             "mobileOnly": false
           },
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "How much does Cutpilot cost",
+            "answer": "Cutpilot is ninety five dollars on articut.com.",
             "mobileOnly": false
           },
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "How do I cancel or change an order?",
+            "answer": "Email info@articut.com with your order number as soon as possible. We can cancel or change an order only while it is still processing and before our fulfillment team has picked it. Once an order has been picked, packed, or shipped, it can no longer be canceled or changed. After it ships, you can start a return on our ShipBob Returns portal under our Returns policy.",
             "mobileOnly": false
           }
         ]
@@ -346,21 +422,29 @@
         "title": "Returns and Refunds",
         "questions": [
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "What is your return policy?",
+            "answer": "You may return Cutpilot within thirty days of the shipment date for a full refund if it is unused and in its original packaging, with all parts and accessories included. Once the product has been used to cut hair, it cannot be returned. This is a hygiene policy, similar to razors and other personal care items. If the product arrives damaged or does not work as described, or we sent the wrong item, you may return it for a full refund or replacement. Items showing misuse, intentional damage, or normal wear are not covered. Returns for articut.com orders are handled through our ShipBob Returns portal. Enter your order number and the email you used at checkout, choose your return reason, answer the questions about the item’s condition, and submit your request. Once approved, a prepaid return shipping label is emailed to you automatically. Pack the item in its original packaging and drop it off at any authorized shipping location. ShipBob receives and inspects the item, and your refund is processed to your original payment method after it arrives. The full policy is on our Returns page at articut.com. For Amazon orders, start your return from your Amazon order account, since Amazon’s checkout, shipping, and return rules apply to those purchases.",
             "mobileOnly": false
           },
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "Is there a warranty?",
+            "answer": "If Cutpilot arrives damaged or does not work as described, you may return it for a full refund or replacement, as explained in our Returns policy.\r\n27. ⁠How do I cancel or change an order? Email info@articut.com with your order number as soon as possible. We can cancel or change an order only while it is still processing and before our fulfillment team has picked it. Once an order has been picked, packed, or shipped, it can no longer be canceled or changed. After it ships, you can start a return on our ShipBob Returns portal under our Returns policy.",
             "mobileOnly": false
           },
           {
-            "question": "Lorem ipsum dolor sit amet? Lorem Ipsum Dolor ?",
-            "answer": "Gorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
-            "mobileQuestion": "Are Articut products dishwasher safe?",
+            "question": "I bought Cutpilot on Amazon. How do I get help or make a return?",
+            "answer": "For shipping, refunds, or returns on an Amazon order, start with your Amazon order account, since Amazon handles fulfillment and returns for those purchases. If you have a product question, or the item arrived damaged, you can also email info@articut.com and include your Amazon order number.",
+            "mobileOnly": false
+          }
+        ]
+      },
+      {
+        "id": "c",
+        "title": "Contact",
+        "questions": [
+          {
+            "question": "How can I contact Articut?",
+            "answer": "For questions, concerns, or help with an existing order, email info@articut.com and include your order number when you have one. For partnerships or collaborations, email business@articut.com. You can also visit our About page at articut.com",
             "mobileOnly": false
           }
         ]
